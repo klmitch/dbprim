@@ -50,6 +50,7 @@ AC_CONFIG_LIBCONFIG_IN([dbprim])
 
 AC_DEFINE_VERSION([dbprim])
 
-AC_CONFIG_FILES([Makefile tests/Makefile comp_et-sh dbprim-config dbprim.spec])
+AC_CONFIG_FILES([Makefile tests/Makefile doc/Doxyfile comp_et-sh
+	dbprim-config dbprim.spec])
 
 AC_OUTPUT

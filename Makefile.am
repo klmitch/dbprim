@@ -217,7 +217,7 @@ EXTRA_DIST = dbprim_err.et dbprim.spec dbprim.spec.in \
 
 SUFFIXES = .et .h
 
-CLEANFILES = dbprim.h dbprim_version.c dbprim_version.h \
+CLEANFILES = dbprim_version.c dbprim_version.h \
 	     dbprim_err.c dbprim_err.h
 
 DISTCLEANFILES = dbprim-config.in
@@ -225,8 +225,7 @@ DISTCLEANFILES = dbprim-config.in
 DISTHOOKCLEANFILES = dbprim_err.c \
 		     dbprim_err.h \
 		     dbprim_version.c \
-		     dbprim_version.h \
-		     dbprim.h
+		     dbprim_version.h
 
 .et.c .et.h: comp_et-sh
 	$(SHELL) comp_et-sh --com_err=@COM_ERR@ --dir=$(top_builddir) $<

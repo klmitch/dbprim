@@ -1,5 +1,18 @@
 2003-08-23  Kevin L Mitchell  <klmitch@mit.edu>
 
+	* doc/Doxyfile.in: rename Doxyfile to Doxyfile.in and use @
+	substitution for project name and project number
+
+	* dbprim.spec.in: BuildRequires for doxygen and tetex-latex
+
+	* configure.ac: substitute doc/Doxyfile for package and versioning
+	information
+
+	* Makefile.am: remove dbprim.h from CLEANFILES and
+	DISTHOOKCLEANFILES
+
+	* dbprim.spec.in: remove Serial tag--we don't need it
+
 	* tests/Makefile.am: use check_PROGRAMS to get programs built for
 	us by automake; make sure test-harness.log gets cleaned up by make
 	distclean target

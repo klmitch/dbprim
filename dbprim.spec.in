@@ -24,7 +24,6 @@
 %define name @PACKAGE@
 %define version @VERSION@
 %define release 1
-%define serial 1
 
 %define clean_build_root if test -O "%{buildroot}" -a "%{buildroot}" != "/" -a "%{buildroot}" != "${HOME}"; then %{__rm} -rf %{buildroot}; fi
 %define clean_build_dir %{__rm} -rf %{buildsubdir}
@@ -32,13 +31,12 @@
 Name: %{name}
 Version: %{version}
 Release: %{release}
-Serial: %{serial}
 
 Source: %{name}-%{version}.tar.gz
 
 Copyright: LGPL
 
-Summary: Database Primitives Library
+Summary: @PACKAGE_NAME@
 Group: System Environment/Libraries
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
@@ -46,9 +44,12 @@ Prefix: %{_prefix}
 
 Vendor: Kevin L. Mitchell <klmitch@mit.edu>
 Packager: %{packager}
-#Url: 
+Url: http://dbprim.sourceforge.net/
 
-#BuildRequires: 
+BuildRequires: doxygen
+BuildRequires: tetex-latex
+BuildRequires: tetex-dvips
+BuildRequires: ghostscript
 
 %description
 This library provides a set of database primitives--linked lists,
@@ -65,7 +66,14 @@ Primitives Library.  Applications should include dbprim/dbprim.h.
 This package also includes dbprim-config.
 
 %changelog
-* Fri Aug 22 2003  Kevin L. Mitchell <klmitch@mit.edu>
+* Sat Aug 23 2003 Kevin L Mitchell <klmitch@mit.edu>
+- Build documentation, set BuildRequires properly
+- Use @ substitution for Summary
+- Set URL to SourceForge
+- Also add tetex-dvips and ghostscript to the list of required build
+  packages
+
+* Fri Aug 22 2003 Kevin L Mitchell <klmitch@mit.edu>
 - Creation of initial spec file
 
 %prep
@@ -74,6 +82,8 @@ This package also includes dbprim-config.
 %build
 %configure
 %__make
+%{__rm} -rf doc/html doc/latex doc/man
+doxygen doc/Doxyfile
 (cd doc/latex && %__make refman.ps refman.pdf)
 
 %install
