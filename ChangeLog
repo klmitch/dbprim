@@ -1,3 +1,19 @@
+2004-09-20  Kevin L Mitchell  <klmitch@mit.edu>
+
+	* tests/test-harness.h: new test-harness header file defining some
+	macros which are useful for unit tests
+
+	* tests/test-harness.dat: update for new test suite
+
+	* tests/t_linklists.c: test program for linked lists
+
+	* tests/Makefile.am: update for new test suite
+
+	* tests/*.c: remove old tests to replace with a new, hopefully
+	simpler test suite
+
+	* le_init.c (le_init): allow object to be NULL
+
 2004-03-03  Kevin L Mitchell  <klmitch@mit.edu>
 
 	* tests/t_st_init.c: include dbprim_err.h and dbprim_version.h

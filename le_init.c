@@ -31,7 +31,7 @@ RCSTAG("@(#)$Id$");
  * \param elem	A pointer to a #link_elem_t to be initialized.
  * \param object
  *		A pointer to \c void used to represent the object
- *		associated with the element.  May not be \c NULL.
+ *		associated with the element.
  *
  * \retval DB_ERR_BADARGS	A \c NULL pointer was passed for \p
  *				elem or \p object.
@@ -41,7 +41,7 @@ le_init(link_elem_t *elem, void *object)
 {
   initialize_dbpr_error_table(); /* initialize error table */
 
-  if (!elem || !object) /* verify arguments */
+  if (!elem) /* verify arguments */
     return DB_ERR_BADARGS;
 
   elem->le_next = 0; /* initialize the element */

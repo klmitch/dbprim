@@ -144,93 +144,19 @@ target_alias = @target_alias@
 
 AUTOMAKE_OPTIONS = foreign
 
-AM_CPPFLAGS = -D__DBPRIM_LIBRARY__ -I.. -I$(srcdir)/..
+AM_CPPFLAGS = -D__DBPRIM_LIBRARY__ -I$(top_builddir) -I$(top_srcdir)
+LDADD = $(top_builddir)/libdbprim.la @COM_ERR_LDADD@
+AM_LDFLAGS = -static
 
 check_PROGRAMS = test-harness \
 		 \
-		 t_ll_init t_ll_add t_ll_move t_ll_remove t_ll_find \
-		 t_ll_iter t_ll_flush t_le_init \
-		 \
-		 t_ht_init t_ht_addfind t_ht_move t_ht_remove t_ht_iter \
-		 t_ht_flush t_ht_resize t_ht_free t_he_init \
-		 \
-		 t_st_init
+		 t_linklists
 
 
-test_harness_SOURCES = test-harness.c
+test_harness_SOURCES = test-harness.c test-harness.h
+test_harness_LDADD = 
+test_harness_LDFLAGS = 
 TEST_OPTIONS = 
-
-t_ll_init_SOURCES = t_ll_init.c
-t_ll_init_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_ll_init_LDFLAGS = -static
-
-t_ll_add_SOURCES = t_ll_add.c
-t_ll_add_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_ll_add_LDFLAGS = -static
-
-t_ll_move_SOURCES = t_ll_move.c
-t_ll_move_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_ll_move_LDFLAGS = -static
-
-t_ll_remove_SOURCES = t_ll_remove.c
-t_ll_remove_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_ll_remove_LDFLAGS = -static
-
-t_ll_find_SOURCES = t_ll_find.c
-t_ll_find_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_ll_find_LDFLAGS = -static
-
-t_ll_iter_SOURCES = t_ll_iter.c
-t_ll_iter_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_ll_iter_LDFLAGS = -static
-
-t_ll_flush_SOURCES = t_ll_flush.c
-t_ll_flush_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_ll_flush_LDFLAGS = -static
-
-t_le_init_SOURCES = t_le_init.c
-t_le_init_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_le_init_LDFLAGS = -static
-
-t_ht_init_SOURCES = t_ht_init.c
-t_ht_init_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_ht_init_LDFLAGS = -static
-
-t_ht_addfind_SOURCES = t_ht_addfind.c
-t_ht_addfind_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_ht_addfind_LDFLAGS = -static
-
-t_ht_move_SOURCES = t_ht_move.c
-t_ht_move_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_ht_move_LDFLAGS = -static
-
-t_ht_remove_SOURCES = t_ht_remove.c
-t_ht_remove_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_ht_remove_LDFLAGS = -static
-
-t_ht_iter_SOURCES = t_ht_iter.c
-t_ht_iter_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_ht_iter_LDFLAGS = -static
-
-t_ht_flush_SOURCES = t_ht_flush.c
-t_ht_flush_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_ht_flush_LDFLAGS = -static
-
-t_ht_resize_SOURCES = t_ht_resize.c
-t_ht_resize_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_ht_resize_LDFLAGS = -static
-
-t_ht_free_SOURCES = t_ht_free.c
-t_ht_free_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_ht_free_LDFLAGS = -static
-
-t_he_init_SOURCES = t_he_init.c
-t_he_init_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_he_init_LDFLAGS = -static
-
-t_st_init_SOURCES = t_st_init.c
-t_st_init_LDADD = ../libdbprim.la @COM_ERR_LDADD@
-t_st_init_LDFLAGS = -static
 
 EXTRA_DIST = test-harness.dat
 
@@ -239,86 +165,20 @@ subdir = tests
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =
-check_PROGRAMS = test-harness$(EXEEXT) t_ll_init$(EXEEXT) \
-	t_ll_add$(EXEEXT) t_ll_move$(EXEEXT) t_ll_remove$(EXEEXT) \
-	t_ll_find$(EXEEXT) t_ll_iter$(EXEEXT) t_ll_flush$(EXEEXT) \
-	t_le_init$(EXEEXT) t_ht_init$(EXEEXT) t_ht_addfind$(EXEEXT) \
-	t_ht_move$(EXEEXT) t_ht_remove$(EXEEXT) t_ht_iter$(EXEEXT) \
-	t_ht_flush$(EXEEXT) t_ht_resize$(EXEEXT) t_ht_free$(EXEEXT) \
-	t_he_init$(EXEEXT) t_st_init$(EXEEXT)
-am_t_he_init_OBJECTS = t_he_init.$(OBJEXT)
-t_he_init_OBJECTS = $(am_t_he_init_OBJECTS)
-t_he_init_DEPENDENCIES = ../libdbprim.la
-am_t_ht_addfind_OBJECTS = t_ht_addfind.$(OBJEXT)
-t_ht_addfind_OBJECTS = $(am_t_ht_addfind_OBJECTS)
-t_ht_addfind_DEPENDENCIES = ../libdbprim.la
-am_t_ht_flush_OBJECTS = t_ht_flush.$(OBJEXT)
-t_ht_flush_OBJECTS = $(am_t_ht_flush_OBJECTS)
-t_ht_flush_DEPENDENCIES = ../libdbprim.la
-am_t_ht_free_OBJECTS = t_ht_free.$(OBJEXT)
-t_ht_free_OBJECTS = $(am_t_ht_free_OBJECTS)
-t_ht_free_DEPENDENCIES = ../libdbprim.la
-am_t_ht_init_OBJECTS = t_ht_init.$(OBJEXT)
-t_ht_init_OBJECTS = $(am_t_ht_init_OBJECTS)
-t_ht_init_DEPENDENCIES = ../libdbprim.la
-am_t_ht_iter_OBJECTS = t_ht_iter.$(OBJEXT)
-t_ht_iter_OBJECTS = $(am_t_ht_iter_OBJECTS)
-t_ht_iter_DEPENDENCIES = ../libdbprim.la
-am_t_ht_move_OBJECTS = t_ht_move.$(OBJEXT)
-t_ht_move_OBJECTS = $(am_t_ht_move_OBJECTS)
-t_ht_move_DEPENDENCIES = ../libdbprim.la
-am_t_ht_remove_OBJECTS = t_ht_remove.$(OBJEXT)
-t_ht_remove_OBJECTS = $(am_t_ht_remove_OBJECTS)
-t_ht_remove_DEPENDENCIES = ../libdbprim.la
-am_t_ht_resize_OBJECTS = t_ht_resize.$(OBJEXT)
-t_ht_resize_OBJECTS = $(am_t_ht_resize_OBJECTS)
-t_ht_resize_DEPENDENCIES = ../libdbprim.la
-am_t_le_init_OBJECTS = t_le_init.$(OBJEXT)
-t_le_init_OBJECTS = $(am_t_le_init_OBJECTS)
-t_le_init_DEPENDENCIES = ../libdbprim.la
-am_t_ll_add_OBJECTS = t_ll_add.$(OBJEXT)
-t_ll_add_OBJECTS = $(am_t_ll_add_OBJECTS)
-t_ll_add_DEPENDENCIES = ../libdbprim.la
-am_t_ll_find_OBJECTS = t_ll_find.$(OBJEXT)
-t_ll_find_OBJECTS = $(am_t_ll_find_OBJECTS)
-t_ll_find_DEPENDENCIES = ../libdbprim.la
-am_t_ll_flush_OBJECTS = t_ll_flush.$(OBJEXT)
-t_ll_flush_OBJECTS = $(am_t_ll_flush_OBJECTS)
-t_ll_flush_DEPENDENCIES = ../libdbprim.la
-am_t_ll_init_OBJECTS = t_ll_init.$(OBJEXT)
-t_ll_init_OBJECTS = $(am_t_ll_init_OBJECTS)
-t_ll_init_DEPENDENCIES = ../libdbprim.la
-am_t_ll_iter_OBJECTS = t_ll_iter.$(OBJEXT)
-t_ll_iter_OBJECTS = $(am_t_ll_iter_OBJECTS)
-t_ll_iter_DEPENDENCIES = ../libdbprim.la
-am_t_ll_move_OBJECTS = t_ll_move.$(OBJEXT)
-t_ll_move_OBJECTS = $(am_t_ll_move_OBJECTS)
-t_ll_move_DEPENDENCIES = ../libdbprim.la
-am_t_ll_remove_OBJECTS = t_ll_remove.$(OBJEXT)
-t_ll_remove_OBJECTS = $(am_t_ll_remove_OBJECTS)
-t_ll_remove_DEPENDENCIES = ../libdbprim.la
-am_t_st_init_OBJECTS = t_st_init.$(OBJEXT)
-t_st_init_OBJECTS = $(am_t_st_init_OBJECTS)
-t_st_init_DEPENDENCIES = ../libdbprim.la
+check_PROGRAMS = test-harness$(EXEEXT) t_linklists$(EXEEXT)
+t_linklists_SOURCES = t_linklists.c
+t_linklists_OBJECTS = t_linklists.$(OBJEXT)
+t_linklists_LDADD = $(LDADD)
+t_linklists_DEPENDENCIES = $(top_builddir)/libdbprim.la
+t_linklists_LDFLAGS =
 am_test_harness_OBJECTS = test-harness.$(OBJEXT)
 test_harness_OBJECTS = $(am_test_harness_OBJECTS)
-test_harness_LDADD = $(LDADD)
 test_harness_DEPENDENCIES =
-test_harness_LDFLAGS =
 
 DEFAULT_INCLUDES =  -I. -I$(srcdir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/t_he_init.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/t_ht_addfind.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/t_ht_flush.Po ./$(DEPDIR)/t_ht_free.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/t_ht_init.Po ./$(DEPDIR)/t_ht_iter.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/t_ht_move.Po ./$(DEPDIR)/t_ht_remove.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/t_ht_resize.Po ./$(DEPDIR)/t_le_init.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/t_ll_add.Po ./$(DEPDIR)/t_ll_find.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/t_ll_flush.Po ./$(DEPDIR)/t_ll_init.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/t_ll_iter.Po ./$(DEPDIR)/t_ll_move.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/t_ll_remove.Po ./$(DEPDIR)/t_st_init.Po \
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/t_linklists.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/test-harness.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -327,16 +187,9 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES = $(t_he_init_SOURCES) $(t_ht_addfind_SOURCES) \
-	$(t_ht_flush_SOURCES) $(t_ht_free_SOURCES) $(t_ht_init_SOURCES) \
-	$(t_ht_iter_SOURCES) $(t_ht_move_SOURCES) \
-	$(t_ht_remove_SOURCES) $(t_ht_resize_SOURCES) \
-	$(t_le_init_SOURCES) $(t_ll_add_SOURCES) $(t_ll_find_SOURCES) \
-	$(t_ll_flush_SOURCES) $(t_ll_init_SOURCES) $(t_ll_iter_SOURCES) \
-	$(t_ll_move_SOURCES) $(t_ll_remove_SOURCES) \
-	$(t_st_init_SOURCES) $(test_harness_SOURCES)
+DIST_SOURCES = t_linklists.c $(test_harness_SOURCES)
 DIST_COMMON = $(srcdir)/Makefile.in Makefile.am
-SOURCES = $(t_he_init_SOURCES) $(t_ht_addfind_SOURCES) $(t_ht_flush_SOURCES) $(t_ht_free_SOURCES) $(t_ht_init_SOURCES) $(t_ht_iter_SOURCES) $(t_ht_move_SOURCES) $(t_ht_remove_SOURCES) $(t_ht_resize_SOURCES) $(t_le_init_SOURCES) $(t_ll_add_SOURCES) $(t_ll_find_SOURCES) $(t_ll_flush_SOURCES) $(t_ll_init_SOURCES) $(t_ll_iter_SOURCES) $(t_ll_move_SOURCES) $(t_ll_remove_SOURCES) $(t_st_init_SOURCES) $(test_harness_SOURCES)
+SOURCES = t_linklists.c $(test_harness_SOURCES)
 
 all: all-am
 
@@ -354,60 +207,9 @@ clean-checkPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-t_he_init$(EXEEXT): $(t_he_init_OBJECTS) $(t_he_init_DEPENDENCIES) 
-	@rm -f t_he_init$(EXEEXT)
-	$(LINK) $(t_he_init_LDFLAGS) $(t_he_init_OBJECTS) $(t_he_init_LDADD) $(LIBS)
-t_ht_addfind$(EXEEXT): $(t_ht_addfind_OBJECTS) $(t_ht_addfind_DEPENDENCIES) 
-	@rm -f t_ht_addfind$(EXEEXT)
-	$(LINK) $(t_ht_addfind_LDFLAGS) $(t_ht_addfind_OBJECTS) $(t_ht_addfind_LDADD) $(LIBS)
-t_ht_flush$(EXEEXT): $(t_ht_flush_OBJECTS) $(t_ht_flush_DEPENDENCIES) 
-	@rm -f t_ht_flush$(EXEEXT)
-	$(LINK) $(t_ht_flush_LDFLAGS) $(t_ht_flush_OBJECTS) $(t_ht_flush_LDADD) $(LIBS)
-t_ht_free$(EXEEXT): $(t_ht_free_OBJECTS) $(t_ht_free_DEPENDENCIES) 
-	@rm -f t_ht_free$(EXEEXT)
-	$(LINK) $(t_ht_free_LDFLAGS) $(t_ht_free_OBJECTS) $(t_ht_free_LDADD) $(LIBS)
-t_ht_init$(EXEEXT): $(t_ht_init_OBJECTS) $(t_ht_init_DEPENDENCIES) 
-	@rm -f t_ht_init$(EXEEXT)
-	$(LINK) $(t_ht_init_LDFLAGS) $(t_ht_init_OBJECTS) $(t_ht_init_LDADD) $(LIBS)
-t_ht_iter$(EXEEXT): $(t_ht_iter_OBJECTS) $(t_ht_iter_DEPENDENCIES) 
-	@rm -f t_ht_iter$(EXEEXT)
-	$(LINK) $(t_ht_iter_LDFLAGS) $(t_ht_iter_OBJECTS) $(t_ht_iter_LDADD) $(LIBS)
-t_ht_move$(EXEEXT): $(t_ht_move_OBJECTS) $(t_ht_move_DEPENDENCIES) 
-	@rm -f t_ht_move$(EXEEXT)
-	$(LINK) $(t_ht_move_LDFLAGS) $(t_ht_move_OBJECTS) $(t_ht_move_LDADD) $(LIBS)
-t_ht_remove$(EXEEXT): $(t_ht_remove_OBJECTS) $(t_ht_remove_DEPENDENCIES) 
-	@rm -f t_ht_remove$(EXEEXT)
-	$(LINK) $(t_ht_remove_LDFLAGS) $(t_ht_remove_OBJECTS) $(t_ht_remove_LDADD) $(LIBS)
-t_ht_resize$(EXEEXT): $(t_ht_resize_OBJECTS) $(t_ht_resize_DEPENDENCIES) 
-	@rm -f t_ht_resize$(EXEEXT)
-	$(LINK) $(t_ht_resize_LDFLAGS) $(t_ht_resize_OBJECTS) $(t_ht_resize_LDADD) $(LIBS)
-t_le_init$(EXEEXT): $(t_le_init_OBJECTS) $(t_le_init_DEPENDENCIES) 
-	@rm -f t_le_init$(EXEEXT)
-	$(LINK) $(t_le_init_LDFLAGS) $(t_le_init_OBJECTS) $(t_le_init_LDADD) $(LIBS)
-t_ll_add$(EXEEXT): $(t_ll_add_OBJECTS) $(t_ll_add_DEPENDENCIES) 
-	@rm -f t_ll_add$(EXEEXT)
-	$(LINK) $(t_ll_add_LDFLAGS) $(t_ll_add_OBJECTS) $(t_ll_add_LDADD) $(LIBS)
-t_ll_find$(EXEEXT): $(t_ll_find_OBJECTS) $(t_ll_find_DEPENDENCIES) 
-	@rm -f t_ll_find$(EXEEXT)
-	$(LINK) $(t_ll_find_LDFLAGS) $(t_ll_find_OBJECTS) $(t_ll_find_LDADD) $(LIBS)
-t_ll_flush$(EXEEXT): $(t_ll_flush_OBJECTS) $(t_ll_flush_DEPENDENCIES) 
-	@rm -f t_ll_flush$(EXEEXT)
-	$(LINK) $(t_ll_flush_LDFLAGS) $(t_ll_flush_OBJECTS) $(t_ll_flush_LDADD) $(LIBS)
-t_ll_init$(EXEEXT): $(t_ll_init_OBJECTS) $(t_ll_init_DEPENDENCIES) 
-	@rm -f t_ll_init$(EXEEXT)
-	$(LINK) $(t_ll_init_LDFLAGS) $(t_ll_init_OBJECTS) $(t_ll_init_LDADD) $(LIBS)
-t_ll_iter$(EXEEXT): $(t_ll_iter_OBJECTS) $(t_ll_iter_DEPENDENCIES) 
-	@rm -f t_ll_iter$(EXEEXT)
-	$(LINK) $(t_ll_iter_LDFLAGS) $(t_ll_iter_OBJECTS) $(t_ll_iter_LDADD) $(LIBS)
-t_ll_move$(EXEEXT): $(t_ll_move_OBJECTS) $(t_ll_move_DEPENDENCIES) 
-	@rm -f t_ll_move$(EXEEXT)
-	$(LINK) $(t_ll_move_LDFLAGS) $(t_ll_move_OBJECTS) $(t_ll_move_LDADD) $(LIBS)
-t_ll_remove$(EXEEXT): $(t_ll_remove_OBJECTS) $(t_ll_remove_DEPENDENCIES) 
-	@rm -f t_ll_remove$(EXEEXT)
-	$(LINK) $(t_ll_remove_LDFLAGS) $(t_ll_remove_OBJECTS) $(t_ll_remove_LDADD) $(LIBS)
-t_st_init$(EXEEXT): $(t_st_init_OBJECTS) $(t_st_init_DEPENDENCIES) 
-	@rm -f t_st_init$(EXEEXT)
-	$(LINK) $(t_st_init_LDFLAGS) $(t_st_init_OBJECTS) $(t_st_init_LDADD) $(LIBS)
+t_linklists$(EXEEXT): $(t_linklists_OBJECTS) $(t_linklists_DEPENDENCIES) 
+	@rm -f t_linklists$(EXEEXT)
+	$(LINK) $(t_linklists_LDFLAGS) $(t_linklists_OBJECTS) $(t_linklists_LDADD) $(LIBS)
 test-harness$(EXEEXT): $(test_harness_OBJECTS) $(test_harness_DEPENDENCIES) 
 	@rm -f test-harness$(EXEEXT)
 	$(LINK) $(test_harness_LDFLAGS) $(test_harness_OBJECTS) $(test_harness_LDADD) $(LIBS)
@@ -418,24 +220,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_he_init.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_ht_addfind.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_ht_flush.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_ht_free.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_ht_init.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_ht_iter.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_ht_move.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_ht_remove.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_ht_resize.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_le_init.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_ll_add.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_ll_find.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_ll_flush.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_ll_init.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_ll_iter.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_ll_move.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_ll_remove.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_st_init.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_linklists.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-harness.Po@am__quote@
 
 .c.o:

@@ -218,10 +218,10 @@ extern "C" {
  * \brief Database key.
  *
  * This structure is a generic key containing a void * pointer and a
- * length parameter.  It should be accessed with * dk_key() and
+ * length parameter.  It should be accessed with dk_key() and
  * dk_len().
  */
-typedef struct _db_key_s     db_key_t;
+typedef struct _db_key_s db_key_t;
 
 /** \ingroup dbprim_link
  * \brief Linked list head.

@@ -357,7 +357,8 @@ DISTHOOKCLEANFILES = dbprim_err.c \
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_CLEAN_FILES = doc/Doxyfile comp_et-sh dbprim-config dbprim.spec
+CONFIG_CLEAN_FILES = tests/Makefile doc/Doxyfile comp_et-sh \
+	dbprim-config dbprim.spec
 LTLIBRARIES = $(lib_LTLIBRARIES)
 
 am_libdbprim_la_OBJECTS = dbprim_version.lo _hash_prime.lo he_init.lo \
@@ -453,6 +454,8 @@ $(srcdir)/configure:  $(srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENC
 
 $(ACLOCAL_M4):  configure.ac acinclude.m4
 	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
+tests/Makefile: $(top_builddir)/config.status $(top_srcdir)/tests/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 doc/Doxyfile: $(top_builddir)/config.status $(top_srcdir)/doc/Doxyfile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 comp_et-sh: $(top_builddir)/config.status comp_et-sh.in
@@ -815,7 +818,7 @@ distcleancheck_listfiles = find . -type f -print
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkinstalldirs) $(distdir)/. $(distdir)/doc
+	$(mkinstalldirs) $(distdir)/. $(distdir)/doc $(distdir)/tests
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
