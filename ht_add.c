@@ -71,10 +71,10 @@ ht_add(hash_table_t *table, hash_entry_t *entry, db_key_t *key)
   if (!ht_find(table, 0, key)) /* don't permit duplicates */
     return DB_ERR_DUPLICATE;
 
-  /* increment element count and grow the table if necessary and allowed */
-  if (++table->ht_count > table->ht_rollover &&
+  /* grow the table if necessary and allowed */
+  if ((table->ht_count + 1) > table->ht_rollover &&
       (table->ht_flags & HASH_FLAG_AUTOGROW) &&
-      (retval = ht_resize(table, 0)))
+      (retval = ht_resize(table, _hash_fuzz(table->ht_count + 1))))
     return retval;
 
   /* Force the link element to point to the entry */
@@ -89,10 +89,10 @@ ht_add(hash_table_t *table, hash_entry_t *entry, db_key_t *key)
 
   /* Now add the entry to the table... */
   if ((retval = ll_add(&table->ht_table[entry->he_hash], &entry->he_elem,
-		       LINK_LOC_HEAD, 0))) {
-    table->ht_count--; /* decrement the count--don't worry about shrinking */
+		       LINK_LOC_HEAD, 0)))
     return retval;
-  }
+
+  table->ht_count++; /* OK, now increment element count */
 
   entry->he_table = table; /* point entry at table */
 

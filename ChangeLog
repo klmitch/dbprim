@@ -1,4 +1,31 @@
+2004-09-21  Kevin L Mitchell  <klmitch@mit.edu>
+
+	* tests/test-harness.h: update test-harness.h header to set output
+	buffering
+
+	* tests/test-harness.dat: change some whitespace and add the
+	necessary information for t_hashtab.c
+
+	* tests/t_hashtab.c: test program for hash tables
+
+	* tests/Makefile.am (check_PROGRAMS): add t_hashtab
+
+	* ht_remove.c (ht_remove): move the table shrinkage to before the
+	ll_remove(), so that if ht_resize() fails, we can bail out before
+	removing the element
+
+	* ht_free.c (ht_free): must zero rollover and rollunder
+
+	* ht_add.c (ht_add): make the element count increment the last
+	thing done after the ll_add()
+
 2004-09-20  Kevin L Mitchell  <klmitch@mit.edu>
+
+	* _smat_hash.c (_smat_hash): uh, oops--type mismatch
+
+	* tests/t_linklists.c: put ChkOrder macro in a more reasonable
+	location
+	(ChkOrder): don't let a test fail twice...
 
 	* tests/test-harness.h: new test-harness header file defining some
 	macros which are useful for unit tests

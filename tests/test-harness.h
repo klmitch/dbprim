@@ -54,12 +54,18 @@ static void _th_unused
 _th_report(enum _th_status status, const char *test,
 	   const char *fmt, va_list vp)
 {
+  static int init = 0;
   char *codes[] = {
 #define _THSC(code)	#code
     _TH_STATCODES, 0
 #undef _THSC
   };
   char buf[512];
+
+  if (!init) { /* set output buffering... */
+    setvbuf(stdout, 0, _IONBF, 0);
+    init++;
+  }
 
   if (status != TR_PASS && status != TR_FAIL)
     return; /* status in bounds? */

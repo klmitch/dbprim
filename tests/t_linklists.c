@@ -66,28 +66,6 @@ int tremove[] = { 2, 0, 3 };
 
 int order_remove[] = { 5, 1, 4, -1 };
 
-#define ChkOrder(name, order, fatal, go)				      \
-do {									      \
-  int _err = 0;								      \
-  char *_name = TEST_NAME(name);					      \
-  int *_order = (order);						      \
-  link_elem_t *_le = ll_first(&head), *_ple = ll_first(&head);		      \
-  for (; *_order >= 0 && _le; _order++, _ple = _le, _le = le_next(_le))	      \
-    if (_le != &elems[*_order]) {					      \
-      _err++;								      \
-      fprintf(stderr, "%s ordering error: Expected %d, got %d\n", _name,      \
-	      *_order, _le - elems);					      \
-    }									      \
-  if (_err) {								      \
-    FAIL(_name, (fatal), "Ordering failure: %d errors", _err);		      \
-    go									      \
-  }									      \
-  if (*_order != -1 || _le != 0 || _ple != ll_last(&head)) {		      \
-    FAIL(_name, (fatal), "List incorrectly terminated");		      \
-    go									      \
-  }									      \
-} while (0)
-
 static unsigned long
 t_comp(db_key_t *key, void *comp)
 {
@@ -135,6 +113,27 @@ int order_flush[][2] = {
 };
 
 #define LINK_FLUSH_CNT	(sizeof(desc_flush) / sizeof(struct iter_desc))
+
+#define ChkOrder(name, order, fatal, go)				      \
+do {									      \
+  int _err = 0;								      \
+  char *_name = TEST_NAME(name);					      \
+  int *_order = (order);						      \
+  link_elem_t *_le = ll_first(&head), *_ple = ll_first(&head);		      \
+  for (; *_order >= 0 && _le; _order++, _ple = _le, _le = le_next(_le))	      \
+    if (_le != &elems[*_order]) {					      \
+      _err++;								      \
+      fprintf(stderr, "%s ordering error: Expected %d, got %d\n", _name,      \
+	      *_order, _le - elems);					      \
+    }									      \
+  if (_err) {								      \
+    FAIL(_name, (fatal), "Ordering failure: %d errors", _err);		      \
+    go									      \
+  } else if (*_order != -1 || _le != 0 || _ple != ll_last(&head)) {	      \
+    FAIL(_name, (fatal), "List incorrectly terminated");		      \
+    go									      \
+  }									      \
+} while (0)
 
 int
 main(int argc, char **argv)

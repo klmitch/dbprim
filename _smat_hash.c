@@ -27,7 +27,7 @@ unsigned long
 _smat_hash(hash_table_t *table, db_key_t *key)
 {
   int i, j;
-  unsigned int hash = 0;
+  unsigned long hash = 0;
   void **objects;
   unsigned char *c;
 

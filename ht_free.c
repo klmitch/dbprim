@@ -57,6 +57,8 @@ ht_free(hash_table_t *table)
   free(table->ht_table); /* free allocated memory */
 
   table->ht_modulus = 0; /* zero the table and modulus */
+  table->ht_rollover = 0; /* must also zero the rollover/rollunder */
+  table->ht_rollunder = 0;
   table->ht_table = 0;
 
   return 0;

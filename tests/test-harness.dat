@@ -20,19 +20,52 @@
 program t_linklists t_linklists \
 	"Test linked list functionality"
 
-test ll_init		t_linklists	PASS \
+test ll_init			t_linklists	PASS	\
 	"Test that ll_init() may be called"
-test le_init		t_linklists	PASS \
+test le_init			t_linklists	PASS	\
 	"Test that le_init() may be called"
-test ll_add		t_linklists	PASS \
+test ll_add			t_linklists	PASS	\
 	"Test that ll_add() works properly"
-test ll_move		t_linklists	PASS \
+test ll_move			t_linklists	PASS	\
 	"Test that ll_move() works properly"
-test ll_remove		t_linklists	PASS \
+test ll_remove			t_linklists	PASS	\
 	"Test that ll_remove() works properly"
-test ll_find		t_linklists	PASS \
+test ll_find			t_linklists	PASS	\
 	"Test that ll_find() works properly"
-test ll_iter		t_linklists	PASS \
+test ll_iter			t_linklists	PASS	\
 	"Test that ll_iter() works properly"
-test ll_flush		t_linklists	PASS \
+test ll_flush			t_linklists	PASS	\
 	"Test that ll_flush() works properly"
+
+program t_hashtab t_hashtab \
+	"Test hash table functionality"
+t_hashtab: t_linklists
+
+test ht_init			t_hashtab	PASS	\
+	"Test that ht_init() may be called"
+test he_init			t_hashtab	PASS	\
+	"Test that he_init() may be called"
+test ht_add			t_hashtab	PASS	\
+	"Test that ht_add() adds entries to hash table"
+test ht_find			t_hashtab	PASS	\
+	"Test that ht_find() finds entries in hash table"
+test ht_move			t_hashtab	PASS	\
+	"Test that ht_move() moves entries around"
+test ht_remove			t_hashtab	PASS	\
+	"Test that ht_remove() removes entries"
+test ht_iter			t_hashtab	PASS	\
+	"Test that ht_iter() iterates properly"
+test ht_resize			t_hashtab	PASS	\
+	"Test that ht_resize() may be called"
+test ht_flush			t_hashtab	PASS	\
+	"Test that ht_flush() flushes the table"
+test ht_free			t_hashtab	PASS	\
+	"Test that ht_free() may be called"
+test ht_add_autogrow		t_hashtab	PASS	\
+	"Test that ht_add() automatically grows the table"
+test ht_find_autogrow		t_hashtab	PASS	\
+	"Test that ht_find() can still find entries for autogrow"
+test ht_remove_autoshrink	t_hashtab	PASS	\
+	"Test that ht_remove() automatically shrinks the table"
+test ht_find_autoshrink		t_hashtab	PASS	\
+	"Test that ht_find() can still find entries for autoshrink"

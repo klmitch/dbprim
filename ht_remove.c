@@ -58,16 +58,19 @@ ht_remove(hash_table_t *table, hash_entry_t *entry)
   if (table->ht_flags & HASH_FLAG_FREEZE) /* don't remove from frozen tables */
     return DB_ERR_FROZEN;
 
+  /* try to shrink the table if necessary... */
+  if ((table->ht_count - 1) < table->ht_rollunder &&
+      (table->ht_flags & HASH_FLAG_AUTOSHRINK) &&
+      (retval = ht_resize(table, table->ht_count - 1)))
+    return retval; /* if we try to shrink and it won't, error out */
+
   /* remove the entry from the table */
   if ((retval = ll_remove(&table->ht_table[entry->he_hash], &entry->he_elem)))
     return retval;
 
   entry->he_table = 0; /* reset the table */
 
-  /* decrement element count and shrink the table if necessary and allowed */
-  if (--table->ht_count < table->ht_rollunder &&
-      (table->ht_flags & HASH_FLAG_AUTOSHRINK))
-    retval = ht_resize(table, table->ht_count);
+  table->ht_count--; /* decrement element count */
 
   return retval;
 }
