@@ -25,7 +25,7 @@ AUTOMAKE_OPTIONS = foreign
 
 INCLUDES = -I.. -I$(srcdir)/..
 
-EXTRA_PROGRAMS = test-harness \
+check_PROGRAMS = test-harness \
 		 \
 		 t_ll_init t_ll_add t_ll_move t_ll_remove t_ll_find \
 		 t_ll_iter t_ll_flush t_le_init \
@@ -112,5 +112,7 @@ t_st_init_LDFLAGS = -static
 
 EXTRA_DIST = test-harness.dat
 
-check: $(EXTRA_PROGRAMS)
+DISTCLEANFILES = test-harness.log
+
+check:
 	./test-harness -I. -I$(srcdir) $(TEST_OPTIONS)
