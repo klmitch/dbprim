@@ -32,9 +32,9 @@
  * list.
  */
 
-/** \defgroup dbprim_key Database keys
+/** \defgroup dbprim Database Primitives
  *
- * This module contains interfaces common to all database
+ * This module describes interfaces common to all database
  * modules--mainly the macros concerned with manipulating database
  * keys and the definition of the key structure.
  *
@@ -206,8 +206,9 @@
  */
 
 #include <dbprim_err.h>
+#include <dbprim_version.h>
 
-/** \ingroup dbprim_key
+/** \ingroup dbprim
  * \brief Database key.
  *
  * This structure is a generic key containing a void * pointer and a
@@ -459,7 +460,7 @@ struct _db_key_s {
   int   dk_len;		/* Length of the key, if that has any meaning. */
 };
 
-/** \ingroup dbprim_key
+/** \ingroup dbprim
  * \brief Database key static initializer.
  *
  * This macro allows a #db_key_t to be initialized statically.
@@ -469,7 +470,7 @@ struct _db_key_s {
  */
 #define DB_KEY_INIT(key, size) { (key), (size) }
 
-/** \ingroup dbprim_key
+/** \ingroup dbprim
  * \brief Database key accessor macro.
  *
  * This macro allows access to the key field of a #db_key_t.  It may
@@ -480,7 +481,7 @@ struct _db_key_s {
  */
 #define dk_key(key)	((key)->dk_key)
 
-/** \ingroup dbprim_key
+/** \ingroup dbprim
  * \brief Database key length accessor macro.
  *
  * This macro allows access to the key length field of a #db_key_t.
@@ -492,7 +493,7 @@ struct _db_key_s {
  */
 #define dk_len(key)	((key)->dk_len)
 
-/** \ingroup dbprim_key
+/** \ingroup dbprim
  * \brief Reverse flag.
  *
  * This flag can be passed to ordered iterations to reverse the
