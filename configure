@@ -18487,8 +18487,9 @@ fi
 
 
 
-t_LIBS=${LIBS}
-LIBS="${LIBS} -L${klm_cv_path_com_err}/lib"
+if test "x$COM_ERR" = "xtrue"; then
+    t_LIBS=${LIBS}
+    LIBS="${LIBS} -L${klm_cv_path_com_err}/lib"
 
 
 echo "$as_me:$LINENO: checking for com_err in -lcom_err" >&5
@@ -18559,9 +18560,13 @@ echo "$as_me: error: Unable to find com_err libraries" >&2;}
 fi
 
 
-LIBS=${t_LIBS}
-COM_ERR_LIBPATH="${klm_cv_path_com_err}/lib"
-COM_ERR_LDADD="-L${COM_ERR_LIBPATH} -lcom_err"
+    LIBS=${t_LIBS}
+    COM_ERR_LIBPATH="${klm_cv_path_com_err}/lib"
+    COM_ERR_LDADD="-L${COM_ERR_LIBPATH} -lcom_err"
+else
+    COM_ERR_LIBPATH=
+    COM_ERR_LDADD=
+fi
 
 
 

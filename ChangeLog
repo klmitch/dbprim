@@ -1,5 +1,7 @@
 2004-09-25  Kevin L Mitchell  <klmitch@mit.edu>
 
+	* acinclude.m4: update checks for com_err
+
 	* configure.ac: bump the patch level
 
 	* tests/test-harness.dat: add test descriptions for red-black
