@@ -213,7 +213,7 @@ man_MANS = $(docmandir)/dbprim_hash.3 \
 	   $(docmandir)/st_verify.3
 
 EXTRA_DIST = dbprim_err.et dbprim.spec dbprim.spec.in \
-	     comp_et-sh.in COPYING INSTALL \
+	     autogen.sh comp_et-sh.in COPYING INSTALL \
 	     doc/Doxyfile doc/Doxyfile.in doc/html doc/latex doc/man
 
 SUFFIXES = .et .h
@@ -236,4 +236,5 @@ dbprim_err.c dbprim_err.h: dbprim_err.et
 dist-hook:
 	for file in $(DISTHOOKCLEANFILES) ; do \
 	    rm -f $(distdir)/$$file ; \
-	done
+	done ; \
+	find $(distdir) -name CVS -print -prune | xargs rm -rf

@@ -1,5 +1,8 @@
 2003-08-23  Kevin L Mitchell  <klmitch@mit.edu>
 
+	* Makefile.am: distribute autogen.sh; remove CVS directories in
+	dist-hook
+
 	* doc/Doxyfile.in: rename Doxyfile to Doxyfile.in and use @
 	substitution for project name and project number
 
