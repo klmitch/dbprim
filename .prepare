@@ -1,0 +1,7 @@
+${common} --license=LGPL --com_err --install --test
+${acinclude} ${acincludes}
+${aclocal}
+${autoconf}
+${libtoolize} --automake
+${automake} -a
+${doxygen} doc/Doxyfile

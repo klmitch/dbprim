@@ -1,0 +1,11 @@
+.deps
+.libs
+Makefile
+Makefile.in
+test-harness
+test-harness.c
+test-harness.log
+t_le_init
+t_ll_add
+t_ll_init
+t_ll_move
