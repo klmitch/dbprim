@@ -44,7 +44,7 @@ unsigned long
 ll_iter(link_head_t *list, link_iter_t iter_func, void *extra)
 {
   unsigned long retval;
-  link_elem_t *elem;
+  link_elem_t *elem, *next = 0;
 
   initialize_dbpr_error_table(); /* initialize error table */
 
@@ -52,9 +52,11 @@ ll_iter(link_head_t *list, link_iter_t iter_func, void *extra)
     return DB_ERR_BADARGS;
 
   /* Walk through list and return first non-zero return value */
-  for (elem = list->lh_first; elem; elem = elem->le_next)
+  for (elem = list->lh_first; elem; elem = next) {
+    next = elem->le_next; /* iter_func may ll_remove... */
     if ((retval = (*iter_func)(list, elem, extra)))
       return retval;
+  }
 
   return 0;
 }

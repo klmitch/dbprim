@@ -1,0 +1,5 @@
+2003-06-13  Kevin L Mitchell  <klmitch@mit.edu>
+
+	* ll_iter.c (ll_iter): allow iter_func to ll_remove() the current
+	item
+
