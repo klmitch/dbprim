@@ -87,3 +87,21 @@ test st_remove			t_smat		PASS	\
 
 # Pretty much everything else is so simple and straightforward that it
 # should just work.  If you do find a bug, write a test case for it :)
+
+program t_redblack t_redblack \
+	"Test red-black tree functionality"
+
+test rt_init			t_redblack	PASS	\
+	"Test that rt_init() may be called"
+test rn_init			t_redblack	PASS	\
+	"Test that rn_init() may be called"
+test rt_add			t_redblack	PASS	\
+	"Test that rt_add() adds entries to the tree"
+test rt_find			t_redblack	PASS	\
+	"Test that rt_find() finds entries in tree"
+test rt_remove			t_redblack	PASS	\
+	"Test that rt_remove() removes nodes"
+test rt_flush			t_redblack	PASS	\
+	"Test that rt_flush() flushes the tree"
+test rt_iter			t_redblack	PASS	\
+	"Test that rt_iter() iterates over the tree in the correct order"

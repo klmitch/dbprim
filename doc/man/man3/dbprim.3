@@ -1,9 +1,9 @@
-.TH "Database Primitives" 3 "11 Dec 2003" "Database Primitives Library" \" -*- nroff -*-
+.TH "Database Primitives" 3 "25 Sep 2004" "Database Primitives Library" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
 Database Primitives \- 
-.SH "DETAILED DESCRIPTION"
+.SH "Detailed Description"
 .PP 
 This module describes interfaces common to all database modules--mainly the macros concerned with manipulating database keys and the definition of the key structure.
 .PP
@@ -14,19 +14,19 @@ The key may be any arbitrary pointer, including a pointer to a string. Everythin
 .ti -1c
 .RI "#define \fBDB_KEY_INIT\fP(key, size)"
 .br
-.RI "\fIDatabase key static initializer.\fP"
+.RI "\fIDatabase key static initializer. \fP"
 .ti -1c
 .RI "#define \fBdk_key\fP(key)"
 .br
-.RI "\fIDatabase key accessor macro.\fP"
+.RI "\fIDatabase key accessor macro. \fP"
 .ti -1c
 .RI "#define \fBdk_len\fP(key)"
 .br
-.RI "\fIDatabase key length accessor macro.\fP"
+.RI "\fIDatabase key length accessor macro. \fP"
 .ti -1c
 .RI "#define \fBDB_FLAG_REVERSE\fP"
 .br
-.RI "\fIReverse flag.\fP"
+.RI "\fIReverse flag. \fP"
 .in -1c
 .SS "Typedefs"
 
@@ -34,9 +34,9 @@ The key may be any arbitrary pointer, including a pointer to a string. Everythin
 .ti -1c
 .RI "typedef _db_key_s \fBdb_key_t\fP"
 .br
-.RI "\fIDatabase key.\fP"
+.RI "\fIDatabase key. \fP"
 .in -1c
-.SH "DEFINE DOCUMENTATION"
+.SH "Define Documentation"
 .PP 
 .SS "#define DB_FLAG_REVERSE"
 .PP
@@ -45,42 +45,46 @@ This flag can be passed to ordered iterations to reverse the order of the iterat
 .PP
 This macro allows a \fBdb_key_t\fP to be initialized statically.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fIkey\fP\fP
-A pointer to the key. 
-.TP
-\fB\fIsize\fP\fP
-Size of the key. 
+\fBParameters:\fP
+.RS 4
+\fIkey\fP A pointer to the key. 
+.br
+\fIsize\fP Size of the key. 
+.RE
+.PP
+
 .SS "#define dk_key(key)"
 .PP
 This macro allows access to the key field of a \fBdb_key_t\fP. It may be used as an lvalue in order to assign a key to a \fBdb_key_t\fP.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fIkey\fP\fP
-A pointer to a \fBdb_key_t\fP. 
+\fBParameters:\fP
+.RS 4
+\fIkey\fP A pointer to a \fBdb_key_t\fP. 
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 A pointer to a key (\fCvoid *\fP). 
+.RE
+.PP
+
 .SS "#define dk_len(key)"
 .PP
 This macro allows access to the key length field of a \fBdb_key_t\fP. It may be used as an lvalue in order to assign a length to a \fBdb_key_t\fP.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fIkey\fP\fP
-A pointer to a \fBdb_key_t\fP. 
+\fBParameters:\fP
+.RS 4
+\fIkey\fP A pointer to a \fBdb_key_t\fP. 
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 An \fCint\fP describing the length of the key. 
-.SH "TYPEDEF DOCUMENTATION"
-.PP 
-.SS "typedef struct _db_key_s db_key_t"
+.RE
 .PP
-This structure is a generic key containing a void * pointer and a length parameter. It should be accessed with * \fBdk_key()\fP and \fBdk_len()\fP. 
+
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef struct _db_key_s \fBdb_key_t\fP"
+.PP
+This structure is a generic key containing a void * pointer and a length parameter. It should be accessed with \fBdk_key()\fP and \fBdk_len()\fP. 

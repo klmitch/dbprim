@@ -1,3 +1,12 @@
+2004-09-25  Kevin L Mitchell  <klmitch@mit.edu>
+
+	* configure.ac: bump the patch level
+
+	* tests/test-harness.dat: add test descriptions for red-black
+	trees
+
+	* tests/t_redblack.c: finish writing red-black tree test suite
+
 2004-09-23  Kevin L Mitchell  <klmitch@mit.edu>
 
 	* tests/t_redblack.c: add treecheck() function to verify that a

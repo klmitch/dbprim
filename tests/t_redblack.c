@@ -95,14 +95,17 @@ make_order(rb_tree_t *tree, int *order, unsigned long flags,
 {
   int idx = 0;
 
-  switch (flags & RBT_ORDER_MASK) {
+  switch (flags) {
   case RBT_ORDER_PRE: /* get the pre-order list */
+  case RBT_ORDER_POST | DB_FLAG_REVERSE:
     _make_pre(rt_root(tree), order, &idx, flags & DB_FLAG_REVERSE, visited);
     break;
   case RBT_ORDER_IN: /* get the in-order list */
+  case RBT_ORDER_IN | DB_FLAG_REVERSE:
     _make_in(rt_root(tree), order, &idx, flags & DB_FLAG_REVERSE, visited);
     break;
   case RBT_ORDER_POST: /* get the post-order list */
+  case RBT_ORDER_PRE | DB_FLAG_REVERSE:
     _make_post(rt_root(tree), order, &idx, flags & DB_FLAG_REVERSE, visited);
     break;
   }
@@ -114,11 +117,17 @@ comp_order(int *o1, int *o2)
 {
   int i;
 
-  for (i = 0; i < RBT_ELEM_CNT; i++) /* walk through all the elements */
-    if (o1[i] != o2[i])
-      return 1; /* oops, mismatch... */
+  fprintf(stderr, "Ordering comparison:");
+  for (i = 0; i < RBT_ELEM_CNT; i++) { /* walk through all the elements */
+    fprintf(stderr, " %d", o1[i]);
+    if (o1[i] != o2[i]) {
+      fprintf(stderr, "!= %d!\n", o2[i]);
+      return 0; /* oops, mismatch... */
+    }
+  }
+  fprintf(stderr, "\n");
 
-  return 0; /* OK, everything's fine. */
+  return 1; /* OK, everything's fine. */
 }
 
 /* handy macro to generate the arguments for identifying nodes in printf's */
@@ -221,6 +230,65 @@ t_comp(rb_tree_t *tree, db_key_t *key1, db_key_t *key2)
   return dk_len(key1) - dk_len(key2); /* difference of the lengths */
 }
 
+/* structure to keep track of flush testing... */
+struct flush_test {
+  int stop_node;
+  unsigned long visited;
+};
+
+#define STOP_RETURN	77
+#define VISIT_RETURN	89
+
+/* simple iterator for testing flushing... */
+static unsigned long
+t_flush(rb_tree_t *tree, rb_node_t *node, struct flush_test *ft)
+{
+  fprintf(stderr, "t_flush(%d)\n", dk_len(rn_key(node)));
+
+  /* have we visited this node before? */
+  if (!(ft->visited & (0x01lu << dk_len(rn_key(node)))))
+    return VISIT_RETURN;
+
+  /* remember that we visited it... */
+  ft->visited &= ~(0x01lu << dk_len(rn_key(node)));
+
+  /* if we're supposed to stop here, do so... */
+  return (dk_len(rn_key(node)) == ft->stop_node) ? STOP_RETURN : 0;
+}
+
+/* structure for testing iteration */
+struct iter_test {
+  unsigned long visited;
+  int stop_node;
+  rb_node_t *last_node;
+  int idx;
+  int order[RBT_ELEM_CNT];
+};
+
+#define ITER_TRIALS	10
+
+/* simple iterator for testing iteration... */
+static unsigned long
+t_iter(rb_tree_t *tree, rb_node_t *node, struct iter_test *it)
+{
+  fprintf(stderr, "t_iter(%d)\n", dk_len(rn_key(node)));
+
+  /* have we visited this node already? */
+  if (!(it->visited & (0x01lu << dk_len(rn_key(node)))))
+    return VISIT_RETURN;
+
+  /* remember that we visited it... */
+  it->visited &= ~(0x01lu << dk_len(rn_key(node)));
+
+  /* store the node value in the order array... */
+  it->order[it->idx++] = dk_len(rn_key(node));
+
+  it->last_node = node; /* remember the node... */
+
+  /* so that if we're supposed to stop here, we can continue on later... */
+  return (dk_len(rn_key(node)) == it->stop_node) ? STOP_RETURN : 0;
+}
+
 int
 main(int argc, char **argv)
 {
@@ -229,8 +297,10 @@ main(int argc, char **argv)
   rb_node_t nodes[RBT_ELEM_CNT];
   rb_node_t *n = 0;
   db_key_t key = DB_KEY_INIT(0, 0);
-  int i, tmp;
-  unsigned long visited, visit_init;
+  int i, tmp, order[RBT_ELEM_CNT];
+  unsigned long visited, visit_init, ordering;
+  struct flush_test ft;
+  struct iter_test it;
 
   srand(time(0)); /* seed random number generator */
 
@@ -305,6 +375,138 @@ main(int argc, char **argv)
 	   "the tree bad enough that rt_find() returned error %lu", err);
   }
   PASS(TEST_NAME(rt_remove), "rt_remove() calls successful");
+
+  /* test tree flushes... */
+  TEST_DECL(t_redblack, rt_flush, "Test that rt_flush() flushes the tree")
+  for (ft.stop_node = rand() % RBT_ELEM_CNT; /* select an element to stop on */
+       !(visit_init & (0x01lu << ft.stop_node));
+       ft.stop_node = rand() % RBT_ELEM_CNT)
+    ; /* empty loop */
+  ft.visited = visit_init; /* need to know what's been removed... */
+  switch (err = rt_flush(&tree, (rb_iter_t)t_flush, (void *)&ft)) {
+  case STOP_RETURN: /* this is what it should return... */
+    break;
+  case VISIT_RETURN: /* visited the same node twice?!? */
+    FAIL(TEST_NAME(rt_flush), FATAL(0), "rt_flush() visited the same node "
+	 "twice!");
+    break;
+  case 0: /* it's supposed to error out! */
+    FAIL(TEST_NAME(rt_flush), FATAL(0), "rt_flush() failed to stop when told "
+	 "to do so");
+    break;
+  default: /* OK, some other error... */
+    FAIL(TEST_NAME(rt_flush), FATAL(0), "rt_flush() failed with error %lu",
+	 err);
+    break;
+  }
+  switch (err = rt_flush(&tree, (rb_iter_t)t_flush, (void *)&ft)) {
+  case 0: /* this is what it should return... */
+    break;
+  case VISIT_RETURN: /* visited the same node twice?!? */
+    FAIL(TEST_NAME(rt_flush), FATAL(0), "rt_flush() visited the same node "
+	 "twice!");
+    break;
+  default: /* some other error occurred... */
+    FAIL(TEST_NAME(rt_flush), FATAL(0), "rt_flush() failed with error %lu",
+	 err);
+    break;
+  }
+  if (ft.visited || rt_count(&tree)) /* did it visit all elements? */
+    FAIL(TEST_NAME(rt_flush), FATAL(0), "rt_flush() failed to visit all "
+	 "elements");
+  PASS(TEST_NAME(rt_flush), "rt_flush() calls successful");
+
+  /* OK, let's test iteration... */
+  TEST_DECL(t_redblack, rt_iter, "Test that rt_iter() iterates over the "
+	    "tree in the correct order")
+  for (i = 0; i < ITER_TRIALS; i++) {
+    /* First, select an ordering to try... */
+    for (ordering = rand() & 0x07;
+	 !(ordering & RBT_ORDER_MASK);
+	 ordering = rand() & 0x07)
+      ; /* empty loop */
+    ordering = (ordering & RBT_ORDER_MASK) | ((ordering & 0x04) << 29);
+
+    fprintf(stderr, "rt_iter() trial %d: ordering 0x%08lx\n", i, ordering);
+
+    /* Next, populate the tree...in random order. */
+    for (visited = 0, tmp = 0; tmp < RBT_ELEM_CNT; ) {
+      /* select a unique element for each iteration */
+      if (visited & (0x01lu << (dk_len(&key) = rand() % RBT_ELEM_CNT)))
+	continue;
+      fprintf(stderr, "Adding node %d...\n", dk_len(&key));
+      if ((err = rt_add(&tree, &nodes[dk_len(&key)], &key)))
+	FAIL(TEST_NAME(rt_iter), FATAL(0), "rt_add() failed with error %lu "
+	     "while testing rt_iter()", err);
+      else if (!treecheck(rt_root(&tree), 0, 0, 0))
+	FAIL(TEST_NAME(rt_iter), FATAL(0), "rt_add() corrupted tree's "
+	     "red-black property while testing rt_iter()");
+      it.order[tmp] = -1; /* just throw this in here so we don't loop again */
+      order[tmp] = -1; /* this too... */
+      tmp++; /* OK, we've added one element... */
+      visited |= (0x01lu << dk_len(&key)); /* mark that we've added that one */
+    }
+
+    /* Now, fill in iter_test and select an element at random to stop at... */
+    it.visited = visited;
+    it.stop_node = rand() % RBT_ELEM_CNT;
+    it.last_node = 0;
+    it.idx = 0; /* start at the beginning of the array... */
+
+    /* OK, let's iterate! */
+    fprintf(stderr, "First rt_iter(): stop on node %d\n", it.stop_node);
+    switch ((err = rt_iter(&tree, 0, (rb_iter_t)t_iter, &it, ordering))) {
+    case STOP_RETURN: /* this is what's supposed to happen... */
+      assert(dk_len(rn_key(it.last_node)) == it.stop_node); /* uh... */
+      break;
+    case 0: /* uh, this isn't supposed to happen */
+      FAIL(TEST_NAME(rt_iter), FATAL(0), "rt_iter() failed to stop when "
+	   "directed to do so");
+      break;
+    default: /* some other error; hmm.... */
+      FAIL(TEST_NAME(rt_iter), FATAL(0), "rt_iter() failed with error %lu",
+	   err);
+      break;
+    }
+
+    /* get the next element to start at... */
+    fprintf(stderr, "Selecting successor to %d...\n", it.stop_node);
+    if ((err = rt_next(&tree, &it.last_node, ordering)))
+      FAIL(TEST_NAME(rt_iter), FATAL(0), "rt_next() failed with error %lu",
+	   err);
+    else if (it.last_node && dk_len(rn_key(it.last_node)) == it.stop_node)
+      FAIL(TEST_NAME(rt_iter), FATAL(0), "rt_next() failed to retrieve a "
+	   "different node than node %d...", it.stop_node);
+
+    /* Now finish up the iteration... */
+    if (it.last_node) { /* if there was a next node, that is... */
+      fprintf(stderr, "Starting second rt_iter() at node %d\n",
+	      dk_len(rn_key(it.last_node)));
+      if ((err = rt_iter(&tree, it.last_node, (rb_iter_t)t_iter, &it,
+			 ordering)))
+	FAIL(TEST_NAME(rt_iter), FATAL(0), "rt_iter() failed with error %lu",
+	     err);
+      else if (it.visited)
+	FAIL(TEST_NAME(rt_iter), FATAL(0), "rt_iter() failed to visit all "
+	     "nodes");
+    }
+
+    /* OK, let's make the ordering recursively to verify... */
+    make_order(&tree, order, ordering, &visited);
+
+    assert(!visited); /* make_order() had better have visited everything... */
+
+    /* Now, compare the orderings and see if they match... */
+    if (!comp_order(order, it.order))
+      FAIL(TEST_NAME(rt_iter), FATAL(0), "rt_iter() visited nodes in the "
+	   "wrong order");
+
+    /* And last, but certainly not least, flush the tree for the next loop */
+    if ((err = rt_flush(&tree, 0, 0)))
+      FAIL(TEST_NAME(rt_iter), FATAL(0), "rt_flush() failed with error %lu "
+	   "while testing rt_iter()", err);
+  }
+  PASS(TEST_NAME(rt_iter), "rt_iter() calls successful");
 
   return 0;
 }

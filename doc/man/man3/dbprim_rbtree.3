@@ -1,9 +1,9 @@
-.TH "Red-black trees" 3 "11 Dec 2003" "Database Primitives Library" \" -*- nroff -*-
+.TH "Red-black trees" 3 "25 Sep 2004" "Database Primitives Library" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
 Red-black trees \- 
-.SH "DETAILED DESCRIPTION"
+.SH "Detailed Description"
 .PP 
 Red-black trees are a form of binary search tree. One essential feature of binary search trees is that they need to be balanced in order to be efficient. Many algorithms exist for keeping trees balanced, but among the easiest to implement is the red-black tree. In a red-black tree, every node is given a color--either red or black--and there are various rules for what color nodes can be present where in the tree. This library implements these rules, along with functions for traversing the tree in any desired tree order.
 .PP
@@ -16,99 +16,99 @@ There are three ways to traverse a binary tree. The first, known as 'preorder,' 
 .ti -1c
 .RI "#define \fBRB_TREE_INIT\fP(comp, extra)"
 .br
-.RI "\fIRed-black tree static initializer.\fP"
+.RI "\fIRed-black tree static initializer. \fP"
 .ti -1c
 .RI "#define \fBrt_verify\fP(tree)"
 .br
-.RI "\fIRed-black tree verification macro.\fP"
+.RI "\fIRed-black tree verification macro. \fP"
 .ti -1c
 .RI "#define \fBrt_frozen\fP(tree)"
 .br
-.RI "\fIDetermine if a red-black tree is frozen.\fP"
+.RI "\fIDetermine if a red-black tree is frozen. \fP"
 .ti -1c
 .RI "#define \fBrt_count\fP(tree)"
 .br
-.RI "\fIRed-black tree count.\fP"
+.RI "\fIRed-black tree count. \fP"
 .ti -1c
 .RI "#define \fBrt_root\fP(tree)"
 .br
-.RI "\fIRed-black tree root node.\fP"
+.RI "\fIRed-black tree root node. \fP"
 .ti -1c
 .RI "#define \fBrt_comp\fP(tree)"
 .br
-.RI "\fIRed-black tree comparison function.\fP"
+.RI "\fIRed-black tree comparison function. \fP"
 .ti -1c
 .RI "#define \fBrt_extra\fP(tree)"
 .br
-.RI "\fIExtra pointer data in a red-black tree.\fP"
+.RI "\fIExtra pointer data in a red-black tree. \fP"
 .ti -1c
 .RI "#define \fBRBT_ORDER_PRE\fP"
 .br
-.RI "\fIPreorder tree traversal method.\fP"
+.RI "\fIPreorder tree traversal method. \fP"
 .ti -1c
 .RI "#define \fBRBT_ORDER_IN\fP"
 .br
-.RI "\fIInorder tree traversal method.\fP"
+.RI "\fIInorder tree traversal method. \fP"
 .ti -1c
 .RI "#define \fBRBT_ORDER_POST\fP"
 .br
-.RI "\fIPostorder tree traversal method.\fP"
+.RI "\fIPostorder tree traversal method. \fP"
 .ti -1c
 .RI "#define \fBrt_prev\fP(tree, node_io, flags)"
 .br
-.RI "\fIGet the previous node.\fP"
+.RI "\fIGet the previous node. \fP"
 .ti -1c
 .RI "#define \fBRB_NODE_INIT\fP(value)"
 .br
-.RI "\fIRed-black tree node static initializer.\fP"
+.RI "\fIRed-black tree node static initializer. \fP"
 .ti -1c
 .RI "#define \fBrn_verify\fP(node)"
 .br
-.RI "\fIRed-black tree node verification macro.\fP"
+.RI "\fIRed-black tree node verification macro. \fP"
 .ti -1c
 .RI "#define \fBrn_color\fP(node)"
 .br
-.RI "\fIRed-black tree node color.\fP"
+.RI "\fIRed-black tree node color. \fP"
 .ti -1c
 .RI "#define \fBrn_tree\fP(node)"
 .br
-.RI "\fIRed-black tree node's tree pointer.\fP"
+.RI "\fIRed-black tree node's tree pointer. \fP"
 .ti -1c
 .RI "#define \fBrn_parent\fP(node)"
 .br
-.RI "\fIRed-black tree node's parent pointer.\fP"
+.RI "\fIRed-black tree node's parent pointer. \fP"
 .ti -1c
 .RI "#define \fBrn_left\fP(node)"
 .br
-.RI "\fIRed-black tree node's left pointer.\fP"
+.RI "\fIRed-black tree node's left pointer. \fP"
 .ti -1c
 .RI "#define \fBrn_right\fP(node)"
 .br
-.RI "\fIRed-black tree node's right pointer.\fP"
+.RI "\fIRed-black tree node's right pointer. \fP"
 .ti -1c
 .RI "#define \fBrn_key\fP(node)"
 .br
-.RI "\fIRed-black tree node's key pointer.\fP"
+.RI "\fIRed-black tree node's key pointer. \fP"
 .ti -1c
 .RI "#define \fBrn_value\fP(node)"
 .br
-.RI "\fIRed-black tree node's value pointer.\fP"
+.RI "\fIRed-black tree node's value pointer. \fP"
 .ti -1c
 .RI "#define \fBrn_isblack\fP(node)"
 .br
-.RI "\fITest if a given node is black.\fP"
+.RI "\fITest if a given node is black. \fP"
 .ti -1c
 .RI "#define \fBrn_isred\fP(node)"
 .br
-.RI "\fITest if a given node is red.\fP"
+.RI "\fITest if a given node is red. \fP"
 .ti -1c
 .RI "#define \fBrn_isleft\fP(node)"
 .br
-.RI "\fITest if a given node is the left node of its parent.\fP"
+.RI "\fITest if a given node is the left node of its parent. \fP"
 .ti -1c
 .RI "#define \fBrn_isright\fP(node)"
 .br
-.RI "\fITest if a given node is the right node of its parent.\fP"
+.RI "\fITest if a given node is the right node of its parent. \fP"
 .in -1c
 .SS "Typedefs"
 
@@ -116,23 +116,23 @@ There are three ways to traverse a binary tree. The first, known as 'preorder,' 
 .ti -1c
 .RI "typedef _rb_tree_s \fBrb_tree_t\fP"
 .br
-.RI "\fIRed-black tree.\fP"
+.RI "\fIRed-black tree. \fP"
 .ti -1c
 .RI "typedef _rb_node_s \fBrb_node_t\fP"
 .br
-.RI "\fIRed-black tree node.\fP"
+.RI "\fIRed-black tree node. \fP"
 .ti -1c
 .RI "typedef unsigned long(* \fBrb_iter_t\fP )(\fBrb_tree_t\fP *, \fBrb_node_t\fP *, void *)"
 .br
-.RI "\fIRed-black tree iteration callback.\fP"
+.RI "\fIRed-black tree iteration callback. \fP"
 .ti -1c
 .RI "typedef long(* \fBrb_comp_t\fP )(\fBrb_tree_t\fP *, \fBdb_key_t\fP *, \fBdb_key_t\fP *)"
 .br
-.RI "\fIRed-black tree comparison callback.\fP"
+.RI "\fIRed-black tree comparison callback. \fP"
 .ti -1c
 .RI "typedef enum \fB_rb_color_e\fP \fBrb_color_t\fP"
 .br
-.RI "\fIRed-black tree node color.\fP"
+.RI "\fIRed-black tree node color. \fP"
 .in -1c
 .SS "Enumerations"
 
@@ -140,7 +140,7 @@ There are three ways to traverse a binary tree. The first, known as 'preorder,' 
 .ti -1c
 .RI "enum \fB_rb_color_e\fP { \fBRB_COLOR_NONE\fP, \fBRB_COLOR_RED\fP, \fBRB_COLOR_BLACK\fP }"
 .br
-.RI "\fIRed-black tree node color.\fP"
+.RI "\fIRed-black tree node color. \fP"
 .in -1c
 .SS "Functions"
 
@@ -148,63 +148,64 @@ There are three ways to traverse a binary tree. The first, known as 'preorder,' 
 .ti -1c
 .RI "unsigned long \fBrt_init\fP (\fBrb_tree_t\fP *tree, \fBrb_comp_t\fP comp, void *extra)"
 .br
-.RI "\fIDynamically initialize a red-black tree.\fP"
+.RI "\fIDynamically initialize a red-black tree. \fP"
 .ti -1c
 .RI "unsigned long \fBrt_add\fP (\fBrb_tree_t\fP *tree, \fBrb_node_t\fP *node, \fBdb_key_t\fP *key)"
 .br
-.RI "\fIAdd a node to a red-black tree.\fP"
+.RI "\fIAdd a node to a red-black tree. \fP"
 .ti -1c
 .RI "unsigned long \fBrt_move\fP (\fBrb_tree_t\fP *tree, \fBrb_node_t\fP *node, \fBdb_key_t\fP *key)"
 .br
-.RI "\fIMove a node in a red-black tree.\fP"
+.RI "\fIMove a node in a red-black tree. \fP"
 .ti -1c
 .RI "unsigned long \fBrt_remove\fP (\fBrb_tree_t\fP *tree, \fBrb_node_t\fP *node)"
 .br
-.RI "\fIRemove a node from a red-black tree.\fP"
+.RI "\fIRemove a node from a red-black tree. \fP"
 .ti -1c
 .RI "unsigned long \fBrt_find\fP (\fBrb_tree_t\fP *tree, \fBrb_node_t\fP **node_p, \fBdb_key_t\fP *key)"
 .br
-.RI "\fIFind an entry in a red-black table.\fP"
+.RI "\fIFind an entry in a red-black table. \fP"
 .ti -1c
 .RI "unsigned long \fBrt_next\fP (\fBrb_tree_t\fP *tree, \fBrb_node_t\fP **node_io, unsigned long flags)"
 .br
-.RI "\fIGet the next node.\fP"
+.RI "\fIGet the next node. \fP"
 .ti -1c
 .RI "unsigned long \fBrt_iter\fP (\fBrb_tree_t\fP *tree, \fBrb_node_t\fP *start, \fBrb_iter_t\fP iter_func, void *extra, unsigned long flags)"
 .br
-.RI "\fIIterate over each entry in a red-black tree.\fP"
+.RI "\fIIterate over each entry in a red-black tree. \fP"
 .ti -1c
 .RI "unsigned long \fBrt_flush\fP (\fBrb_tree_t\fP *tree, \fBrb_iter_t\fP flush_func, void *extra)"
 .br
-.RI "\fIFlush a red-black tree.\fP"
+.RI "\fIFlush a red-black tree. \fP"
 .ti -1c
 .RI "unsigned long \fBrn_init\fP (\fBrb_node_t\fP *node, void *value)"
 .br
-.RI "\fIDynamically initialize a red-black tree node.\fP"
+.RI "\fIDynamically initialize a red-black tree node. \fP"
 .in -1c
-.SH "DEFINE DOCUMENTATION"
+.SH "Define Documentation"
 .PP 
 .SS "#define RB_NODE_INIT(value)"
 .PP
 This macro statically initializes a \fBrb_node_t\fP.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fIvalue\fP\fP
-A pointer to \fCvoid\fP representing the object associated with the node. 
+\fBParameters:\fP
+.RS 4
+\fIvalue\fP A pointer to \fCvoid\fP representing the object associated with the node. 
+.RE
+.PP
+
 .SS "#define RB_TREE_INIT(comp, extra)"
 .PP
 This macro statically initializes a \fBrb_tree_t\fP.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fIcomp\fP\fP
-A \fBrb_comp_t\fP function pointer for a comparison function. 
-.TP
-\fB\fIextra\fP\fP
-Extra pointer data that should be associated with the red-black tree. 
+\fBParameters:\fP
+.RS 4
+\fIcomp\fP A \fBrb_comp_t\fP function pointer for a comparison function. 
+.br
+\fIextra\fP Extra pointer data that should be associated with the red-black tree. 
+.RE
+.PP
+
 .SS "#define RBT_ORDER_IN"
 .PP
 If this flag is passed to \fBrt_iter()\fP, an inorder iteration will be performed. 
@@ -218,230 +219,267 @@ If this flag is passed to \fBrt_iter()\fP, a preorder iteration will be performe
 .PP
 This macro retrieves the color of the \fCnode\fP.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fInode\fP\fP
-A pointer to a \fBrb_node_t\fP.
+\fBParameters:\fP
+.RS 4
+\fInode\fP A pointer to a \fBrb_node_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 A \fBrb_color_t\fP value expressing the color of the \fCnode\fP. 
+.RE
+.PP
+
 .SS "#define rn_isblack(node)"
 .PP
 This macro safely tests whether a given red-black tree node is black.
 .PP
-\fBWarning: \fP
-.in +1c
+\fBWarning:\fP
+.RS 4
 This macro may evaluate the \fCnode\fP argument twice.
+.RE
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fInode\fP\fP
-A pointer to a \fBrb_node_t\fP.
+\fBParameters:\fP
+.RS 4
+\fInode\fP A pointer to a \fBrb_node_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 Boolean true if \fCnode\fP is black or false otherwise. 
+.RE
+.PP
+
 .SS "#define rn_isleft(node)"
 .PP
 This macro safely tests whether a given red-black tree node is the left node of its parent.
 .PP
-\fBWarning: \fP
-.in +1c
+\fBWarning:\fP
+.RS 4
 This macro may evaluate the \fCnode\fP argument three times.
+.RE
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fInode\fP\fP
-A pointer to a \fBrb_node_t\fP.
+\fBParameters:\fP
+.RS 4
+\fInode\fP A pointer to a \fBrb_node_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 Boolean true if \fCnode\fP is the left node of its parent or false otherwise. 
+.RE
+.PP
+
 .SS "#define rn_isred(node)"
 .PP
 This macro safely tests whether a given red-black tree node is red.
 .PP
-\fBWarning: \fP
-.in +1c
+\fBWarning:\fP
+.RS 4
 This macro may evaluate the \fCnode\fP argument twice.
+.RE
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fInode\fP\fP
-A pointer to a \fBrb_node_t\fP.
+\fBParameters:\fP
+.RS 4
+\fInode\fP A pointer to a \fBrb_node_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 Boolean true if \fCnode\fP is red or false otherwise. 
+.RE
+.PP
+
 .SS "#define rn_isright(node)"
 .PP
 This macro safely tests whether a given red-black tree node is the right node of its parent.
 .PP
-\fBWarning: \fP
-.in +1c
+\fBWarning:\fP
+.RS 4
 This macro may evaluate the \fCnode\fP argument three times.
+.RE
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fInode\fP\fP
-A pointer to a \fBrb_node_t\fP.
+\fBParameters:\fP
+.RS 4
+\fInode\fP A pointer to a \fBrb_node_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 Boolean true if \fCnode\fP is the right node of its parent or false otherwise. 
+.RE
+.PP
+
 .SS "#define rn_key(node)"
 .PP
 This macro retrieves the key associated with the red-black tree node.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fInode\fP\fP
-A pointer to a \fBrb_node_t\fP.
+\fBParameters:\fP
+.RS 4
+\fInode\fP A pointer to a \fBrb_node_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 A pointer to a \fBdb_key_t\fP. 
+.RE
+.PP
+
 .SS "#define rn_left(node)"
 .PP
 This macro retrieves a pointer to the node's left node.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fInode\fP\fP
-A pointer to a \fBrb_node_t\fP.
+\fBParameters:\fP
+.RS 4
+\fInode\fP A pointer to a \fBrb_node_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 A pointer to a \fBrb_node_t\fP representing the left node of the given \fCnode\fP. 
+.RE
+.PP
+
 .SS "#define rn_parent(node)"
 .PP
 This macro retrieves a pointer to the node's parent node.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fInode\fP\fP
-A pointer to a \fBrb_node_t\fP.
+\fBParameters:\fP
+.RS 4
+\fInode\fP A pointer to a \fBrb_node_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 A pointer to a \fBrb_node_t\fP representing the parent of the given \fCnode\fP. 
+.RE
+.PP
+
 .SS "#define rn_right(node)"
 .PP
 This macro retrieves a pointer to the node's right node.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fInode\fP\fP
-A pointer to a \fBrb_node_t\fP.
+\fBParameters:\fP
+.RS 4
+\fInode\fP A pointer to a \fBrb_node_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 A pointer to a \fBrb_node_t\fP representing the right node of the given \fCnode\fP. 
+.RE
+.PP
+
 .SS "#define rn_tree(node)"
 .PP
 This macro retrieves a pointer to the red-black tree the node is in.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fInode\fP\fP
-A pointer to a \fBrb_node_t\fP.
+\fBParameters:\fP
+.RS 4
+\fInode\fP A pointer to a \fBrb_node_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 A pointer to a \fBrb_tree_t\fP. 
+.RE
+.PP
+
 .SS "#define rn_value(node)"
 .PP
 This macro retrieves the value associated with the red-black tree's node. It may be treated as an lvalue to change that value. Care should be taken when using this option.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fInode\fP\fP
-A pointer to a \fBrb_node_t\fP.
+\fBParameters:\fP
+.RS 4
+\fInode\fP A pointer to a \fBrb_node_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 A pointer to \fCvoid\fP representing the value associated with this node. 
+.RE
+.PP
+
 .SS "#define rn_verify(node)"
 .PP
 This macro verifies that a given pointer actually does point to a red-black tree node.
 .PP
-\fBWarning: \fP
-.in +1c
+\fBWarning:\fP
+.RS 4
 This macro may evaluate the \fCnode\fP argument twice.
+.RE
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fInode\fP\fP
-A pointer to a \fBrb_node_t\fP.
+\fBParameters:\fP
+.RS 4
+\fInode\fP A pointer to a \fBrb_node_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 Boolean true if \fCentry\fP is a valid red-black tree node or false otherwise. 
+.RE
+.PP
+
 .SS "#define rt_comp(tree)"
 .PP
 This macro retrieves the comparison function pointer.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fItree\fP\fP
-A pointer to a \fBrb_tree_t\fP.
+\fBParameters:\fP
+.RS 4
+\fItree\fP A pointer to a \fBrb_tree_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 A \fBrb_comp_t\fP. 
+.RE
+.PP
+
 .SS "#define rt_count(tree)"
 .PP
 This macro retrieves the total number of items actually in the red-black tree.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fItree\fP\fP
-A pointer to a \fBrb_tree_t\fP.
+\fBParameters:\fP
+.RS 4
+\fItree\fP A pointer to a \fBrb_tree_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 An \fCunsigned long\fP containing a count of the number of items in the red-black tree. 
+.RE
+.PP
+
 .SS "#define rt_extra(tree)"
 .PP
 This macro retrieves the extra pointer data associated with a particular red-black tree.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fItree\fP\fP
-A pointer to a \fBrb_tree_t\fP.
+\fBParameters:\fP
+.RS 4
+\fItree\fP A pointer to a \fBrb_tree_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 A pointer to \fCvoid\fP. 
+.RE
+.PP
+
 .SS "#define rt_frozen(tree)"
 .PP
 This macro returns a non-zero value if the tree is currently frozen. The red-black tree may be frozen if there is an iteration in progress.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fItree\fP\fP
-A pointer to a \fBrb_tree_t\fP.
+\fBParameters:\fP
+.RS 4
+\fItree\fP A pointer to a \fBrb_tree_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 A zero value if the table is not frozen or a non-zero value if the table is frozen. 
+.RE
+.PP
+
 .SS "#define rt_prev(tree, node_io, flags)"
 .PP
 Obtains the previous node in the given iteration scheme. See \fBrt_next()\fP for more information. 
@@ -449,299 +487,271 @@ Obtains the previous node in the given iteration scheme. See \fBrt_next()\fP for
 .PP
 This macro retrieves the root node of the tree.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fItree\fP\fP
-A pointer to a \fBrb_tree_t\fP.
+\fBParameters:\fP
+.RS 4
+\fItree\fP A pointer to a \fBrb_tree_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 A pointer to a \fBrb_node_t\fP. 
+.RE
+.PP
+
 .SS "#define rt_verify(tree)"
 .PP
 This macro verifies that a given pointer actually does point to a red-black tree.
 .PP
-\fBWarning: \fP
-.in +1c
+\fBWarning:\fP
+.RS 4
 This macro may evaluate the \fCtree\fP argument twice.
+.RE
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fItree\fP\fP
-A pointer to a \fBrb_tree_t\fP.
+\fBParameters:\fP
+.RS 4
+\fItree\fP A pointer to a \fBrb_tree_t\fP.
+.RE
 .PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 Boolean true if \fCtree\fP is a valid red-black tree or false otherwise. 
-.SH "TYPEDEF DOCUMENTATION"
+.RE
+.PP
+
+.SH "Typedef Documentation"
 .PP 
-.SS "typedef enum \fB_rb_color_e\fP rb_color_t"
+.SS "typedef enum \fB_rb_color_e\fP \fBrb_color_t\fP"
 .PP
 See the documentation for the enumeration \fB_rb_color_e\fP. 
-.SS "typedef long(* rb_comp_t)(\fBrb_tree_t\fP *, \fBdb_key_t\fP *, \fBdb_key_t\fP *)"
+.SS "typedef long(* \fBrb_comp_t\fP)(\fBrb_tree_t\fP *, \fBdb_key_t\fP *, \fBdb_key_t\fP *)"
 .PP
 This function pointer references a callback used to compare nodes in a red-black tree. It should return 0 for identical entries, less than 0 if the first key is less than the second, or greater than 0 if the first key is greater than the second. 
-.SS "typedef unsigned long(* rb_iter_t)(\fBrb_tree_t\fP *, \fBrb_node_t\fP *, void *)"
+.SS "typedef unsigned long(* \fBrb_iter_t\fP)(\fBrb_tree_t\fP *, \fBrb_node_t\fP *, void *)"
 .PP
 This function pointer references a callback used by rb_iter() and rb_flush(). It should return 0 for success. A non-zero return value will terminate the operation and will become the return value of the call. 
-.SS "typedef struct _rb_node_s rb_node_t"
+.SS "typedef struct _rb_node_s \fBrb_node_t\fP"
 .PP
 This structure represents a single node in a red-black tree. 
-.SS "typedef struct _rb_tree_s rb_tree_t"
+.SS "typedef struct _rb_tree_s \fBrb_tree_t\fP"
 .PP
 This structure is the basis of all red-black trees maintained by this library. 
-.SH "ENUMERATION TYPE DOCUMENTATION"
+.SH "Enumeration Type Documentation"
 .PP 
-.SS "enum _rb_color_e"
+.SS "enum \fB_rb_color_e\fP"
 .PP
 This enumeration is used to specify the color of a node of a red-black tree. 
 .PP
 \fBEnumeration values: \fP
 .in +1c
 .TP
-\fB\fI\fIRB_COLOR_NONE\fP \fP\fP
+\fB\fIRB_COLOR_NONE \fP\fP
 Node is uncolored as of yet. 
 .TP
-\fB\fI\fIRB_COLOR_RED\fP \fP\fP
+\fB\fIRB_COLOR_RED \fP\fP
 Node is red. 
 .TP
-\fB\fI\fIRB_COLOR_BLACK\fP \fP\fP
+\fB\fIRB_COLOR_BLACK \fP\fP
 Node is black. 
-.SH "FUNCTION DOCUMENTATION"
+.SH "Function Documentation"
 .PP 
 .SS "unsigned long rn_init (\fBrb_node_t\fP * node, void * value)"
 .PP
 This function dynamically initializes a red-black tree node.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fInode\fP\fP
-A pointer to a \fBrb_tree_t\fP to be initialized. 
-.TP
-\fB\fIvalue\fP\fP
-A pointer to \fCvoid\fP which will be the value of the red-black tree entry.
+\fBParameters:\fP
+.RS 4
+\fInode\fP A pointer to a \fBrb_tree_t\fP to be initialized. 
+.br
+\fIvalue\fP A pointer to \fCvoid\fP which will be the value of the red-black tree entry.
+.RE
 .PP
-\fBReturn values: \fP
-.in +1c
-.TP
-\fB\fIDB_ERR_BADARGS\fP\fP
-A \fCNULL\fP pointer was passed for \fCnode\fP. 
+\fBReturn values:\fP
+.RS 4
+\fIDB_ERR_BADARGS\fP A \fCNULL\fP pointer was passed for \fCnode\fP. 
+.RE
+.PP
+
 .SS "unsigned long rt_add (\fBrb_tree_t\fP * tree, \fBrb_node_t\fP * node, \fBdb_key_t\fP * key)"
 .PP
 This function adds a node to a red-black tree.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fItree\fP\fP
-A pointer to a \fBrb_tree_t\fP. 
-.TP
-\fB\fInode\fP\fP
-A pointer to a \fBrb_node_t\fP to be added to the tree. 
-.TP
-\fB\fIkey\fP\fP
-A pointer to a \fBdb_key_t\fP containing the key for the node.
+\fBParameters:\fP
+.RS 4
+\fItree\fP A pointer to a \fBrb_tree_t\fP. 
+.br
+\fInode\fP A pointer to a \fBrb_node_t\fP to be added to the tree. 
+.br
+\fIkey\fP A pointer to a \fBdb_key_t\fP containing the key for the node.
+.RE
 .PP
-\fBReturn values: \fP
-.in +1c
-.TP
-\fB\fIDB_ERR_BADARGS\fP\fP
-An invalid argument was given. 
-.TP
-\fB\fIDB_ERR_BUSY\fP\fP
-The node is already in a tree. 
-.TP
-\fB\fIDB_ERR_FROZEN\fP\fP
-The tree is currently frozen. 
-.TP
-\fB\fIDB_ERR_DUPLICATE\fP\fP
-The entry is a duplicate of an existing node. 
+\fBReturn values:\fP
+.RS 4
+\fIDB_ERR_BADARGS\fP An invalid argument was given. 
+.br
+\fIDB_ERR_BUSY\fP The node is already in a tree. 
+.br
+\fIDB_ERR_FROZEN\fP The tree is currently frozen. 
+.br
+\fIDB_ERR_DUPLICATE\fP The entry is a duplicate of an existing node. 
+.RE
+.PP
+
 .SS "unsigned long rt_find (\fBrb_tree_t\fP * tree, \fBrb_node_t\fP ** node_p, \fBdb_key_t\fP * key)"
 .PP
 This function looks up an entry matching the given \fCkey\fP.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fItree\fP\fP
-A pointer to a \fBrb_tree_t\fP. 
-.TP
-\fB\fInode_p\fP\fP
-A pointer to a pointer to a \fBrb_node_t\fP. This is a result parameter. If \fCNULL\fP is passed, the lookup will be performed and an appropriate error code returned. 
-.TP
-\fB\fIkey\fP\fP
-A pointer to a \fBdb_key_t\fP describing the item to find.
+\fBParameters:\fP
+.RS 4
+\fItree\fP A pointer to a \fBrb_tree_t\fP. 
+.br
+\fInode_p\fP A pointer to a pointer to a \fBrb_node_t\fP. This is a result parameter. If \fCNULL\fP is passed, the lookup will be performed and an appropriate error code returned. 
+.br
+\fIkey\fP A pointer to a \fBdb_key_t\fP describing the item to find.
+.RE
 .PP
-\fBReturn values: \fP
-.in +1c
-.TP
-\fB\fIDB_ERR_BADARGS\fP\fP
-An argument was invalid. 
-.TP
-\fB\fIDB_ERR_NOENTRY\fP\fP
-No matching entry was found. 
+\fBReturn values:\fP
+.RS 4
+\fIDB_ERR_BADARGS\fP An argument was invalid. 
+.br
+\fIDB_ERR_NOENTRY\fP No matching entry was found. 
+.RE
+.PP
+
 .SS "unsigned long rt_flush (\fBrb_tree_t\fP * tree, \fBrb_iter_t\fP flush_func, void * extra)"
 .PP
 This function flushes a red-black tree--that is, it removes each node from the tree. If a \fCflush_func\fP is specified, it will be called on the node after it has been removed from the tree, and may safely call \fCfree()\fP.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fItree\fP\fP
-A pointer to a \fBrb_tree_t\fP. 
-.TP
-\fB\fIflush_func\fP\fP
-A pointer to a callback function used to perform user-specified actions on a node after removing it from the tree. May be \fCNULL\fP. See the documentation for \fBrb_iter_t\fP for more information. 
-.TP
-\fB\fIextra\fP\fP
-A \fCvoid\fP pointer that will be passed to \fCflush_func\fP.
+\fBParameters:\fP
+.RS 4
+\fItree\fP A pointer to a \fBrb_tree_t\fP. 
+.br
+\fIflush_func\fP A pointer to a callback function used to perform user-specified actions on a node after removing it from the tree. May be \fCNULL\fP. See the documentation for \fBrb_iter_t\fP for more information. 
+.br
+\fIextra\fP A \fCvoid\fP pointer that will be passed to \fCflush_func\fP.
+.RE
 .PP
-\fBReturn values: \fP
-.in +1c
-.TP
-\fB\fIDB_ERR_BADARGS\fP\fP
-An argument was invalid. 
-.TP
-\fB\fIDB_ERR_FROZEN\fP\fP
-The red-black tree is frozen. 
+\fBReturn values:\fP
+.RS 4
+\fIDB_ERR_BADARGS\fP An argument was invalid. 
+.br
+\fIDB_ERR_FROZEN\fP The red-black tree is frozen. 
+.RE
+.PP
+
 .SS "unsigned long rt_init (\fBrb_tree_t\fP * tree, \fBrb_comp_t\fP comp, void * extra)"
 .PP
 This function dynamically initializes a red-black tree.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fItree\fP\fP
-A pointer to a \fBrb_tree_t\fP to be initialized. 
-.TP
-\fB\fIcomp\fP\fP
-A \fBrb_comp_t\fP function pointer for a comparison function. 
-.TP
-\fB\fIextra\fP\fP
-Extra pointer data that should be associated with the tree.
+\fBParameters:\fP
+.RS 4
+\fItree\fP A pointer to a \fBrb_tree_t\fP to be initialized. 
+.br
+\fIcomp\fP A \fBrb_comp_t\fP function pointer for a comparison function. 
+.br
+\fIextra\fP Extra pointer data that should be associated with the tree.
+.RE
 .PP
-\fBReturn values: \fP
-.in +1c
-.TP
-\fB\fIDB_ERR_BADARGS\fP\fP
-An invalid argument was given. 
+\fBReturn values:\fP
+.RS 4
+\fIDB_ERR_BADARGS\fP An invalid argument was given. 
+.RE
+.PP
+
 .SS "unsigned long rt_iter (\fBrb_tree_t\fP * tree, \fBrb_node_t\fP * start, \fBrb_iter_t\fP iter_func, void * extra, unsigned long flags)"
 .PP
 This function iterates over every node in a red-black tree in the given traversal order, executing the given \fCiter_func\fP on each node.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fItree\fP\fP
-A pointer to a \fBrb_tree_t\fP. 
-.TP
-\fB\fIstart\fP\fP
-A pointer to a \fBrb_node_t\fP describing where in the tree to start. If \fCNULL\fP is passed, the first element of the tree for the specified order will be assumed. 
-.TP
-\fB\fIiter_func\fP\fP
-A pointer to a callback function used to perform user-specified actions on a node in the red-black tree. \fCNULL\fP is an invalid value. See the documentation for \fBrb_iter_t\fP for more information. 
-.TP
-\fB\fIextra\fP\fP
-A \fCvoid\fP pointer that will be passed to \fCiter_func\fP. 
-.TP
-\fB\fIflags\fP\fP
-One of RBT_ORDER_PRE, RBT_ORDER_IN, or RBT_ORDER_POST, possibly ORed with DB_FLAG_REVERSE to reverse the order of iteration. Zero is not allowed.
+\fBParameters:\fP
+.RS 4
+\fItree\fP A pointer to a \fBrb_tree_t\fP. 
+.br
+\fIstart\fP A pointer to a \fBrb_node_t\fP describing where in the tree to start. If \fCNULL\fP is passed, the first element of the tree for the specified order will be assumed. 
+.br
+\fIiter_func\fP A pointer to a callback function used to perform user-specified actions on a node in the red-black tree. \fCNULL\fP is an invalid value. See the documentation for \fBrb_iter_t\fP for more information. 
+.br
+\fIextra\fP A \fCvoid\fP pointer that will be passed to \fCiter_func\fP. 
+.br
+\fIflags\fP One of RBT_ORDER_PRE, RBT_ORDER_IN, or RBT_ORDER_POST, possibly ORed with DB_FLAG_REVERSE to reverse the order of iteration. Zero is not allowed.
+.RE
 .PP
-\fBReturn values: \fP
-.in +1c
-.TP
-\fB\fIDB_ERR_BADARGS\fP\fP
-An argument was invalid. 
-.TP
-\fB\fIDB_ERR_WRONGTABLE\fP\fP
-\fCstart\fP is not in this red-black tree. 
+\fBReturn values:\fP
+.RS 4
+\fIDB_ERR_BADARGS\fP An argument was invalid. 
+.br
+\fIDB_ERR_WRONGTABLE\fP \fCstart\fP is not in this red-black tree. 
+.RE
+.PP
+
 .SS "unsigned long rt_move (\fBrb_tree_t\fP * tree, \fBrb_node_t\fP * node, \fBdb_key_t\fP * key)"
 .PP
 This function moves an existing node in the red-black tree to correspond to the new key.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fItree\fP\fP
-A pointer to a \fBrb_tree_t\fP. 
-.TP
-\fB\fInode\fP\fP
-A pointer to a \fBrb_node_t\fP to be moved. It must already be in the red-black tree. 
-.TP
-\fB\fIkey\fP\fP
-A pointer to a \fBdb_key_t\fP describing the new key for the node.
+\fBParameters:\fP
+.RS 4
+\fItree\fP A pointer to a \fBrb_tree_t\fP. 
+.br
+\fInode\fP A pointer to a \fBrb_node_t\fP to be moved. It must already be in the red-black tree. 
+.br
+\fIkey\fP A pointer to a \fBdb_key_t\fP describing the new key for the node.
+.RE
 .PP
-\fBReturn values: \fP
-.in +1c
-.TP
-\fB\fIDB_ERR_BADARGS\fP\fP
-An invalid argument was given. 
-.TP
-\fB\fIDB_ERR_UNUSED\fP\fP
-Node is not in a red-black tree. 
-.TP
-\fB\fIDB_ERR_WRONGTABLE\fP\fP
-Node is not in this tree. 
-.TP
-\fB\fIDB_ERR_FROZEN\fP\fP
-Red-black tree is frozen. 
-.TP
-\fB\fIDB_ERR_DUPLICATE\fP\fP
-New key is a duplicate of an existing key. 
-.TP
-\fB\fIDB_ERR_READDFAILED\fP\fP
-Unable to re-add node to tree. 
+\fBReturn values:\fP
+.RS 4
+\fIDB_ERR_BADARGS\fP An invalid argument was given. 
+.br
+\fIDB_ERR_UNUSED\fP Node is not in a red-black tree. 
+.br
+\fIDB_ERR_WRONGTABLE\fP Node is not in this tree. 
+.br
+\fIDB_ERR_FROZEN\fP Red-black tree is frozen. 
+.br
+\fIDB_ERR_DUPLICATE\fP New key is a duplicate of an existing key. 
+.br
+\fIDB_ERR_READDFAILED\fP Unable to re-add node to tree. 
+.RE
+.PP
+
 .SS "unsigned long rt_next (\fBrb_tree_t\fP * tree, \fBrb_node_t\fP ** node_io, unsigned long flags)"
 .PP
 This function obtains the next node in the given iteration scheme. The \fCnode_io\fP parameter is a value-result parameter--if the node pointer to which it points is \fCNULL\fP, the first node for the given iteration order will be loaded; otherwise, the next node in the given iteration order will be loaded.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fItree\fP\fP
-A pointer to a \fBrb_tree_t\fP. 
-.TP
-\fB\fInode_io\fP\fP
-A pointer to a pointer to a \fBrb_node_t\fP. If the pointer to which node_io points is \fCNULL\fP, the first node will be loaded, otherwise the next node will be loaded. 
-.TP
-\fB\fIflags\fP\fP
-One of RBT_ORDER_PRE, RBT_ORDER_IN, or RBT_ORDER_POST, possibly ORed with DB_FLAG_REVERSE to reverse the order of iteration. Zero is not allowed.
+\fBParameters:\fP
+.RS 4
+\fItree\fP A pointer to a \fBrb_tree_t\fP. 
+.br
+\fInode_io\fP A pointer to a pointer to a \fBrb_node_t\fP. If the pointer to which node_io points is \fCNULL\fP, the first node will be loaded, otherwise the next node will be loaded. 
+.br
+\fIflags\fP One of RBT_ORDER_PRE, RBT_ORDER_IN, or RBT_ORDER_POST, possibly ORed with DB_FLAG_REVERSE to reverse the order of iteration. Zero is not allowed.
+.RE
 .PP
-\fBReturn values: \fP
-.in +1c
-.TP
-\fB\fIDB_ERR_BADARGS\fP\fP
-An argument was invalid. 
-.TP
-\fB\fIDB_ERR_WRONGTABLE\fP\fP
-\fCstart\fP is not in this red-black tree. 
+\fBReturn values:\fP
+.RS 4
+\fIDB_ERR_BADARGS\fP An argument was invalid. 
+.br
+\fIDB_ERR_WRONGTABLE\fP \fCstart\fP is not in this red-black tree. 
+.RE
+.PP
+
 .SS "unsigned long rt_remove (\fBrb_tree_t\fP * tree, \fBrb_node_t\fP * node)"
 .PP
 This function removes the given node from the specified red-black tree.
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fItree\fP\fP
-A pointer to a \fBrb_tree_t\fP. 
-.TP
-\fB\fInode\fP\fP
-A pointer to a \fBrb_node_t\fP to be removed from the tree.
+\fBParameters:\fP
+.RS 4
+\fItree\fP A pointer to a \fBrb_tree_t\fP. 
+.br
+\fInode\fP A pointer to a \fBrb_node_t\fP to be removed from the tree.
+.RE
 .PP
-\fBReturn values: \fP
-.in +1c
-.TP
-\fB\fIDB_ERR_BADARGS\fP\fP
-An invalid argument was given. 
-.TP
-\fB\fIDB_ERR_UNUSED\fP\fP
-Node is not in a red-black tree. 
-.TP
-\fB\fIDB_ERR_WRONGTABLE\fP\fP
-Node is not in this tree. 
-.TP
-\fB\fIDB_ERR_FROZEN\fP\fP
-Red-black tree is frozen. 
+\fBReturn values:\fP
+.RS 4
+\fIDB_ERR_BADARGS\fP An invalid argument was given. 
+.br
+\fIDB_ERR_UNUSED\fP Node is not in a red-black tree. 
+.br
+\fIDB_ERR_WRONGTABLE\fP Node is not in this tree. 
+.br
+\fIDB_ERR_FROZEN\fP Red-black tree is frozen. 
+.RE
+.PP
+
