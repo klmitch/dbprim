@@ -1039,25 +1039,6 @@ struct _smat_table_s {
 #define SMAT_TABLE_MAGIC 0x2f92a7b1
 
 /** \ingroup dbprim_smat
- * \brief Sparse matrix table static initializer.
- *
- * This macro statically initializes a #smat_table_t.
- *
- * \param flags	A bit-wise OR of #HASH_FLAG_AUTOGROW and
- *		#HASH_FLAG_AUTOSHRINK.  If neither behavior is
- *		desired, use 0.
- * \param resize
- *		A #smat_resize_t function pointer for determining
- *		whether resizing is permitted and/or for notification
- *		of the resize.
- * \param extra	Extra pointer data that should be associated with the
- *		sparse matrix.
- */
-#define SMAT_TABLE_INIT(flags, resize, extra) \
-	{ SMAT_TABLE_MAGIC, (resize), (extra), \
-	  HASH_TABLE_INIT((flags), _smat_hash, _smat_comp, _smat_resize, 0) }
-
-/** \ingroup dbprim_smat
  * \brief Sparse matrix table verification macro.
  *
  * This macro verifies that a given pointer actually does point to a

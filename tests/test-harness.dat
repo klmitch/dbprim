@@ -1421,25 +1421,6 @@ program t_st_init t_st_init \
 	"Test sparse matrix table initialization"
 t_st_init: t_ht_init
 
-test st_static_magic		t_st_init	PASS	\
-	"Test static initialization: magic number"
-test st_static_htinit		t_st_init	PASS	\
-	"Test static initialization: hash table init"
-test st_static_hflags		t_st_init	PASS	\
-	"Test static initialization: flags"
-test st_static_hmodulus		t_st_init	PASS	\
-	"Test static initialization: modulus"
-test st_static_hfunc		t_st_init	PASS	\
-	"Test static initialization: hash function"
-test st_static_hcomp		t_st_init	PASS	\
-	"Test static initialization: hash comparison function"
-test st_static_hrsize		t_st_init	PASS	\
-	"Test static initialization: hash resize callback"
-test st_static_rsize		t_st_init	PASS	\
-	"Test static initialization: resize callback"
-test st_static_hextra		t_st_init	PASS	\
-	"Test static initialization: extra data"
-
 test st_init_noargs		t_st_init	PASS	\
 	"Test st_init() with no valid arguments"
 

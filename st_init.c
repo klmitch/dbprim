@@ -25,7 +25,7 @@ RCSTAG("@(#)$Id$");
 
 /** \ingroup dbprim_smat
  *
- * This function dynamically initializes a sparse matrix table.
+ * This function initializes a sparse matrix table.
  *
  * \param table	A pointer to a #smat_table_t to be initialized.
  * \param flags	A bit-wise OR of #HASH_FLAG_AUTOGROW and
@@ -61,7 +61,7 @@ st_init(smat_table_t *table, unsigned long flags, smat_resize_t resize,
 
   /* initialize the hash table */
   if ((retval = ht_init(&table->st_table, flags, _smat_hash, _smat_comp,
-			_smat_resize, 0, init_mod)))
+			_smat_resize, table, init_mod)))
     return retval;
 
   table->st_magic = SMAT_TABLE_MAGIC; /* initialize the rest of the table */

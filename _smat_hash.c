@@ -37,8 +37,8 @@ _smat_hash(hash_table_t *table, db_key_t *key)
   objects = dk_key(key); /* get the key--a pair of pointers */
 
   /* walk through both elements in the array... */
-  for (i = SMAT_LOC_FIRST; i < SMAT_LOC_SECOND; i++) {
-    c = objects[i]; /* get a char pointer to the pointer value */
+  for (i = SMAT_LOC_FIRST; i <= SMAT_LOC_SECOND; i++) {
+    c = (unsigned char *)&objects[i]; /* get a char pointer to pointer value */
     for (j = 0; j < sizeof(void *); j++) /* step through each character */
       hash = (hash * 257) + c[j];
   }

@@ -52,10 +52,10 @@ typedef enum \hyperlink{group__dbprim__link_a26}{\_\-link\_\-loc\_\-e} \hyperlin
 \subsection*{Enumerations}
 \begin{CompactItemize}
 \item 
-enum \hyperlink{group__dbprim__link_a26}{\_\-link\_\-loc\_\-e} \{ \hyperlink{group__dbprim__link_a26a132}{LINK\_\-LOC\_\-HEAD}, 
-\hyperlink{group__dbprim__link_a26a133}{LINK\_\-LOC\_\-TAIL}, 
-\hyperlink{group__dbprim__link_a26a134}{LINK\_\-LOC\_\-BEFORE}, 
-\hyperlink{group__dbprim__link_a26a135}{LINK\_\-LOC\_\-AFTER}
+enum \hyperlink{group__dbprim__link_a26}{\_\-link\_\-loc\_\-e} \{ \hyperlink{group__dbprim__link_a26a131}{LINK\_\-LOC\_\-HEAD}, 
+\hyperlink{group__dbprim__link_a26a132}{LINK\_\-LOC\_\-TAIL}, 
+\hyperlink{group__dbprim__link_a26a133}{LINK\_\-LOC\_\-BEFORE}, 
+\hyperlink{group__dbprim__link_a26a134}{LINK\_\-LOC\_\-AFTER}
  \}
 \begin{CompactList}\small\item\em Linked list location.\item\end{CompactList}\end{CompactItemize}
 \subsection*{Functions}
@@ -344,21 +344,21 @@ This enumeration is used to specify where an element in a linked list should be 
 \item[Enumeration values: ]\par
 \begin{description}
 \index{LINK_LOC_HEAD@{LINK\_\-LOC\_\-HEAD}!dbprim_link@{dbprim\_\-link}}\index{dbprim_link@{dbprim\_\-link}!LINK_LOC_HEAD@{LINK\_\-LOC\_\-HEAD}}\item[{\em 
-\hypertarget{group__dbprim__link_a26a132}{
+\hypertarget{group__dbprim__link_a26a131}{
 {\em LINK\_\-LOC\_\-HEAD}}
-\label{group__dbprim__link_a26a132}
+\label{group__dbprim__link_a26a131}
 }]Element should be inserted at head of list. \index{LINK_LOC_TAIL@{LINK\_\-LOC\_\-TAIL}!dbprim_link@{dbprim\_\-link}}\index{dbprim_link@{dbprim\_\-link}!LINK_LOC_TAIL@{LINK\_\-LOC\_\-TAIL}}\item[{\em 
-\hypertarget{group__dbprim__link_a26a133}{
+\hypertarget{group__dbprim__link_a26a132}{
 {\em LINK\_\-LOC\_\-TAIL}}
-\label{group__dbprim__link_a26a133}
+\label{group__dbprim__link_a26a132}
 }]Element should be inserted at tail of list. \index{LINK_LOC_BEFORE@{LINK\_\-LOC\_\-BEFORE}!dbprim_link@{dbprim\_\-link}}\index{dbprim_link@{dbprim\_\-link}!LINK_LOC_BEFORE@{LINK\_\-LOC\_\-BEFORE}}\item[{\em 
-\hypertarget{group__dbprim__link_a26a134}{
+\hypertarget{group__dbprim__link_a26a133}{
 {\em LINK\_\-LOC\_\-BEFORE}}
-\label{group__dbprim__link_a26a134}
+\label{group__dbprim__link_a26a133}
 }]Element should be inserted before specified element. \index{LINK_LOC_AFTER@{LINK\_\-LOC\_\-AFTER}!dbprim_link@{dbprim\_\-link}}\index{dbprim_link@{dbprim\_\-link}!LINK_LOC_AFTER@{LINK\_\-LOC\_\-AFTER}}\item[{\em 
-\hypertarget{group__dbprim__link_a26a135}{
+\hypertarget{group__dbprim__link_a26a134}{
 {\em LINK\_\-LOC\_\-AFTER}}
-\label{group__dbprim__link_a26a135}
+\label{group__dbprim__link_a26a134}
 }]Element should be inserted after specified element. \end{description}
 \end{Desc}
 
@@ -399,7 +399,7 @@ This function adds a given element to a specified linked list in the specified l
 list}]A pointer to a \hyperlink{group__dbprim__link_a0}{link\_\-head\_\-t}. \item[{\em 
 new}]A pointer to the \hyperlink{group__dbprim__link_a1}{link\_\-elem\_\-t} to be added to the linked list. \item[{\em 
 loc}]A \hyperlink{group__dbprim__link_a4}{link\_\-loc\_\-t} indicating where the entry should be added. \item[{\em 
-elem}]A pointer to a \hyperlink{group__dbprim__link_a1}{link\_\-elem\_\-t} describing another element in the list if {\tt loc} is \hyperlink{group__dbprim__link_a26a134}{LINK\_\-LOC\_\-BEFORE} or \hyperlink{group__dbprim__link_a26a135}{LINK\_\-LOC\_\-AFTER}.\end{description}
+elem}]A pointer to a \hyperlink{group__dbprim__link_a1}{link\_\-elem\_\-t} describing another element in the list if {\tt loc} is \hyperlink{group__dbprim__link_a26a133}{LINK\_\-LOC\_\-BEFORE} or \hyperlink{group__dbprim__link_a26a134}{LINK\_\-LOC\_\-AFTER}.\end{description}
 \end{Desc}
 \begin{Desc}
 \item[Return values: ]\par
@@ -514,7 +514,7 @@ This function moves a specified element within the linked list.\begin{Desc}
 list}]A pointer to a \hyperlink{group__dbprim__link_a0}{link\_\-head\_\-t}. \item[{\em 
 new}]A pointer to the \hyperlink{group__dbprim__link_a1}{link\_\-elem\_\-t} describing the element to be moved. \item[{\em 
 loc}]A \hyperlink{group__dbprim__link_a4}{link\_\-loc\_\-t} indicating where the entry should be moved to. \item[{\em 
-elem}]A pointer to a \hyperlink{group__dbprim__link_a1}{link\_\-elem\_\-t} describing another element in the list if {\tt loc} is \hyperlink{group__dbprim__link_a26a134}{LINK\_\-LOC\_\-BEFORE} or \hyperlink{group__dbprim__link_a26a135}{LINK\_\-LOC\_\-AFTER}.\end{description}
+elem}]A pointer to a \hyperlink{group__dbprim__link_a1}{link\_\-elem\_\-t} describing another element in the list if {\tt loc} is \hyperlink{group__dbprim__link_a26a133}{LINK\_\-LOC\_\-BEFORE} or \hyperlink{group__dbprim__link_a26a134}{LINK\_\-LOC\_\-AFTER}.\end{description}
 \end{Desc}
 \begin{Desc}
 \item[Return values: ]\par

@@ -1,5 +1,23 @@
 2003-11-22  Kevin L Mitchell  <klmitch@mit.edu>
 
+	* tests/test-harness.dat (t_st_init): remove static initializer
+	tests
+
+	* tests/t_st_init.c (main): remove static initializer check
+
+	* dbprim.h: SMAT_TABLE_INIT() won't work, because the hash table
+	must point up to the smat_table, which can't be done in a static
+	initializer
+
+	* tests/t_st_init.c (check_init): fix test--test st_extra instead
+	of ht_extra
+
+	* st_init.c (st_init): bah, make the table extra be the table
+	pointer
+
+	* _smat_hash.c (_smat_hash): change "<" to "<=" (reported by
+	mbuna); coerce object pointer into an unsigned string
+
 	* _smat_comp.c (_smat_comp): change "<" to "<=" (reported by
 	mbuna)
 

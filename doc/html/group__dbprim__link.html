@@ -50,10 +50,10 @@ Elements may be added at any arbitrary location in the linked list with <a class
 <tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__dbprim__link.html#a26">_link_loc_e</a>&nbsp;</td><td valign=bottom><a class="el" href="group__dbprim__link.html#a4">link_loc_t</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Linked list location.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Enumerations</h2></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__dbprim__link.html#a26">_link_loc_e</a> { <a class="el" href="group__dbprim__link.html#a26a132">LINK_LOC_HEAD</a>, 
-<a class="el" href="group__dbprim__link.html#a26a133">LINK_LOC_TAIL</a>, 
-<a class="el" href="group__dbprim__link.html#a26a134">LINK_LOC_BEFORE</a>, 
-<a class="el" href="group__dbprim__link.html#a26a135">LINK_LOC_AFTER</a>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__dbprim__link.html#a26">_link_loc_e</a> { <a class="el" href="group__dbprim__link.html#a26a131">LINK_LOC_HEAD</a>, 
+<a class="el" href="group__dbprim__link.html#a26a132">LINK_LOC_TAIL</a>, 
+<a class="el" href="group__dbprim__link.html#a26a133">LINK_LOC_BEFORE</a>, 
+<a class="el" href="group__dbprim__link.html#a26a134">LINK_LOC_AFTER</a>
  }</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Linked list location.</em> <a href="#a26">More...</a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Functions</h2></td></tr>
@@ -641,13 +641,13 @@ See the documentation for the enumeration <a class="el" href="group__dbprim__lin
 <p>
 This enumeration is used to specify where an element in a linked list should be placed. It should be referenced by the typedef <a class="el" href="group__dbprim__link.html#a4">link_loc_t</a>. <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a26a132" doxytag="LINK_LOC_HEAD"></a><em>LINK_LOC_HEAD</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a26a131" doxytag="LINK_LOC_HEAD"></a><em>LINK_LOC_HEAD</em></em>&nbsp;</td><td>
 Element should be inserted at head of list. </td></tr>
-<tr><td valign=top><em><a name="a26a133" doxytag="LINK_LOC_TAIL"></a><em>LINK_LOC_TAIL</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a26a132" doxytag="LINK_LOC_TAIL"></a><em>LINK_LOC_TAIL</em></em>&nbsp;</td><td>
 Element should be inserted at tail of list. </td></tr>
-<tr><td valign=top><em><a name="a26a134" doxytag="LINK_LOC_BEFORE"></a><em>LINK_LOC_BEFORE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a26a133" doxytag="LINK_LOC_BEFORE"></a><em>LINK_LOC_BEFORE</em></em>&nbsp;</td><td>
 Element should be inserted before specified element. </td></tr>
-<tr><td valign=top><em><a name="a26a135" doxytag="LINK_LOC_AFTER"></a><em>LINK_LOC_AFTER</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a26a134" doxytag="LINK_LOC_AFTER"></a><em>LINK_LOC_AFTER</em></em>&nbsp;</td><td>
 Element should be inserted after specified element. </td></tr>
 </table>
 </dl>
@@ -761,7 +761,7 @@ A pointer to the <a class="el" href="group__dbprim__link.html#a1">link_elem_t</a
 <tr><td valign=top><em>loc</em>&nbsp;</td><td>
 A <a class="el" href="group__dbprim__link.html#a4">link_loc_t</a> indicating where the entry should be added. </td></tr>
 <tr><td valign=top><em>elem</em>&nbsp;</td><td>
-A pointer to a <a class="el" href="group__dbprim__link.html#a1">link_elem_t</a> describing another element in the list if <code>loc</code> is <a class="el" href="group__dbprim__link.html#a26a134">LINK_LOC_BEFORE</a> or <a class="el" href="group__dbprim__link.html#a26a135">LINK_LOC_AFTER</a>.</td></tr>
+A pointer to a <a class="el" href="group__dbprim__link.html#a1">link_elem_t</a> describing another element in the list if <code>loc</code> is <a class="el" href="group__dbprim__link.html#a26a133">LINK_LOC_BEFORE</a> or <a class="el" href="group__dbprim__link.html#a26a134">LINK_LOC_AFTER</a>.</td></tr>
 </table>
 </dl><dl compact><dt><b>Return values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
@@ -1095,7 +1095,7 @@ A pointer to the <a class="el" href="group__dbprim__link.html#a1">link_elem_t</a
 <tr><td valign=top><em>loc</em>&nbsp;</td><td>
 A <a class="el" href="group__dbprim__link.html#a4">link_loc_t</a> indicating where the entry should be moved to. </td></tr>
 <tr><td valign=top><em>elem</em>&nbsp;</td><td>
-A pointer to a <a class="el" href="group__dbprim__link.html#a1">link_elem_t</a> describing another element in the list if <code>loc</code> is <a class="el" href="group__dbprim__link.html#a26a134">LINK_LOC_BEFORE</a> or <a class="el" href="group__dbprim__link.html#a26a135">LINK_LOC_AFTER</a>.</td></tr>
+A pointer to a <a class="el" href="group__dbprim__link.html#a1">link_elem_t</a> describing another element in the list if <code>loc</code> is <a class="el" href="group__dbprim__link.html#a26a133">LINK_LOC_BEFORE</a> or <a class="el" href="group__dbprim__link.html#a26a134">LINK_LOC_AFTER</a>.</td></tr>
 </table>
 </dl><dl compact><dt><b>Return values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
@@ -1165,7 +1165,7 @@ An argument was invalid. </td></tr>
 </dl>    </td>
   </tr>
 </table>
-<hr><address style="align: right;"><small>Generated on Sun Aug 31 19:35:47 2003 for Database Primitives Library by
+<hr><address style="align: right;"><small>Generated on Sat Nov 22 13:21:50 2003 for Database Primitives Library by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.2.18 </small></address>

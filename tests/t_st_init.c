@@ -75,7 +75,7 @@ check_init(smat_table_t *table, unsigned long flags, unsigned long mod,
   else
     printf("PASS/%s_rsize:Initialization set resize properly\n", how);
 
-  if (ht_extra(&table->st_table) != extra) /* verify extra was set */
+  if (table->st_extra != extra) /* verify extra was set */
     printf("FAIL/%s_hextra:Initialization failed to set extra\n", how);
   else
     printf("PASS/%s_hextra:Initialization set extra properly\n", how);
@@ -118,11 +118,7 @@ check_rsize(smat_table_t *tab, unsigned long new_mod)
 int
 main(int argc, char **argv)
 {
-  smat_table_t table = SMAT_TABLE_INIT(0x80010000 | HASH_FLAG_AUTOGROW,
-				       check_rsize, TABLE0);
-
-  /* Check that the static initializer produces a passable structure */
-  check_init(&table, HASH_FLAG_AUTOGROW, 0, check_rsize, TABLE0, "st_static");
+  smat_table_t table;
 
   /* now, check what ht_init does with bad arguments */
   check_result(st_init(0, 0, 0, 0, 0), DB_ERR_BADARGS, "st_init_noargs",

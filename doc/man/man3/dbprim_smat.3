@@ -1,4 +1,4 @@
-.TH "Sparse matrices" 3 "31 Aug 2003" "Database Primitives Library" \" -*- nroff -*-
+.TH "Sparse matrices" 3 "22 Nov 2003" "Database Primitives Library" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -21,10 +21,6 @@ An association may also be reordered within the linked lists using the \fBsh_mov
 .SS "Defines"
 
 .in +1c
-.ti -1c
-.RI "#define \fBSMAT_TABLE_INIT\fP(flags, resize, extra)"
-.br
-.RI "\fISparse matrix table static initializer.\fP"
 .ti -1c
 .RI "#define \fBst_verify\fP(table)"
 .br
@@ -500,21 +496,6 @@ One of \fBSMAT_LOC_FIRST\fP or \fBSMAT_LOC_SECOND\fP specifing whether the objec
 .TP
 \fB\fIobject\fP\fP
 A pointer to \fCvoid\fP representing the object associated with the list head. 
-.SS "#define SMAT_TABLE_INIT(flags, resize, extra)"
-.PP
-This macro statically initializes a \fBsmat_table_t\fP.
-.PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fIflags\fP\fP
-A bit-wise OR of \fBHASH_FLAG_AUTOGROW\fP and \fBHASH_FLAG_AUTOSHRINK\fP. If neither behavior is desired, use 0. 
-.TP
-\fB\fIresize\fP\fP
-A \fBsmat_resize_t\fP function pointer for determining whether resizing is permitted and/or for notification of the resize. 
-.TP
-\fB\fIextra\fP\fP
-Extra pointer data that should be associated with the sparse matrix. 
 .SS "#define st_count(table)"
 .PP
 This macro retrieves the total number of items actually in the sparse matrix table.
@@ -914,7 +895,7 @@ The table is frozen.
 The table is not empty. 
 .SS "unsigned long st_init (\fBsmat_table_t\fP * table, unsigned long flags, \fBsmat_resize_t\fP resize, void * extra, unsigned long init_mod)"
 .PP
-This function dynamically initializes a sparse matrix table.
+This function initializes a sparse matrix table.
 .PP
 \fBParameters: \fP
 .in +1c
