@@ -24,11 +24,12 @@
  *
  * This library contains a set of database primitives.  The primitives
  * defined by this library include a powerful linked list abstraction,
- * a hash table with optional automatic resizing, and a powerful and
- * efficient sparse matrix implementation.  All of the necessary
- * declarations for using this library are found in the header file
- * dbprim.h.  For more information about the components of this
- * library, see the module list.
+ * a hash table with optional automatic resizing, a powerful and
+ * efficient sparse matrix implementation, and a red-black tree with
+ * iterative traversals.  All of the necessary declarations for using
+ * this library are found in the header file dbprim.h.  For more
+ * information about the components of this library, see the module
+ * list.
  */
 
 /** \defgroup dbprim_key Database keys
@@ -61,7 +62,7 @@
  *
  * Elements may be added at any arbitrary location in the linked list
  * with ll_add(); moved to any other arbitrary location in the linked
- * list with ll_move(), or removed from the list with ll_remove().  In
+ * list with ll_move(); or removed from the list with ll_remove().  In
  * addition, the user may search the list using a user-defined
  * comparison function with ll_find(); iterate over every element in
  * the list with ll_iter(); or remove all items from the list with
@@ -163,6 +164,47 @@
  * clean-up function.
  */
 
+/** \defgroup dbprim_rbtree Red-black trees
+ * \brief Operations for red-black trees.
+ *
+ * Red-black trees are a form of binary search tree.  One essential
+ * feature of binary search trees is that they need to be balanced in
+ * order to be efficient.  Many algorithms exist for keeping trees
+ * balanced, but among the easiest to implement is the red-black
+ * tree.  In a red-black tree, every node is given a color--either red
+ * or black--and there are various rules for what color nodes can be
+ * present where in the tree.  This library implements these rules,
+ * along with functions for traversing the tree in any desired tree
+ * order.
+ *
+ * A red-black tree is represented by a caller-allocated #rb_tree_t
+ * structure.  This structure describes various characteristics of the
+ * tree, such as the number of nodes in the tree, and includes a
+ * pointer to the root node of the tree.  Nodes may be added to the
+ * tree using rt_add() or removed from the tree using rt_remove().
+ * Additionally, the key on a given node may be changed using the
+ * rt_move() function.  Nodes may be looked up with rt_find(), and
+ * rt_iter() will execute a user-defined function for each node in the
+ * tree in the specified order.  To remove all entries in the tree,
+ * simply call the rt_flush() function.  If you must manually iterate
+ * through the tree, you may call the rt_next() and rt_prev()
+ * functions to determine the next or previous nodes to visit.
+ *
+ * There are three ways to traverse a binary tree.  The first, known
+ * as "preorder," visits the root node, then traverses the left
+ * subtree in preorder, then traverses the right subtree in preorder.
+ * The second, known an "inorder," traverses the left subtree in
+ * inorder, then the root node, then the right subtree in inorder.
+ * (This particular ordering retrieves the nodes in lexical order;
+ * thus its name.)  The third ordering is known as "postorder"; this
+ * ordering traverses the left subtree, the right subtree, then visits
+ * the root node.  To iterate over the tree in one of these orderings,
+ * simply call rt_iter() (or rt_next() or rt_prev()) with the
+ * #RBT_ORDER_PRE, #RBT_ORDER_IN, or #RBT_ORDER_POST flags.  You may
+ * OR these flags with #DB_FLAG_REVERSE to reverse the traversal
+ * ordering, if you wish.
+ */
+
 /** \ingroup dbprim_key
  * \brief Database key.
  *
@@ -225,6 +267,21 @@ typedef struct _smat_head_s  smat_head_t;
  * element in a sparse matrix.
  */
 typedef struct _smat_entry_s smat_entry_t;
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree.
+ *
+ * This structure is the basis of all red-black trees maintained by
+ * this library.
+ */
+typedef struct _rb_tree_s rb_tree_t;
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree node.
+ *
+ * This structure represents a single node in a red-black tree.
+ */
+typedef struct _rb_node_s rb_node_t;
 
 /** \ingroup dbprim_link
  * \brief Linked list iteration callback.
@@ -314,6 +371,26 @@ typedef unsigned long (*smat_iter_t)(smat_table_t *, smat_entry_t *, void *);
  */
 typedef unsigned long (*smat_comp_t)(db_key_t *, smat_entry_t *);
 
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree iteration callback.
+ *
+ * This function pointer references a callback used by rb_iter() and
+ * rb_flush().  It should return 0 for success.  A non-zero return
+ * value will terminate the operation and will become the return
+ * value of the call.
+ */
+typedef unsigned long (*rb_iter_t)(rb_tree_t *, rb_node_t *, void *);
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree comparison callback.
+ *
+ * This function pointer references a callback used to compare nodes
+ * in a red-black tree.  It should return 0 for identical entries,
+ * less than 0 if the first key is less than the second, or greater
+ * than 0 if the first key is greater than the second.
+ */
+typedef long (*rb_comp_t)(rb_tree_t *, db_key_t *, db_key_t *);
+
 /** \ingroup dbprim_link
  * \brief Linked list location.
  *
@@ -356,6 +433,25 @@ enum _smat_loc_e {
  */
 typedef enum _smat_loc_e smat_loc_t;
 
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree node color.
+ *
+ * This enumeration is used to specify the color of a node of a
+ * red-black tree.
+ */
+enum _rb_color_e {
+  RB_COLOR_NONE,	/**< Node is uncolored as of yet. */
+  RB_COLOR_RED,		/**< Node is red. */
+  RB_COLOR_BLACK	/**< Node is black. */
+};
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree node color.
+ *
+ * See the documentation for the enumeration #_rb_color_e.
+ */
+typedef enum _rb_color_e rb_color_t;
+
 struct _db_key_s {
   void *dk_key;		/* Pointer to the key. */
   int   dk_len;		/* Length of the key, if that has any meaning. */
@@ -394,6 +490,14 @@ struct _db_key_s {
  */
 #define dk_len(key)	((key)->dk_len)
 
+/** \ingroup dbprim_key
+ * \brief Reverse flag.
+ *
+ * This flag can be passed to ordered iterations to reverse the
+ * order of the iterations.
+ */
+#define DB_FLAG_REVERSE		0x80000000
+
 struct _link_head_s {
   unsigned long	lh_magic;	/* Magic number. */
   unsigned long	lh_count;	/* Number of entries in the linked list. */
@@ -419,6 +523,8 @@ struct _link_head_s {
  *
  * This macro verifies that a given pointer actually does point to a
  * linked list head.
+ *
+ * \warning This macro may evaluate the \c list argument twice.
  *
  * \param list	A pointer to a #link_head_t.
  *
@@ -484,7 +590,7 @@ unsigned long ll_find(link_head_t *list, link_elem_t **elem_p,
 		      link_comp_t comp_func, link_elem_t *start,
 		      db_key_t *key);
 unsigned long ll_iter(link_head_t *list, link_elem_t *start,
-		      link_iter_t iter_func, void *extra);
+		      link_iter_t iter_func, void *extra, unsigned long flags);
 unsigned long ll_flush(link_head_t *list, link_iter_t flush_func, void *extra);
 
 struct _link_elem_s {
@@ -513,6 +619,8 @@ struct _link_elem_s {
  *
  * This macro verifies that a given pointer actually does point to a
  * linked list element.
+ *
+ * \warning This macro may evaluate the \c element argument twice.
  *
  * \param element
  *		A pointer to a #link_elem_t.
@@ -655,6 +763,8 @@ struct _hash_table_s {
  * This macro verifies that a given pointer actually does point to a
  * hash table.
  *
+ * \warning This macro may evaluate the \c table argument twice.
+ *
  * \param table	A pointer to a #hash_table_t.
  *
  * \return	Boolean true if \p table is a valid hash table or
@@ -691,7 +801,7 @@ struct _hash_table_s {
  * \return	A zero value if the table is not frozen or a non-zero
  *		value if the table is frozen.
  */
-#define ht_frozen(table)  ((table)->ht_flags & HASH_FLAG_FROZEN)
+#define ht_frozen(table)  ((table)->ht_flags & HASH_FLAG_FREEZE)
 
 /** \ingroup dbprim_hash
  * \brief Hash table modulus.
@@ -821,6 +931,8 @@ struct _hash_entry_s {
  * This macro verifies that a given pointer actually does point to a
  * hash table entry.
  *
+ * \warning This macro may evaluate the \c entry argument twice.
+ *
  * \param entry	A pointer to a #hash_entry_t.
  *
  * \return	Boolean true if \p entry is a valid hash table entry
@@ -947,6 +1059,8 @@ struct _smat_table_s {
  *
  * This macro verifies that a given pointer actually does point to a
  * sparse matrix table.
+ *
+ * \warning This macro may evaluate the \c table argument twice.
  *
  * \param table	A pointer to a #smat_table_t.
  *
@@ -1103,6 +1217,8 @@ struct _smat_head_s {
  * This macro verifies that a given pointer actually does point to a
  * sparse matrix head.
  *
+ * \warning This macro may evaluate the \c head argument twice.
+ *
  * \param head	A pointer to a #smat_head_t.
  *
  * \return	Boolean true if \p head is a valid sparse matrix head
@@ -1229,7 +1345,7 @@ unsigned long sh_find(smat_head_t *head, smat_entry_t **elem_p,
 		      smat_comp_t comp_func, smat_entry_t *start,
 		      db_key_t *key);
 unsigned long sh_iter(smat_head_t *head, smat_entry_t *start,
-		      smat_iter_t iter_func, void *extra);
+		      smat_iter_t iter_func, void *extra, unsigned long flags);
 unsigned long sh_flush(smat_head_t *head, smat_iter_t flush_func, void *extra);
 
 struct _smat_entry_s {
@@ -1247,6 +1363,8 @@ struct _smat_entry_s {
  *
  * This macro verifies that a given pointer actually does point to a
  * sparse matrix entry.
+ *
+ * \warning This macro may evaluate the \c entry argument twice.
  *
  * \param entry	A pointer to a #smat_entry_t.
  *
@@ -1378,6 +1496,344 @@ struct _smat_entry_s {
  * \return	A pointer to \c void representing the object.
  */
 #define se_object(entry, n) ((entry)->se_object[(n)])
+
+struct _rb_tree_s {
+  unsigned long	rt_magic;	/* magic number */
+  unsigned long	rt_flags;	/* flags associated with the table */
+  unsigned long	rt_count;	/* number of nodes in the tree */
+  rb_node_t    *rt_root;	/* pointer to the root node of the tree */
+  rb_comp_t	rt_comp;	/* function for comparing tree keys */
+  void	       *rt_extra;	/* extra data associated with the tree */
+};
+
+#define RB_TREE_MAGIC 0xd52695be
+
+#define RBT_FLAG_FREEZE 0x80000000 /* tree frozen */
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree static initializer.
+ *
+ * This macro statically initializes a #rb_tree_t.
+ *
+ * \param comp	A #rb_comp_t function pointer for a comparison
+ *		function.
+ * \param extra	Extra pointer data that should be associated with the
+ *		red-black tree.
+ */
+#define RB_TREE_INIT(comp, extra)   { RB_TREE_MAGIC, 0, 0, 0, (comp), (extra) }
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree verification macro.
+ *
+ * This macro verifies that a given pointer actually does point to a
+ * red-black tree.
+ *
+ * \warning This macro may evaluate the \c tree argument twice.
+ *
+ * \param tree	A pointer to a #rb_tree_t.
+ *
+ * \return	Boolean true if \p tree is a valid red-black tree or
+ *		false otherwise.
+ */
+#define rt_verify(tree)		((tree) && \
+				 (tree)->rt_magic == RB_TREE_MAGIC)
+
+/** \ingroup dbprim_rbtree
+ * \brief Determine if a red-black tree is frozen.
+ *
+ * This macro returns a non-zero value if the tree is currently
+ * frozen.  The red-black tree may be frozen if there is an
+ * iteration in progress.
+ *
+ * \param tree	A pointer to a #rb_tree_t.
+ *
+ * \return	A zero value if the table is not frozen or a non-zero
+ *		value if the table is frozen.
+ */
+#define rt_frozen(tree)		((tree)->rt_flags & RBT_FLAG_FREEZE)
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree count.
+ *
+ * This macro retrieves the total number of items actually in the
+ * red-black tree.
+ *
+ * \param tree	A pointer to a #rb_tree_t.
+ *
+ * \return	An <CODE>unsigned long</CODE> containing a count of
+ *		the number of items in the red-black tree.
+ */
+#define rt_count(tree)		((tree)->rt_count)
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree root node.
+ *
+ * This macro retrieves the root node of the tree.
+ *
+ * \param tree	A pointer to a #rb_tree_t.
+ *
+ * \return	A pointer to a #rb_node_t.
+ */
+#define rt_root(tree)		((tree)->rt_root)
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree comparison function.
+ *
+ * This macro retrieves the comparison function pointer.
+ *
+ * \param tree	A pointer to a #rb_tree_t.
+ *
+ * \return	A #rb_comp_t.
+ */
+#define rt_comp(tree)		((tree)->rt_comp)
+
+/** \ingroup dbprim_rbtree
+ * \brief Extra pointer data in a red-black tree.
+ *
+ * This macro retrieves the extra pointer data associated with a
+ * particular red-black tree.
+ *
+ * \param tree	A pointer to a #rb_tree_t.
+ *
+ * \return	A pointer to \c void.
+ */
+#define rt_extra(tree)		((tree)->rt_extra)
+
+/** \ingroup dbprim_rbtree
+ * \brief Preorder tree traversal method.
+ *
+ * If this flag is passed to rt_iter(), a preorder iteration will
+ * be performed.
+ */
+#define RBT_ORDER_PRE	1
+
+/** \ingroup dbprim_rbtree
+ * \brief Inorder tree traversal method.
+ *
+ * If this flag is passed to rt_iter(), an inorder iteration will
+ * be performed.
+ */
+#define RBT_ORDER_IN	2
+
+/** \ingroup dbprim_rbtree
+ * \brief Postorder tree traversal method.
+ *
+ * If this flag is passed to rt_iter(), a postorder iteration will
+ * be performed.
+ */
+#define RBT_ORDER_POST	3
+
+#define RBT_ORDER_MASK	0x00000003
+
+/** \ingroup dbprim_rbtree
+ * \brief Get the previous node.
+ *
+ * Obtains the previous node in the given iteration scheme.  See
+ * rt_next() for more information.
+ */
+#define rt_prev(tree, node_io, flags) \
+	(rt_next((tree), (node_io), (flags) ^ DB_FLAG_REVERSE))
+
+unsigned long rt_init(rb_tree_t *tree, rb_comp_t comp, void *extra);
+unsigned long rt_add(rb_tree_t *tree, rb_node_t *node, db_key_t *key);
+unsigned long rt_move(rb_tree_t *tree, rb_node_t *node, db_key_t *key);
+unsigned long rt_remove(rb_tree_t *tree, rb_node_t *node);
+unsigned long rt_find(rb_tree_t *tree, rb_node_t **node_p, db_key_t *key);
+unsigned long rt_next(rb_tree_t *tree, rb_node_t **node_io,
+		      unsigned long flags);
+unsigned long rt_iter(rb_tree_t *tree, rb_node_t *start,
+		      rb_iter_t iter_func, void *extra, unsigned long flags);
+unsigned long rt_flush(rb_tree_t *tree, rb_iter_t flush_func, void *extra);
+
+struct _rb_node_s {
+  unsigned long	rn_magic;	/* magic number */
+  rb_color_t	rn_color;	/* node's color */
+  rb_tree_t    *rn_tree;	/* tree node is in */
+  rb_node_t    *rn_parent;	/* parent of this node */
+  rb_node_t    *rn_left;	/* left child of this node */
+  rb_node_t    *rn_right;	/* right child of this node */
+  db_key_t	rn_key;		/* node's key */
+  void	       *rn_value;	/* node's value */
+};
+
+#define RB_NODE_MAGIC 0x3dea4d01
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree node static initializer.
+ *
+ * This macro statically initializes a #rb_node_t.
+ *
+ * \param value	A pointer to \c void representing the object
+ *		associated with the node.
+ */
+#define RB_NODE_INIT(value) \
+	{ RB_NODE_MAGIC, RB_COLOR_NONE, 0, 0, 0, 0, DB_KEY_INIT(0, 0), (value)}
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree node verification macro.
+ *
+ * This macro verifies that a given pointer actually does point to a
+ * red-black tree node.
+ *
+ * \warning This macro may evaluate the \c node argument twice.
+ *
+ * \param node	A pointer to a #rb_node_t.
+ *
+ * \return	Boolean true if \p entry is a valid red-black tree
+ *		node or false otherwise.
+ */
+#define rn_verify(node)		((node) && \
+				 (node)->rn_magic == RB_NODE_MAGIC)
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree node color.
+ *
+ * This macro retrieves the color of the \c node.
+ *
+ * \param node	A pointer to a #rb_node_t.
+ *
+ * \return	A #rb_color_t value expressing the color of the
+ *		\c node.
+ */
+#define rn_color(node)		((node)->rn_color)
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree node's tree pointer.
+ *
+ * This macro retrieves a pointer to the red-black tree the node
+ * is in.
+ *
+ * \param node	A pointer to a #rb_node_t.
+ *
+ * \return	A pointer to a #rb_tree_t.
+ */
+#define rn_tree(node)		((node)->rn_tree)
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree node's parent pointer.
+ *
+ * This macro retrieves a pointer to the node's parent node.
+ *
+ * \param node	A pointer to a #rb_node_t.
+ *
+ * \return	A pointer to a #rb_node_t representing the parent
+ *		of the given \c node.
+ */
+#define rn_parent(node)		((node)->rn_parent)
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree node's left pointer.
+ *
+ * This macro retrieves a pointer to the node's left node.
+ *
+ * \param node	A pointer to a #rb_node_t.
+ *
+ * \return	A pointer to a #rb_node_t representing the left
+ *		node of the given \c node.
+ */
+#define rn_left(node)		((node)->rn_left)
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree node's right pointer.
+ *
+ * This macro retrieves a pointer to the node's right node.
+ *
+ * \param node	A pointer to a #rb_node_t.
+ *
+ * \return	A pointer to a #rb_node_t representing the right
+ *		node of the given \c node.
+ */
+#define rn_right(node)		((node)->rn_right)
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree node's key pointer.
+ *
+ * This macro retrieves the key associated with the red-black tree
+ * node.
+ *
+ * \param node	A pointer to a #rb_node_t.
+ *
+ * \return	A pointer to a #db_key_t.
+ */
+#define rn_key(node)		(&((node)->rn_key))
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree node's value pointer.
+ *
+ * This macro retrieves the value associated with the red-black
+ * tree's node.  It may be treated as an lvalue to change that value.
+ * Care should be taken when using this option.
+ *
+ * \param node	A pointer to a #rb_node_t.
+ *
+ * \return	A pointer to \c void representing the value associated
+ *		with this node.
+ */
+#define rn_value(node)		((node)->rn_value)
+
+/** \ingroup dbprim_rbtree
+ * \brief Test if a given node is black.
+ *
+ * This macro safely tests whether a given red-black tree node is
+ * black.
+ *
+ * \warning This macro may evaluate the \c node argument twice.
+ *
+ * \param node	A pointer to a #rb_node_t.
+ *
+ * \return	Boolean true if \p node is black or false otherwise.
+ */
+#define rn_isblack(node)	(!(node) || (node)->rn_color == RB_COLOR_BLACK)
+
+/** \ingroup dbprim_rbtree
+ * \brief Test if a given node is red.
+ *
+ * This macro safely tests whether a given red-black tree node is
+ * red.
+ *
+ * \warning This macro may evaluate the \c node argument twice.
+ *
+ * \param node	A pointer to a #rb_node_t.
+ *
+ * \return	Boolean true if \p node is red or false otherwise.
+ */
+#define rn_isred(node)		((node) && (node)->rn_color == RB_COLOR_RED)
+
+/** \ingroup dbprim_rbtree
+ * \brief Test if a given node is the left node of its parent.
+ *
+ * This macro safely tests whether a given red-black tree node is
+ * the left node of its parent.
+ *
+ * \warning This macro may evaluate the \c node argument three
+ * times.
+ *
+ * \param node	A pointer to a #rb_node_t.
+ *
+ * \return	Boolean true if \p node is the left node of its
+ *		parent or false otherwise.
+ */
+#define rn_isleft(node)		((node)->rn_parent && \
+				 (node)->rn_parent->rn_left == (node))
+
+/** \ingroup dbprim_rbtree
+ * \brief Test if a given node is the right node of its parent.
+ *
+ * This macro safely tests whether a given red-black tree node is
+ * the right node of its parent.
+ *
+ * \warning This macro may evaluate the \c node argument three
+ * times.
+ *
+ * \param node	A pointer to a #rb_node_t.
+ *
+ * \return	Boolean true if \p node is the right node of its
+ *		parent or false otherwise.
+ */
+#define rn_isright(node)	((node)->rn_parent && \
+				 (node)->rn_parent->rn_right == (node))
+
+unsigned long rn_init(rb_node_t *node, void *value);
 
 /* begin dbprim_err.h */
 

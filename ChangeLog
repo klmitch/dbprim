@@ -1,3 +1,56 @@
+2003-06-28  Kevin L Mitchell  <klmitch@mit.edu>
+
+	* Makefile.am (libdbprim_la_LDFLAGS): update library version
+	numbers
+
+	* configure.in: update dbprim version
+
+	* tests/t_ll_iter.c (main): update calls to ll_iter() to include
+	new flags
+
+	* doc/Doxyfile (INPUT): include red-black tree sources
+
+	* sh_iter.c (sh_iter): accept a flags argument that will be passed
+	to ll_iter()
+
+	* rt_remove.c: function to remove a node from a red-black tree
+
+	* rt_next.c: function to find the next or previous node in a
+	red-black tree traversal
+
+	* rt_move.c: function to re-key a red-black tree node
+
+	* rt_iter.c: function to iterate through a red-black tree
+
+	* rt_init.c: function to initialize a red-black tree
+
+	* rt_flush.c: function to flush a red-black tree
+
+	* rt_find.c: function to look up a node in a red-black tree
+
+	* rt_add.c: function to add a node to a red-black tree
+
+	* rn_init.c: function to initialize a red-black tree node
+
+	* ll_iter.c (ll_iter): add flags argument; traverse list backwards
+	if DB_FLAG_REVERSE is passed in
+
+	* dbprim_int.h: declare _rb_locate() and _rb_rotate()
+
+	* dbprim.h.top: add documentation for red-black trees; add
+	structure definitions and function declarations for red-black
+	trees; add DB_FLAG_REVERSE flag for reversing ordering; fixed
+	ht_frozen() macro; added \warning tags for all macros that
+	evaluate their arguments multiple times; added flags argument to
+	ll_iter() and sh_iter()
+
+	* _rb_rotate.c: function to rotate a child up a level
+
+	* _rb_locate.c: function to locate a node in a tree, adding a new
+	one and initializing it if necessary
+
+	* Makefile.am (libdbprim_la_SOURCES): add red-black tree sources
+
 2003-06-25  Kevin L Mitchell  <klmitch@mit.edu>
 
 	* tests/t_ll_iter.c (main): call ll_iter() with its new argument

@@ -49,4 +49,7 @@ unsigned long _st_remove(smat_table_t *table, smat_entry_t *entry,
 smat_entry_t *_smat_alloc(void);
 void _smat_free(smat_entry_t *entry);
 
+rb_node_t *_rb_locate(rb_tree_t *tree, rb_node_t *node, db_key_t *key);
+void _rb_rotate(rb_tree_t *tree, rb_node_t *child);
+
 #endif /* __include_dbprim_int_h__ */

@@ -59,13 +59,15 @@ _sh_iter_iter(link_head_t *head, link_elem_t *elem, void *extra)
  *		information.
  * \param extra	A \c void pointer that will be passed to \p
  *		iter_func.
+ * \param flags	If #DB_FLAG_REVERSE is given, iteration will be done
+ *		from the end of the list backwards towards the head.
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_WRONGTABLE	\p start is not in this row or column.
  */
 unsigned long
 sh_iter(smat_head_t *head, smat_entry_t *start,
-	smat_iter_t iter_func, void *extra)
+	smat_iter_t iter_func, void *extra, unsigned long flags)
 {
   struct _sh_iter_s si;
 
@@ -82,5 +84,5 @@ sh_iter(smat_head_t *head, smat_entry_t *start,
 
   /* call into linked list library to iterate over the list */
   return ll_iter(&head->sh_head, start ? &start->se_link[head->sh_elem] : 0,
-		 _sh_iter_iter, &si);
+		 _sh_iter_iter, &si, flags);
 }

@@ -22,7 +22,7 @@ dnl
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(dbprim_int.h)
-AM_INIT_AUTOMAKE(dbprim, 0.1)
+AM_INIT_AUTOMAKE(dbprim, 0.2)
 
 dnl Checks for programs.
 AC_PROG_CC

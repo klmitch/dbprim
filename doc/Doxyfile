@@ -85,6 +85,17 @@ INPUT                  = ll_init.c \
 			 sh_find.c \
 			 sh_iter.c \
 			 sh_flush.c \
+			 _rb_locate.c \
+			 _rb_rotate.c \
+			 rt_init.c \
+			 rt_add.c \
+			 rt_move.c \
+			 rt_remove.c \
+			 rt_find.c \
+			 rt_next.c \
+			 rt_iter.c \
+			 rt_flush.c \
+			 rn_init.c \
 			 dbprim.h.top \
 			 dbprim_int.h
 FILE_PATTERNS          = 

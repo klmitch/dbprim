@@ -40,13 +40,15 @@ RCSTAG("@(#)$Id$");
  *		documentation for #link_iter_t for more information.
  * \param extra	A \c void pointer that will be passed to \p
  *		iter_func.
+ * \param flags	If #DB_FLAG_REVERSE is given, iteration will be done
+ *		from the end of the list backwards towards the head.
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_WRONGTABLE	\p start is not in this linked list.
  */
 unsigned long
 ll_iter(link_head_t *list, link_elem_t *start,
-	link_iter_t iter_func, void *extra)
+	link_iter_t iter_func, void *extra, unsigned long flags)
 {
   unsigned long retval;
   link_elem_t *elem, *next = 0;
@@ -61,9 +63,13 @@ ll_iter(link_head_t *list, link_elem_t *start,
   if (start && list != start->le_head)
     return DB_ERR_WRONGTABLE;
 
+  /* select the starting element */
+  if (!start)
+    start = (flags & DB_FLAG_REVERSE) ? list->lh_last : list->lh_first;
+
   /* Walk through list and return first non-zero return value */
-  for (elem = start ? start : list->lh_first; elem; elem = next) {
-    next = elem->le_next; /* iter_func may ll_remove... */
+  for (elem = start; elem; elem = next) {
+    next = (flags & DB_FLAG_REVERSE) ? elem->le_prev : elem->le_next;
     if ((retval = (*iter_func)(list, elem, extra)))
       return retval;
   }

@@ -37,13 +37,17 @@ libdbprim_la_SOURCES = dbprim_int.h \
 		       le_init.c ll_add.c ll_find.c ll_flush.c ll_init.c \
 		       ll_iter.c ll_move.c ll_remove.c \
 		       \
+		       _rb_locate.c _rb_rotate.c rn_init.c rt_add.c rt_find.c \
+		       rt_flush.c rt_init.c rt_iter.c rt_move.c rt_next.c \
+		       rt_remove.c \
+		       \
 		       sh_find.c sh_flush.c sh_init.c sh_iter.c sh_move.c \
 		       _smat_comp.c smat_freelist.c _smat_hash.c \
 		       _smat_resize.c st_add.c st_find.c st_flush.c st_free.c \
 		       st_init.c st_iter.c st_remove.c st_resize.c
 libdbprim_la_LIBADD = @DBPRIM_ET_OBJS@
 libdbprim_la_DEPENDENCIES = @DBPRIM_ET_OBJS@
-libdbprim_la_LDFLAGS = -version-info 1:1:0
+libdbprim_la_LDFLAGS = -version-info 2:0:0
 
 include_HEADERS = dbprim.h
 
