@@ -1,5 +1,20 @@
 2004-09-21  Kevin L Mitchell  <klmitch@mit.edu>
 
+	* tests/test-harness.dat: add sparse matrices test cases
+
+	* tests/t_smat.c: add test program for sparse matrices
+
+	* tests/t_redblack.c: add the first part of the red-black tree
+	test suite...which has, unfortunately, discovered a bug in
+	rt_remove() that I haven't been able to squash yet
+
+	* tests/t_hashtab.c (main): flip order of FAIL() message to be
+	more consistent
+
+	* tests/Makefile.am (check_PROGRAMS): add t_smat and t_redblack
+
+	* dbprim.h: fix a grammatical error in a doc comment
+
 	* tests/test-harness.h: update test-harness.h header to set output
 	buffering
 

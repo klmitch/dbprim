@@ -215,7 +215,7 @@ main(int argc, char **argv)
 	   err);
     else if (he != &ents[tmp])
       FAIL(TEST_NAME(ht_find), FATAL(0), "ht_find() found wrong entry; "
-	   "returned %d expected %d", he ? -1 : he - ents, tmp);
+	   "expected %d returned %d", tmp, he ? -1 : he - ents);
   }
   PASS(TEST_NAME(ht_find), "ht_find() calls successful");
 

@@ -69,3 +69,21 @@ test ht_remove_autoshrink	t_hashtab	PASS	\
 	"Test that ht_remove() automatically shrinks the table"
 test ht_find_autoshrink		t_hashtab	PASS	\
 	"Test that ht_find() can still find entries for autoshrink"
+
+program t_smat t_smat \
+	"Test sparse matrix functionality"
+t_smat: t_linklists t_hashtab
+
+test st_init			t_smat		PASS	\
+	"Test that st_init() may be called"
+test sh_init			t_smat		PASS	\
+	"Test that sh_init() may be called"
+test st_add			t_smat		PASS	\
+	"Test that st_add() adds elements to a sparse matrix"
+test st_find			t_smat		PASS	\
+	"Test that st_find() can locate elements in a sparse matrix"
+test st_remove			t_smat		PASS	\
+	"Test that st_remove() can remove elements in a sparse matrix"
+
+# Pretty much everything else is so simple and straightforward that it
+# should just work.  If you do find a bug, write a test case for it :)

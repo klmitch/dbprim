@@ -151,7 +151,9 @@ AM_LDFLAGS = -static
 check_PROGRAMS = test-harness \
 		 \
 		 t_linklists \
-		 t_hashtab
+		 t_hashtab \
+		 t_smat \
+		 t_redblack
 
 
 test_harness_SOURCES = test-harness.c test-harness.h
@@ -167,7 +169,7 @@ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =
 check_PROGRAMS = test-harness$(EXEEXT) t_linklists$(EXEEXT) \
-	t_hashtab$(EXEEXT)
+	t_hashtab$(EXEEXT) t_smat$(EXEEXT) t_redblack$(EXEEXT)
 t_hashtab_SOURCES = t_hashtab.c
 t_hashtab_OBJECTS = t_hashtab.$(OBJEXT)
 t_hashtab_LDADD = $(LDADD)
@@ -178,6 +180,16 @@ t_linklists_OBJECTS = t_linklists.$(OBJEXT)
 t_linklists_LDADD = $(LDADD)
 t_linklists_DEPENDENCIES = $(top_builddir)/libdbprim.la
 t_linklists_LDFLAGS =
+t_redblack_SOURCES = t_redblack.c
+t_redblack_OBJECTS = t_redblack.$(OBJEXT)
+t_redblack_LDADD = $(LDADD)
+t_redblack_DEPENDENCIES = $(top_builddir)/libdbprim.la
+t_redblack_LDFLAGS =
+t_smat_SOURCES = t_smat.c
+t_smat_OBJECTS = t_smat.$(OBJEXT)
+t_smat_LDADD = $(LDADD)
+t_smat_DEPENDENCIES = $(top_builddir)/libdbprim.la
+t_smat_LDFLAGS =
 am_test_harness_OBJECTS = test-harness.$(OBJEXT)
 test_harness_OBJECTS = $(am_test_harness_OBJECTS)
 test_harness_DEPENDENCIES =
@@ -187,6 +199,7 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/t_hashtab.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/t_linklists.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/t_redblack.Po ./$(DEPDIR)/t_smat.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/test-harness.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -195,9 +208,10 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES = t_hashtab.c t_linklists.c $(test_harness_SOURCES)
+DIST_SOURCES = t_hashtab.c t_linklists.c t_redblack.c t_smat.c \
+	$(test_harness_SOURCES)
 DIST_COMMON = $(srcdir)/Makefile.in Makefile.am
-SOURCES = t_hashtab.c t_linklists.c $(test_harness_SOURCES)
+SOURCES = t_hashtab.c t_linklists.c t_redblack.c t_smat.c $(test_harness_SOURCES)
 
 all: all-am
 
@@ -221,6 +235,12 @@ t_hashtab$(EXEEXT): $(t_hashtab_OBJECTS) $(t_hashtab_DEPENDENCIES)
 t_linklists$(EXEEXT): $(t_linklists_OBJECTS) $(t_linklists_DEPENDENCIES) 
 	@rm -f t_linklists$(EXEEXT)
 	$(LINK) $(t_linklists_LDFLAGS) $(t_linklists_OBJECTS) $(t_linklists_LDADD) $(LIBS)
+t_redblack$(EXEEXT): $(t_redblack_OBJECTS) $(t_redblack_DEPENDENCIES) 
+	@rm -f t_redblack$(EXEEXT)
+	$(LINK) $(t_redblack_LDFLAGS) $(t_redblack_OBJECTS) $(t_redblack_LDADD) $(LIBS)
+t_smat$(EXEEXT): $(t_smat_OBJECTS) $(t_smat_DEPENDENCIES) 
+	@rm -f t_smat$(EXEEXT)
+	$(LINK) $(t_smat_LDFLAGS) $(t_smat_OBJECTS) $(t_smat_LDADD) $(LIBS)
 test-harness$(EXEEXT): $(test_harness_OBJECTS) $(test_harness_DEPENDENCIES) 
 	@rm -f test-harness$(EXEEXT)
 	$(LINK) $(test_harness_LDFLAGS) $(test_harness_OBJECTS) $(test_harness_LDADD) $(LIBS)
@@ -233,6 +253,8 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_hashtab.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_linklists.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_redblack.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/t_smat.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-harness.Po@am__quote@
 
 .c.o:

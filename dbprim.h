@@ -1475,7 +1475,7 @@ struct _smat_entry_s {
 /** \ingroup dbprim_smat
  * \brief Object associated with an entry in a sparse matrix list.
  *
- * This macro retrieves a pointer to one of the object represented by
+ * This macro retrieves a pointer to one of the objects represented by
  * the entry.  It may be used as an lvalue to change the object
  * pointed to.  Care should be taken when using this feature.
  *
