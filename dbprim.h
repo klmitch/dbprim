@@ -205,6 +205,10 @@
  * ordering, if you wish.
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <dbprim_err.h>
 #include <dbprim_version.h>
 
@@ -1818,5 +1822,9 @@ struct _rb_node_s {
 				 (node)->rn_parent->rn_right == (node))
 
 unsigned long rn_init(rb_node_t *node, void *value);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __include_dbprim_h__ */

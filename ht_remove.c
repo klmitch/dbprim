@@ -67,7 +67,7 @@ ht_remove(hash_table_t *table, hash_entry_t *entry)
   /* decrement element count and shrink the table if necessary and allowed */
   if (--table->ht_count < table->ht_rollunder &&
       (table->ht_flags & HASH_FLAG_AUTOSHRINK))
-    retval = ht_resize(table, 0);
+    retval = ht_resize(table, table->ht_count);
 
   return retval;
 }

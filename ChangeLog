@@ -1,3 +1,11 @@
+2004-01-21  Kevin L Mitchell  <klmitch@mit.edu>
+
+	* dbprim.h: add 'extern "C"' support so that hopefully this thing
+	can be used with C++...
+
+	* ht_remove.c (ht_remove): apply a fix to (hopefully) prevent a
+	CPU-sucker condition for autoshrinking hash tables...
+
 2003-12-11  Kevin L Mitchell  <klmitch@mit.edu>
 
 	* configure.ac: update version number
