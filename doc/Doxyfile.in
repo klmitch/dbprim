@@ -3,8 +3,8 @@
 #---------------------------------------------------------------------------
 # General configuration options
 #---------------------------------------------------------------------------
-PROJECT_NAME           = dbprim
-PROJECT_NUMBER         = $Id$
+PROJECT_NAME           = "@PACKAGE_NAME@"
+PROJECT_NUMBER         = "Version @VERSION@"
 OUTPUT_DIRECTORY       = doc
 OUTPUT_LANGUAGE        = English
 EXTRACT_ALL            = NO
