@@ -205,6 +205,8 @@
  * ordering, if you wish.
  */
 
+#include <dbprim_err.h>
+
 /** \ingroup dbprim_key
  * \brief Database key.
  *
@@ -1835,5 +1837,4 @@ struct _rb_node_s {
 
 unsigned long rn_init(rb_node_t *node, void *value);
 
-/* begin dbprim_err.h */
-
+#endif /* __include_dbprim_h__ */

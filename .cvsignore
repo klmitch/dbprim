@@ -6,6 +6,7 @@ Makefile
 Makefile.in
 acinclude.m4
 aclocal.m4
+autom4te.cache
 comp_et-sh
 comp_et-sh.in
 config.cache
@@ -14,9 +15,11 @@ config.log
 config.status
 config.sub
 configure
-dbprim.h
+dbprim-config.in
 dbprim_err.c
 dbprim_err.h
+dbprim.pc.in
+depcomp
 install-sh
 libdbprim.la
 libtool

@@ -29,20 +29,20 @@ RCSTAG("@(#)$Id$");
  * This function moves a specified element within the linked list.
  *
  * \param list	A pointer to a #link_head_t.
- * \param elem	A pointer to the #link_elem_t describing the element
+ * \param new	A pointer to the #link_elem_t describing the element
  *		to be moved.
  * \param loc	A #link_loc_t indicating where the entry should be
  *		moved to.
- * \param elem2	A pointer to a #link_elem_t describing another element
+ * \param elem	A pointer to a #link_elem_t describing another element
  *		in the list if \p loc is #LINK_LOC_BEFORE or
  *		#LINK_LOC_AFTER.
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_BUSY		\p elem and \p elem2 are the same
+ * \retval DB_ERR_BUSY		\p new and \p elem are the same
  *				element.
- * \retval DB_ERR_WRONGTABLE	\p elem or \p elem2 are in a different
+ * \retval DB_ERR_WRONGTABLE	\p new or \p elem are in a different
  *				list.
- * \retval DB_ERR_UNUSED	\p elem or \p elem2 are not in any
+ * \retval DB_ERR_UNUSED	\p new or \p elem are not in any
  *				list.
  */
 unsigned long

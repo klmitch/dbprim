@@ -28,7 +28,7 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS = . tests
 
 lib_LTLIBRARIES = libdbprim.la
-libdbprim_la_SOURCES = dbprim_int.h \
+libdbprim_la_SOURCES = dbprim.h dbprim_err.h dbprim_int.h \
 		       \
 		       _hash_prime.c he_init.c ht_add.c ht_find.c ht_flush.c \
 		       ht_free.c ht_init.c ht_iter.c ht_move.c ht_remove.c \
@@ -49,25 +49,21 @@ libdbprim_la_LIBADD = @DBPRIM_ET_OBJS@
 libdbprim_la_DEPENDENCIES = @DBPRIM_ET_OBJS@
 libdbprim_la_LDFLAGS = -version-info 2:0:0
 
-include_HEADERS = dbprim.h
+include_HEADERS = dbprim.h dbprim_err.h
 
-EXTRA_DIST = dbprim.h.top dbprim.h.bot dbprim_err.et \
+EXTRA_DIST = dbprim_err.et \
 	     comp_et-sh.in COPYING INSTALL doc
 
 SUFFIXES = .et .h
 
-CLEANFILES = dbprim.h dbprim_err.c dbprim_err.h
+CLEANFILES = dbprim_err.c dbprim_err.h
 
 .et.c .et.h: comp_et-sh
 	$(SHELL) comp_et-sh --com_err=@COM_ERR@ --dir=$(top_builddir) $<
 
+$(libdbprim_la_OBJECTS): dbprim_err.h
+
 dbprim_err.c dbprim_err.h: dbprim_err.et
 
-$(OBJECTS): dbprim.h
-
-dbprim.h: $(srcdir)/dbprim.h.top dbprim_err.h $(srcdir)/dbprim.h.bot
-	cat $(srcdir)/dbprim.h.top dbprim_err.h \
-		$(srcdir)/dbprim.h.bot > dbprim.h
-
 dist-hook:
-	rm -f dbprim.h dbprim_err.c dbprim_err.h
+	rm -f $(distdir)/dbprim_err.c $(distdir)/dbprim_err.h

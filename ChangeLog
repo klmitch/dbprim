@@ -1,3 +1,25 @@
+2003-08-16  Kevin L Mitchell  <klmitch@mit.edu>
+
+	* doc/Doxyfile (INPUT): rename dbprim.h.top to dbprim.h
+
+	* ll_move.c: correct documentation of ll_move.c to use the correct
+	argument names
+
+	* dbprim.h: consolidate dbprim.h.top and dbprim.h.bot into a
+	single dbprim.h to be distributed and make it include dbprim_err.h
+	directly
+
+	* configure.ac: rename configure.in to configure.ac; update for
+	new autoconf/automake syntax; include AC_CONFIG_LIBCONFIG_IN and
+	AC_CONFIG_PKGCONFIG_IN
+
+	* Makefile.am: add dbprim.h and dbprim_err.h to sources list; add
+	dbprim_err.h to include_HEADERS; remove dbprim.h.{top,bot} from
+	EXTRA_DIST; remove dbprim.h from CLEANFILES; make dbprim_err.h a
+	dependancy of libdbprim_la_OBJECTS; remove creation of dbprim.h;
+	don't remove dbprim.h in dist-hook, but do remove dbprim_err.c and
+	dbprim_err.h using $(distdir) substitution
+
 2003-06-28  Kevin L Mitchell  <klmitch@mit.edu>
 
 	* Makefile.am (libdbprim_la_LDFLAGS): update library version

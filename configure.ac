@@ -21,8 +21,9 @@ dnl @(#)$Id$
 dnl
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(dbprim_int.h)
-AM_INIT_AUTOMAKE(dbprim, 0.2)
+AC_INIT([Database Primitives Library], 0.2, [klmitch@mit.edu], [dbprim])
+AC_CONFIG_SRCDIR([dbprim_int.h])
+AM_INIT_AUTOMAKE
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -40,4 +41,14 @@ dnl Checks for library functions.
 KLM_COM_ERR_LIB
 KLM_COM_ERR_OBJ([DBPRIM_ET_OBJS], [dbprim_err.lo])
 
-AC_OUTPUT(Makefile tests/Makefile comp_et-sh)
+DBPRIM_CFLAGS=
+DBPRIM_LIBS=-ldbprim
+DBPRIM_LIBDEPS=$COM_ERR_LDADD
+DBPRIM_VERSION=$PACKAGE_VERSION
+
+AC_CONFIG_LIBCONFIG_IN([dbprim])
+AC_CONFIG_PKGCONFIG_IN([dbprim], [A database primitives library])
+
+AC_CONFIG_FILES([Makefile tests/Makefile comp_et-sh dbprim-config dbprim.pc])
+
+AC_OUTPUT
