@@ -213,7 +213,8 @@ man_MANS = $(docmandir)/dbprim_hash.3 \
 	   $(docmandir)/st_verify.3
 
 EXTRA_DIST = dbprim_err.et dbprim.spec dbprim.spec.in \
-	     comp_et-sh.in COPYING INSTALL doc
+	     comp_et-sh.in COPYING INSTALL \
+	     doc/Doxyfile doc/Doxyfile.in doc/html doc/latex doc/man
 
 SUFFIXES = .et .h
 
