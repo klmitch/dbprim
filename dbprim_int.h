@@ -21,6 +21,9 @@
 #ifndef __include_dbprim_int_h__
 #define __include_dbprim_int_h__
 
+#include "dbprim_err.h"
+#include "dbprim_version.h"
+
 #ifdef __GNUC__
 # if (__GNUC__ < 2) || (__GNUC__ == 2 && __GNUC_MINOR__ < 7)
 #  define __attribute__(A)

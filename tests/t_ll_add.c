@@ -22,6 +22,8 @@
 #include <stdlib.h>
 
 #include "dbprim.h"
+#include "dbprim_err.h"
+#include "dbprim_version.h"
 
 #define OBJECT0 (void *)0x01234567
 #define OBJECT1 (void *)0x12345678

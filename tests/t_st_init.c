@@ -22,6 +22,8 @@
 #include <stdlib.h>
 
 #include "dbprim.h"
+#include "dbprim_err.h"
+#include "dbprim_version.h"
 
 #define TABLE0	(void *)0x76543210
 

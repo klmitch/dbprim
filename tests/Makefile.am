@@ -23,7 +23,7 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-INCLUDES = -I.. -I$(srcdir)/..
+AM_CPPFLAGS = -D__DBPRIM_LIBRARY__ -I.. -I$(srcdir)/..
 
 check_PROGRAMS = test-harness \
 		 \

@@ -22,6 +22,8 @@
 #include <stdlib.h>
 
 #include "dbprim.h"
+#include "dbprim_err.h"
+#include "dbprim_version.h"
 
 #define DEADINT	0xdeadbeef
 #define DEADPTR	(void *)0xdeadbeef

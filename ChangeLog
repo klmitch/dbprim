@@ -1,3 +1,62 @@
+2004-03-03  Kevin L Mitchell  <klmitch@mit.edu>
+
+	* tests/t_st_init.c: include dbprim_err.h and dbprim_version.h
+
+	* tests/t_ll_remove.c: include dbprim_err.h and dbprim_version.h
+
+	* tests/t_ll_move.c: include dbprim_err.h and dbprim_version.h
+
+	* tests/t_ll_iter.c: include dbprim_err.h and dbprim_version.h
+
+	* tests/t_ll_init.c: include dbprim_err.h and dbprim_version.h
+
+	* tests/t_ll_flush.c: include dbprim_err.h and dbprim_version.h
+
+	* tests/t_ll_find.c: include dbprim_err.h and dbprim_version.h
+
+	* tests/t_ll_add.c: include dbprim_err.h and dbprim_version.h
+
+	* tests/t_le_init.c: include dbprim_err.h and dbprim_version.h
+
+	* tests/t_ht_init.c: include dbprim_err.h and dbprim_version.h
+
+	* tests/t_he_init.c: include dbprim_err.h and dbprim_version.h
+
+	* tests/Makefile.in: regenerate Makefile.in
+
+	* tests/Makefile.am (AM_CPPFLAGS): define __DBPRIM_LIBRARY__
+	during build
+
+	* mkinstalldirs: regenerate mkinstalldirs
+
+	* missing: regenerate missing
+
+	* ltmain.sh: regenerate ltmain.sh
+
+	* install-sh: regenerate install-sh
+
+	* depcomp: regenerate depcomp
+
+	* dbprim_int.h: include dbprim_err.h and dbprim_version.h
+
+	* dbprim.h: use dbprim/* for inclusions; only include if
+	__DBPRIM_LIBRARY__ is not defined
+
+	* configure.ac: bump version
+
+	* configure: regenerate configure
+
+	* config.sub: regenerate config.sub
+
+	* config.guess: regenerate config.guess
+
+	* aclocal.m4: regenerate aclocal.m4
+
+	* Makefile.in: regenerate Makefile.in
+
+	* Makefile.am (AM_CPPFLAGS): define __DBPRIM_LIBRARY__ during
+	build
+
 2004-01-21  Kevin L Mitchell  <klmitch@mit.edu>
 
 	* dbprim.h: add 'extern "C"' support so that hopefully this thing

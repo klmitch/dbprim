@@ -22,6 +22,8 @@
 #include <stdlib.h>
 
 #include "dbprim.h"
+#include "dbprim_err.h"
+#include "dbprim_version.h"
 
 #define OBJECT	(void *)0x91827364
 #define DEADINT	0xdeadbeef

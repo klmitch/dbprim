@@ -27,6 +27,8 @@ AUTOMAKE_OPTIONS = foreign
 # library first if necessary
 SUBDIRS = . tests
 
+AM_CPPFLAGS = -D__DBPRIM_LIBRARY__
+
 lib_LTLIBRARIES = libdbprim.la
 libdbprim_la_SOURCES = dbprim.h dbprim_err.h dbprim_int.h dbprim_version.c \
 		       \

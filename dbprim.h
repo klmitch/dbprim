@@ -209,8 +209,10 @@
 extern "C" {
 #endif
 
-#include <dbprim_err.h>
-#include <dbprim_version.h>
+#ifndef __DBPRIM_LIBRARY__
+#include <dbprim/dbprim_err.h>
+#include <dbprim/dbprim_version.h>
+#endif /* __DBPRIM_LIBRARY__ */
 
 /** \ingroup dbprim
  * \brief Database key.
