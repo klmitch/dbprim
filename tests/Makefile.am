@@ -39,75 +39,75 @@ test_harness_SOURCES = test-harness.c
 TEST_OPTIONS =
 
 t_ll_init_SOURCES = t_ll_init.c
-t_ll_init_LDADD = ../libdbprim.la
+t_ll_init_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_ll_init_LDFLAGS = -static
 
 t_ll_add_SOURCES = t_ll_add.c
-t_ll_add_LDADD = ../libdbprim.la
+t_ll_add_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_ll_add_LDFLAGS = -static
 
 t_ll_move_SOURCES = t_ll_move.c
-t_ll_move_LDADD = ../libdbprim.la
+t_ll_move_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_ll_move_LDFLAGS = -static
 
 t_ll_remove_SOURCES = t_ll_remove.c
-t_ll_remove_LDADD = ../libdbprim.la
+t_ll_remove_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_ll_remove_LDFLAGS = -static
 
 t_ll_find_SOURCES = t_ll_find.c
-t_ll_find_LDADD = ../libdbprim.la
+t_ll_find_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_ll_find_LDFLAGS = -static
 
 t_ll_iter_SOURCES = t_ll_iter.c
-t_ll_iter_LDADD = ../libdbprim.la
+t_ll_iter_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_ll_iter_LDFLAGS = -static
 
 t_ll_flush_SOURCES = t_ll_flush.c
-t_ll_flush_LDADD = ../libdbprim.la
+t_ll_flush_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_ll_flush_LDFLAGS = -static
 
 t_le_init_SOURCES = t_le_init.c
-t_le_init_LDADD = ../libdbprim.la
+t_le_init_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_le_init_LDFLAGS = -static
 
 t_ht_init_SOURCES = t_ht_init.c
-t_ht_init_LDADD = ../libdbprim.la
+t_ht_init_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_ht_init_LDFLAGS = -static
 
 t_ht_addfind_SOURCES = t_ht_addfind.c
-t_ht_addfind_LDADD = ../libdbprim.la
+t_ht_addfind_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_ht_addfind_LDFLAGS = -static
 
 t_ht_move_SOURCES = t_ht_move.c
-t_ht_move_LDADD = ../libdbprim.la
+t_ht_move_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_ht_move_LDFLAGS = -static
 
 t_ht_remove_SOURCES = t_ht_remove.c
-t_ht_remove_LDADD = ../libdbprim.la
+t_ht_remove_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_ht_remove_LDFLAGS = -static
 
 t_ht_iter_SOURCES = t_ht_iter.c
-t_ht_iter_LDADD = ../libdbprim.la
+t_ht_iter_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_ht_iter_LDFLAGS = -static
 
 t_ht_flush_SOURCES = t_ht_flush.c
-t_ht_flush_LDADD = ../libdbprim.la
+t_ht_flush_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_ht_flush_LDFLAGS = -static
 
 t_ht_resize_SOURCES = t_ht_resize.c
-t_ht_resize_LDADD = ../libdbprim.la
+t_ht_resize_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_ht_resize_LDFLAGS = -static
 
 t_ht_free_SOURCES = t_ht_free.c
-t_ht_free_LDADD = ../libdbprim.la
+t_ht_free_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_ht_free_LDFLAGS = -static
 
 t_he_init_SOURCES = t_he_init.c
-t_he_init_LDADD = ../libdbprim.la
+t_he_init_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_he_init_LDFLAGS = -static
 
 t_st_init_SOURCES = t_st_init.c
-t_st_init_LDADD = ../libdbprim.la
+t_st_init_LDADD = ../libdbprim.la @COM_ERR_LDADD@
 t_st_init_LDFLAGS = -static
 
 EXTRA_DIST = test-harness.dat

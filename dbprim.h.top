@@ -483,7 +483,8 @@ unsigned long ll_remove(link_head_t *list, link_elem_t *elem);
 unsigned long ll_find(link_head_t *list, link_elem_t **elem_p,
 		      link_comp_t comp_func, link_elem_t *start,
 		      db_key_t *key);
-unsigned long ll_iter(link_head_t *list, link_iter_t iter_func, void *extra);
+unsigned long ll_iter(link_head_t *list, link_elem_t *start,
+		      link_iter_t iter_func, void *extra);
 unsigned long ll_flush(link_head_t *list, link_iter_t flush_func, void *extra);
 
 struct _link_elem_s {
@@ -1227,7 +1228,8 @@ unsigned long sh_move(smat_head_t *head, smat_entry_t *elem, link_loc_t loc,
 unsigned long sh_find(smat_head_t *head, smat_entry_t **elem_p,
 		      smat_comp_t comp_func, smat_entry_t *start,
 		      db_key_t *key);
-unsigned long sh_iter(smat_head_t *head, smat_iter_t iter_func, void *extra);
+unsigned long sh_iter(smat_head_t *head, smat_entry_t *start,
+		      smat_iter_t iter_func, void *extra);
 unsigned long sh_flush(smat_head_t *head, smat_iter_t flush_func, void *extra);
 
 struct _smat_entry_s {

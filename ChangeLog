@@ -1,3 +1,19 @@
+2003-06-25  Kevin L Mitchell  <klmitch@mit.edu>
+
+	* tests/t_ll_iter.c (main): call ll_iter() with its new argument
+
+	* tests/Makefile.am: may need to link the tests with -lcom_err
+
+	* sh_iter.c (sh_iter): provide a start argument to indicate where
+	in the row or column to begin iterating
+
+	* ll_iter.c (ll_iter): provide a start argument to indicate where
+	in the linked list to begin iterating
+
+	* dbprim.h.top: add start arguments to ll_iter() and sh_iter()
+
+	* configure.in: may need to link the tests with -lcom_err
+
 2003-06-13  Kevin L Mitchell  <klmitch@mit.edu>
 
 	* ll_iter.c (ll_iter): allow iter_func to ll_remove() the current

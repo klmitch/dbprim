@@ -37,6 +37,7 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 
 dnl Checks for library functions.
 
+KLM_COM_ERR_LIB
 KLM_COM_ERR_OBJ([DBPRIM_ET_OBJS], [dbprim_err.lo])
 
 AC_OUTPUT(Makefile tests/Makefile comp_et-sh)

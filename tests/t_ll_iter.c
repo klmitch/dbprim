@@ -136,23 +136,23 @@ main(int argc, char **argv)
 	     "Verify baseline list");
 
   /* Check to see if ll_iter() verifies its arguments correctly */
-  check_result(ll_iter(0, 0, 0), DB_ERR_BADARGS, "ll_iter_noargs",
+  check_result(ll_iter(0, 0, 0, 0), DB_ERR_BADARGS, "ll_iter_noargs",
 	       "ll_iter() with no arguments", 0);
-  check_result(ll_iter(&list[1], check_iter, &itcheck), DB_ERR_BADARGS,
+  check_result(ll_iter(&list[1], 0, check_iter, &itcheck), DB_ERR_BADARGS,
 	       "ll_iter_badlist", "ll_iter() with bad list", 0);
-  check_result(ll_iter(&list[0], 0, &itcheck), DB_ERR_BADARGS,
+  check_result(ll_iter(&list[0], 0, 0, &itcheck), DB_ERR_BADARGS,
 	       "ll_iter_badfunc", "ll_iter() with bad function", 0);
 
   /* Now check to see if ll_iter() returns what the iter function returns */
-  check_result(ll_iter(&list[0], check_iter, &itcheck), EINVAL,
+  check_result(ll_iter(&list[0], 0, check_iter, &itcheck), EINVAL,
 	       "ll_iter_funcreturn",
 	       "ll_iter() returning iteration function return value", 0);
 
   /* Now iterate through the list */
   itcheck.elem_array = elem;
   itcheck.elem_idx = 0;
-  check_result(ll_iter(&list[0], check_iter, &itcheck), 0, "ll_iter_function",
-	       "ll_iter() iteration", 0);
+  check_result(ll_iter(&list[0], 0, check_iter, &itcheck), 0,
+	       "ll_iter_function", "ll_iter() iteration", 0);
 
   /* Did it check them all? */
   if (itcheck.elem_idx == 5)

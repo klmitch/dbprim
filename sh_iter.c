@@ -48,6 +48,9 @@ _sh_iter_iter(link_head_t *head, link_elem_t *elem, void *extra)
  * executing the given \p iter_func for each entry.
  *
  * \param head	A pointer to a #smat_head_t.
+ * \param start	A pointer to a #smat_entry_t describing where in the
+ *		row or column to start.  If \c NULL is passed, the
+ *		beginning of the row or column will be assumed.
  * \param iter_func
  *		A pointer to a callback function used to perform
  *		user-specified actions on an entry in a row or column
@@ -58,15 +61,18 @@ _sh_iter_iter(link_head_t *head, link_elem_t *elem, void *extra)
  *		iter_func.
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_WRONGTABLE	\p start is not in this row or column.
  */
 unsigned long
-sh_iter(smat_head_t *head, smat_iter_t iter_func, void *extra)
+sh_iter(smat_head_t *head, smat_entry_t *start,
+	smat_iter_t iter_func, void *extra)
 {
   struct _sh_iter_s si;
 
   initialize_dbpr_error_table(); /* initialize error table */
 
-  if (!sh_verify(head) || !iter_func) /* verify arguments */
+  /* verify arguments */
+  if (!sh_verify(head) || (start && !se_verify(start)) || !iter_func)
     return DB_ERR_BADARGS;
 
   /* initialize extra data... */
@@ -75,5 +81,6 @@ sh_iter(smat_head_t *head, smat_iter_t iter_func, void *extra)
   si.si_extra = extra;
 
   /* call into linked list library to iterate over the list */
-  return ll_iter(&head->sh_head, _sh_iter_iter, &si);
+  return ll_iter(&head->sh_head, start ? &start->se_link[head->sh_elem] : 0,
+		 _sh_iter_iter, &si);
 }
