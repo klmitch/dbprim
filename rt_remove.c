@@ -23,6 +23,42 @@
 
 RCSTAG("@(#)$Id$");
 
+/* Clear a node... */
+#define _rn_clear(node)							      \
+do {									      \
+  (node)->rn_color = RB_COLOR_NONE; /* no color... */			      \
+  (node)->rn_tree = 0; /* no tree... */					      \
+  (node)->rn_parent = 0; /* no parent... */				      \
+  (node)->rn_left = 0; /* and no children */				      \
+  (node)->rn_right = 0;							      \
+} while (0)
+
+/* update a node's parent to point to the new node */
+#define _rt_update_parent(tree, node, new)				      \
+do {									      \
+  if (!(node)->rn_parent) /* node must be at root of tree... */		      \
+    (tree)->rt_root = (new); /* so update the root */			      \
+  else if (rn_isleft(node)) /* maybe it's a left child? */		      \
+    (node)->rn_parent->rn_left = (new); /* OK, save new value there */	      \
+  else									      \
+    (node)->rn_parent->rn_right = (new); /* OK, right child, save tere */     \
+} while (0)
+
+/* is the node <n> the left child of the parent node <par>? */
+#define isleft(par, n)	((par)->rn_left == (n))
+
+/* select the right node if condition <t> is true */
+#define sel_lr(t, n)	((t) ? (n)->rn_right : (n)->rn_left)
+
+/* Locate sibling of the given node */
+#define sibling(par, n)	(sel_lr(isleft((par), (n)), (par)))
+
+/* Locate "closer" nephew of the given node */
+#define l_neph(par, n)	(sel_lr(!isleft((par), (n)), sibling((par), (n))))
+
+/* Locate "further" nephew of the given node */
+#define r_neph(par, n)	(sel_lr(isleft((par), (n)), sibling((par), (n))))
+
 /** \ingroup dbprim_rbtree
  * \brief Remove a node from a red-black tree.
  *
@@ -41,7 +77,7 @@ unsigned long
 rt_remove(rb_tree_t *tree, rb_node_t *node)
 {
   rb_color_t col;
-  rb_node_t *t1, *t2, *t2p = 0;
+  rb_node_t *nchild, *nparent;
 
   initialize_dbpr_error_table(); /* initialize error table */
 
@@ -56,117 +92,99 @@ rt_remove(rb_tree_t *tree, rb_node_t *node)
   if (tree->rt_flags & RBT_FLAG_FREEZE) /* don't remove from frozen trees */
     return DB_ERR_FROZEN;
 
-  /* OK, this logic is tricky--first, let's remove the node */
-  if (!node->rn_left || !node->rn_right)
-    t1 = node; /* node to be deleted has only one child */
-  else
-    for (t1 = node->rn_right; t1->rn_left; t1 = t1->rn_left)
-      ; /* Find the left-most node of the right child of deleted node */
+  if (tree->rt_count == 1) { /* only the one node... */
+    _rn_clear(node); /* clear the node */
 
-  t2 = t1->rn_left ? t1->rn_left : t1->rn_right; /* child of node... */
+    tree->rt_root = 0; /* clear the root pointer... */
+    tree->rt_count--; /* update the node count */
 
-  if (t2)
-    t2->rn_parent = t1->rn_parent; /* update the parent pointer */
-  else
-    t2p = t1->rn_parent; /* must remember the parent for rebalancing */
-
-  if (t1->rn_parent) { /* update the parent of node... */
-    if (rn_isleft(t1))
-      t1->rn_parent->rn_left = t2;
-    else
-      t1->rn_parent->rn_right = t2;
-  } else /* it's at the root of the tree... */
-    tree->rt_root = t2;
-
-  col = t1->rn_color; /* cache the color... */
-
-  if (t1 != node) { /* t1 replaces the node to be deleted */
-    t1->rn_color = node->rn_color;
-    t1->rn_parent = node->rn_parent;
-    t1->rn_left = node->rn_left;
-    t1->rn_right = node->rn_right;
-    if (node->rn_parent) { /* OK, update the parent's pointer... */
-      if (rn_isleft(node))
-	t1->rn_parent->rn_left = t1;
-      else
-	t1->rn_parent->rn_right = t1;
-    } else /* it was at the root of the tree... */
-      tree->rt_root = t1;
+    return 0; /* and we're done...gee, that was simple */
   }
 
-  /* OK, now we rebalance the tree if necessary.  t2parent is a special
-   * macro to select either t2->rn_parent or t2p, if t2 is 0.
+  /* If the node has both children, swap it with one of its great-*
+   * grandchildren that has only one child.
    */
-#define t2parent	(t2 ? t2->rn_parent : t2p)
-  if (col == RB_COLOR_BLACK) {
-    while (t2parent && rn_isblack(t2)) /* while balancing neccessary... */
-      if (t2 && rn_isleft(t2)) { /* node is a left child... */
-	t1 = t2parent->rn_right;
-	if (rn_isred(t1)) {
-	  t1->rn_color = RB_COLOR_BLACK; /* recolor the nodes... */
-	  t2parent->rn_color = RB_COLOR_RED;
-	  _rb_rotate(tree, t2parent->rn_right); /* move the right child up */
-	  t1 = t2parent->rn_right;
-	}
+  if (node->rn_left && node->rn_right) {
+    rb_node_t *ggchild;
 
-	/* If both children are black... */
-	if (rn_isblack(t1->rn_left) && rn_isblack(t1->rn_right)) {
-	  t1->rn_color = RB_COLOR_RED; /* recolor the node red */
-	  t2 = t2parent; /* move up the tree a bit */
-	} else {
-	  if (rn_isblack(t1->rn_right)) {
-	    t1->rn_left->rn_color = RB_COLOR_BLACK; /* recolor nodes... */
-	    t1->rn_color = RB_COLOR_RED;
-	    _rb_rotate(tree, t1->rn_left); /* move left child up a level */
-	    t1 = t2parent->rn_right; /* and move to other child of t2 */
-	  }
+    for (ggchild = node->rn_right; ggchild->rn_left;
+	 ggchild = ggchild->rn_left)
+      ; /* find the left-most great-* grandchild on the right subtree */
 
-	  t1->rn_color = t2parent->rn_color; /* recolor nodes... */
-	  t2parent->rn_color = RB_COLOR_BLACK;
-	  t1->rn_right->rn_color = RB_COLOR_BLACK;
-	  _rb_rotate(tree, t2parent->rn_right); /* move child up a level */
-	  t2 = tree->rt_root;
-	}
-      } else { /* node is a right child... */
-	t1 = t2parent->rn_left;
-	if (rn_isred(t1)) {
-	  t1->rn_color = RB_COLOR_BLACK; /* recolor the nodes... */
-	  t2parent->rn_color = RB_COLOR_RED;
-	  _rb_rotate(tree, t2parent->rn_left); /* move the left child up */
-	  t1 = t2parent->rn_left;
-	}
+    /* remember that node's parent... */
+    nparent = (ggchild->rn_parent == node) ? ggchild : ggchild->rn_parent;
+    nchild = ggchild->rn_right; /* ...child... */
+    col = ggchild->rn_color; /* ...and color */
 
-	/* If both children are black... */
-	if (rn_isblack(t1->rn_right) && rn_isblack(t1->rn_left)) {
-	  t1->rn_color = RB_COLOR_RED; /* recolor the node red */
-	  t2 = t2parent; /* move up the tree a bit */
-	} else {
-	  if (rn_isblack(t1->rn_left)) {
-	    t1->rn_right->rn_color = RB_COLOR_BLACK; /* recolor nodes... */
-	    t1->rn_color = RB_COLOR_RED;
-	    _rb_rotate(tree, t1->rn_right); /* move right child up a level */
-	    t1 = t2parent->rn_left; /* and move to other child of t2 */
-	  }
+    /* next, groom great-* grandchild to replace node */
+    ggchild->rn_left = node->rn_left;
+    ggchild->rn_right = node->rn_right == ggchild ? 0 : node->rn_right;
+    ggchild->rn_parent = node->rn_parent;
+    ggchild->rn_color = node->rn_color;
 
-	  t1->rn_color = t2parent->rn_color; /* recolor nodes... */
-	  t2parent->rn_color = RB_COLOR_BLACK;
-	  t1->rn_left->rn_color = RB_COLOR_BLACK;
-	  _rb_rotate(tree, t2parent->rn_left); /* move child up a level */
-	  t2 = tree->rt_root;
-	}
+    /* let's update the node's parent to point at great-* grandchild */
+    _rt_update_parent(tree, node, ggchild);
+
+    ggchild->rn_left->rn_parent = ggchild; /* ...and its children... */
+    if (ggchild->rn_right)
+      ggchild->rn_right->rn_parent = ggchild;
+
+    /* Then update great-* grandchild's original parent... */
+    if (nparent != ggchild)
+      nparent->rn_left = nchild; /* it's by definition a left child */
+    else
+      nparent->rn_right = nchild; /* don't lose the thing! */
+  } else { /* it's already an external node, so remove it... */
+    nparent = node->rn_parent; /* remember node's parent... */
+    nchild = node->rn_left ? node->rn_left : node->rn_right; /* ...child... */
+    col = node->rn_color; /* ...and color */
+
+    /* update node's parent to point at node's child */
+    _rt_update_parent(tree, node, nchild);
+  }
+
+  if (nchild) /* now, if there was a child... */
+    nchild->rn_parent = nparent; /* update its parent pointer */
+
+  if (col == RB_COLOR_BLACK) { /* removed a black node, gotta rebalance... */
+    /* work our way up the tree, stopping on the first red node */
+    while (nparent && rn_isblack(nchild)) {
+      /* If the sibling is red... */
+      if (rn_isred(sibling(nparent, nchild))) {
+	_rb_rotate(tree, sibling(nparent, nchild)); /* move it up... */
+	nparent->rn_color = RB_COLOR_RED; /* and recolor the nodes */
+	nparent->rn_parent->rn_color = RB_COLOR_BLACK; /* old sibling */
       }
 
-    if (t2) /* recolor node... */
-      t2->rn_color = RB_COLOR_BLACK;
+      /* Sibling is black, are the nephews? */
+      if (rn_isblack(l_neph(nparent, nchild)) &&
+	  rn_isblack(r_neph(nparent, nchild))) {
+	sibling(nparent, nchild)->rn_color = RB_COLOR_RED; /* recolor sib... */
+	nchild = nparent; /* then move up the tree... */
+	nparent = nparent->rn_parent;
+	continue; /* go through loop once more... */
+      }
+
+      /* OK, one or the other (or both!) of the nephews is red. */
+      if (rn_isred(l_neph(nparent, nchild))) /* is the closer one red? */
+	_rb_rotate(tree, l_neph(nparent, nchild)); /* then rotate it up */
+      _rb_rotate(tree, sibling(nparent, nchild)); /* now rotate sibling up */
+
+      /* set old sibling color to be the same as parent. */
+      nparent->rn_parent->rn_color = nparent->rn_color;
+      nparent->rn_color = RB_COLOR_BLACK; /* set parent black... */
+      /* now set the parent's new sibling black */
+      sibling(nparent->rn_parent, nparent)->rn_color = RB_COLOR_BLACK;
+      break; /* this is a terminal case; we're done. */
+    }
+
+    if (rn_isred(nchild)) /* if we hit a red node, turn it black */
+      nchild->rn_color = RB_COLOR_BLACK;
   }
 
-  node->rn_color = RB_COLOR_NONE; /* clear the node */
-  node->rn_tree = 0;
-  node->rn_parent = 0;
-  node->rn_left = 0;
-  node->rn_right = 0;
+  _rn_clear(node); /* clear the node */
 
   tree->rt_count--; /* update the node count */
 
-  return 0;
+  return 0; /* and we're done...gee, that was simple */
 }

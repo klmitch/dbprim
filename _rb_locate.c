@@ -42,8 +42,8 @@ _rb_locate(rb_tree_t *tree, rb_node_t *node, db_key_t *key)
       tree->rt_count++; /* keep a count of the number of nodes in the tree */
     }
     return node;
-  } else if (!(comp = (*tree->rt_comp)(tree, rn_key(tmp = tree->rt_root),
-				       key)))
+  } else if (!(comp = (*tree->rt_comp)(tree, key,
+				       rn_key(tmp = tree->rt_root))))
     return tree->rt_root; /* Oh, the root of the tree matches the key */
 
   while (1) /* Search for the key in the tree... */
@@ -51,15 +51,15 @@ _rb_locate(rb_tree_t *tree, rb_node_t *node, db_key_t *key)
       if (!tmp->rn_left) {
 	tmp->rn_left = node; /* add the node here */
 	break; /* We're done with the loop... */
-      } else if (!(comp = (*tree->rt_comp)(tree, rn_key(tmp = tmp->rn_left),
-					   key)))
+      } else if (!(comp = (*tree->rt_comp)(tree, key,
+					   rn_key(tmp = tmp->rn_left))))
 	return tmp; /* found the node in the tree, return it */
     } else { /* desired node is to the right */
       if (!tmp->rn_right) {
 	tmp->rn_right = node; /* add the node here */
 	break; /* We're done with the loop... */
-      } else if (!(comp = (*tree->rt_comp)(tree, rn_key(tmp = tmp->rn_right),
-					   key)))
+      } else if (!(comp = (*tree->rt_comp)(tree, key,
+					   rn_key(tmp = tmp->rn_right))))
 	return tmp; /* found the node in the tree, return it */
     }
 

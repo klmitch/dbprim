@@ -1,3 +1,14 @@
+2004-09-23  Kevin L Mitchell  <klmitch@mit.edu>
+
+	* tests/t_redblack.c: add treecheck() function to verify that a
+	tree really is a red-black tree
+
+	* rt_remove.c: rewrote rt_remove() to correctly remove nodes and
+	properly balance tree
+
+	* _rb_locate.c: swap order of arguments to comparison function to
+	order tree correctly
+
 2004-09-21  Kevin L Mitchell  <klmitch@mit.edu>
 
 	* tests/test-harness.dat: add sparse matrices test cases

@@ -18,6 +18,7 @@
 **
 ** @(#)$Id$
 */
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -120,6 +121,99 @@ comp_order(int *o1, int *o2)
   return 0; /* OK, everything's fine. */
 }
 
+/* handy macro to generate the arguments for identifying nodes in printf's */
+#define n_debargs(node) (void *)(node), (node) ? dk_len(rn_key(node)) : -1, \
+			rn_isblack(node) ? "BLACK" : \
+			(rn_isred(node) ? "RED" : "NO COLOR")
+
+/* check that a tree really is a red-black tree */
+static int
+treecheck(rb_node_t *node, rb_node_t *parent, int bh, int *tbhp)
+{
+  int init_bh = -1; /* tree black height */
+
+  if (!node) /* an empty tree is a red-black tree... */
+    return 1;
+
+  /* First, check parental referential integrity... */
+  if (node->rn_parent != parent) {
+    fprintf(stderr, "Node %p/%d (%s) thinks its a child of %p/%d (%s) "
+	    "rather than of %p/%d (%s)\n", n_debargs(node),
+	    n_debargs(node->rn_parent), n_debargs(parent));
+    return 0;
+  }
+
+  /* Next, make sure it has a reasonable color... */
+  if (!rn_isred(node) && !rn_isblack(node)) {
+    fprintf(stderr, "Node %p/%d (%s) is neither red nor black\n",
+	    n_debargs(node));
+    return 0;
+  }
+
+  /* Now, if it's at the root of the tree, it'd better be black */
+  if (!parent && !rn_isblack(node)) {
+    fprintf(stderr, "Node %p/%d (%s) is a non-black root node\n",
+	    n_debargs(node->rn_parent));
+    return 0;
+  }
+
+  /* No red node may have a red parent */
+  if (rn_isred(parent) && rn_isred(node)) {
+    fprintf(stderr, "Node %p/%d (%s) is a red node with a red parent "
+	    "%p/%d (%s)\n", n_debargs(node), n_debargs(parent));
+    return 0;
+  }
+
+  if (!tbhp) /* need a pointer to the total black height... */
+    tbhp = &init_bh; /* so use ours */
+
+  if (parent && rn_isblack(node)) /* increment black height (for children) */
+    bh++;
+
+  /* Check that the left node is part of a red-black tree */
+  if (node->rn_left) {
+    /* First, double-check node ordering... */
+    if (dk_len(rn_key(node->rn_left)) >= dk_len(rn_key(node))) {
+      fprintf(stderr, "Node %p/%d (%s) is less than its left child, "
+	      "%p/%d (%s)", n_debargs(node), n_debargs(node->rn_left));
+      return 0;
+    } else if (!treecheck(node->rn_left, node, bh, tbhp))
+     return 0;
+  } else if (*tbhp < 0) /* hit an external node for the first time... */
+    *tbhp = bh + 1; /* store the black height */
+  else if ((bh + 1) != *tbhp) { /* verify that black heights are consistent */
+    fprintf(stderr, "Node %p/%d (%s) left child is leaf with bh %d "
+	    "(expected %d)\n", n_debargs(node), bh + 1, *tbhp);
+    return 0;
+  }
+
+  /* Check that the right node is part of a red-black tree */
+  if (node->rn_right) {
+    /* First, double-check node ordering... */
+    if (dk_len(rn_key(node)) >= dk_len(rn_key(node->rn_right))) {
+      fprintf(stderr, "Node %p/%d (%s) is greater than its right child, "
+	      "%p/%d (%s)", n_debargs(node), n_debargs(node->rn_left));
+      return 0;
+    } else if (!treecheck(node->rn_right, node, bh, tbhp))
+      return 0;
+  } else if (*tbhp < 0) /* hit an external node for the first time... */
+    *tbhp = bh + 1; /* store the black height */
+  else if ((bh + 1) != *tbhp) { /* verify that black heights are consistent */
+    fprintf(stderr, "Node %p/%d (%s) right child is leaf with bh %d "
+	    "(expected %d)\n", n_debargs(node), bh + 1, *tbhp);
+    return 0;
+  }
+
+  /* at this point, if we're the root, the black height had better be set */
+  assert(parent || *tbhp > 0);
+
+  /* Informational message... */
+  if (!parent)
+    fprintf(stderr, "Tree black height: %d\n", *tbhp);
+
+  return 1; /* it's a red-black tree. */
+}
+
 /* simple comparison function for testing... */
 static long
 t_comp(rb_tree_t *tree, db_key_t *key1, db_key_t *key2)
@@ -159,6 +253,9 @@ main(int argc, char **argv)
   for (dk_len(&key) = 0; dk_len(&key) < RBT_ELEM_CNT; dk_len(&key)++)
     if ((err = rt_add(&tree, &nodes[dk_len(&key)], &key)))
       FAIL(TEST_NAME(rt_add), FATAL(0), "rt_add() failed with error %lu", err);
+    else if (!treecheck(rt_root(&tree), 0, 0, 0))
+      FAIL(TEST_NAME(rt_add), FATAL(0), "rt_add() corrupted tree's "
+	   "red-black property");
   PASS(TEST_NAME(rt_add), "rt_add() calls successful");
 
   /* Next, try a few rt_find()s... */
@@ -190,6 +287,9 @@ main(int argc, char **argv)
     if ((err = rt_remove(&tree, &nodes[tmp])))
       FAIL(TEST_NAME(rt_remove), FATAL(0), "rt_remove() failed with error %lu",
 	   err);
+    else if (!treecheck(rt_root(&tree), 0, 0, 0))
+      FAIL(TEST_NAME(rt_remove), FATAL(0), "rt_remove() corrupted tree's "
+	   "red-black property");
   }
   /* Now see if we can still locate elements in the tree... */
   for (visited = RBT_ELEM_MASK; visited;
