@@ -193,7 +193,6 @@ man_MANS = $(docmandir)/dbprim_hash.3 \
 	   $(docmandir)/smat_iter_t.3 \
 	   $(docmandir)/smat_loc_t.3 \
 	   $(docmandir)/smat_resize_t.3 \
-	   $(docmandir)/SMAT_TABLE_INIT.3 \
 	   $(docmandir)/smat_table_t.3 \
 	   $(docmandir)/st_add.3 \
 	   $(docmandir)/st_count.3 \
