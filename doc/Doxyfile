@@ -96,7 +96,7 @@ INPUT                  = ll_init.c \
 			 rt_iter.c \
 			 rt_flush.c \
 			 rn_init.c \
-			 dbprim.h.top \
+			 dbprim.h \
 			 dbprim_int.h
 FILE_PATTERNS          = 
 RECURSIVE              = NO
