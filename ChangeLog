@@ -1,3 +1,7 @@
+2004-10-20  Kevin L Mitchell  <klmitch@mit.edu>
+
+	* configure.ac: bump version number for initial production release
+
 2004-09-25  Kevin L Mitchell  <klmitch@mit.edu>
 
 	* acinclude.m4: update checks for com_err
