@@ -36,7 +36,7 @@ _smat_comp(hash_table_t *table, db_key_t *key1, db_key_t *key2)
   objects2 = dk_key(key2);
 
   /* walk through the elements in the array and compare them */
-  for (i = SMAT_LOC_FIRST; i < SMAT_LOC_SECOND; i++)
+  for (i = SMAT_LOC_FIRST; i <= SMAT_LOC_SECOND; i++)
     if (objects1[i] != objects2[i])
       return 1; /* they don't match */
 

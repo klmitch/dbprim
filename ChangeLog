@@ -1,3 +1,16 @@
+2003-11-22  Kevin L Mitchell  <klmitch@mit.edu>
+
+	* _smat_comp.c (_smat_comp): change "<" to "<=" (reported by
+	mbuna)
+
+	* dbprim.h: add st_extra element to smat_table_t and use it
+
+	* st_init.c (st_init): use an "extra" pointer in a smat_table_t
+	instead of the hash_table_t
+
+	* st_add.c (st_add): only set *entry_p if it's *not* NULL--bah
+	(reported by mbuna)
+
 2003-08-31  Kevin L Mitchell  <klmitch@mit.edu>
 
 	* configure.ac: update version to beta release number 0.9.0

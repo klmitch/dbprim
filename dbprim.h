@@ -1032,6 +1032,7 @@ unsigned long smat_freemem(void);
 struct _smat_table_s {
   unsigned long	st_magic;	/* magic number */
   smat_resize_t	st_resize;	/* function pointer for resize callback */
+  void	       *st_extra;	/* extra data pointer */
   hash_table_t	st_table;	/* hash table */
 };
 
@@ -1053,9 +1054,8 @@ struct _smat_table_s {
  *		sparse matrix.
  */
 #define SMAT_TABLE_INIT(flags, resize, extra) \
-	{ SMAT_TABLE_MAGIC, (resize), \
-	  HASH_TABLE_INIT((flags), _smat_hash, _smat_comp, _smat_resize, \
-			  (extra)) }
+	{ SMAT_TABLE_MAGIC, (resize), (extra), \
+	  HASH_TABLE_INIT((flags), _smat_hash, _smat_comp, _smat_resize, 0) }
 
 /** \ingroup dbprim_smat
  * \brief Sparse matrix table verification macro.
@@ -1152,7 +1152,7 @@ struct _smat_table_s {
  *
  * \return	A pointer to \c void.
  */
-#define st_extra(table)	  ((table)->st_table.ht_extra)
+#define st_extra(table)	  ((table)->st_extra)
 
 /** \ingroup dbprim_smat
  * \brief Sparse matrix table memory size.

@@ -56,11 +56,12 @@ st_init(smat_table_t *table, unsigned long flags, smat_resize_t resize,
   if (!table) /* verify arguments */
     return DB_ERR_BADARGS;
 
+  table->st_extra = extra;
   table->st_resize = resize;
 
   /* initialize the hash table */
   if ((retval = ht_init(&table->st_table, flags, _smat_hash, _smat_comp,
-			_smat_resize, extra, init_mod)))
+			_smat_resize, 0, init_mod)))
     return retval;
 
   table->st_magic = SMAT_TABLE_MAGIC; /* initialize the rest of the table */

@@ -130,7 +130,7 @@ st_add(smat_table_t *table, smat_entry_t **entry_p,
   head1->sh_table = head2->sh_table = table; /* remember our table */
   se->se_table = table;
 
-  if (!entry_p) /* user wants to know which entry it is */
+  if (entry_p) /* user wants to know which entry it is */
     *entry_p = se;
 
   return 0; /* all done! */
