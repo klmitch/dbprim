@@ -1,3 +1,10 @@
+2003-12-11  Kevin L Mitchell  <klmitch@mit.edu>
+
+	* configure.ac: update version number
+
+	* smat_freelist.c (_smat_alloc): force entry to point to smat
+	entry
+
 2003-11-22  Kevin L Mitchell  <klmitch@mit.edu>
 
 	* tests/test-harness.dat (t_st_init): remove static initializer

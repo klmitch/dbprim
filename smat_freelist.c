@@ -62,6 +62,9 @@ _smat_free(smat_entry_t *entry)
 {
   entry->se_magic = 0; /* clear magic number to prevent use */
 
+  /* Force the link element to point to the *smat* entry */
+  le_object(_se_link(entry)) = entry;
+
   /* Add the entry to the free list */
   if (ll_add(&_smat_freelist, _se_link(entry), LINK_LOC_HEAD, 0))
     free(entry); /* addition failed, so free the entry */

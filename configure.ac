@@ -21,7 +21,7 @@ dnl @(#)$Id$
 dnl
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([Database Primitives Library], 0.9.0, [klmitch@mit.edu], [dbprim])
+AC_INIT([Database Primitives Library], 0.9.1, [klmitch@mit.edu], [dbprim])
 AC_CONFIG_SRCDIR([dbprim_int.h])
 AM_INIT_AUTOMAKE
 
