@@ -1,5 +1,5 @@
 /* -*- c -*-
-** Copyright (C) 2002 by Kevin L. Mitchell <klmitch@mit.edu>
+** Copyright (C) 2002, 2006 by Kevin L. Mitchell <klmitch@mit.edu>
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -1018,6 +1018,36 @@ struct _link_elem_s {
  */
 unsigned long le_init(link_elem_t *elem, void *object);
 
+/** \ingroup dbprim_hash
+ * \brief FNV-1 hash function.
+ *
+ * This is a hash function, compatible with #hash_func_t, based around
+ * the FNV-1 hash algorithm.  See
+ * http://www.isthe.com/chongo/tech/comp/fnv/ for more information
+ * about FNV-1.
+ *
+ * \param[in]		table	A pointer to a #hash_table_t.
+ * \param[in]		key	The database key to hash.
+ *
+ * \return	A 32-bit hash value for \p key.
+ */
+unsigned long hash_fnv1(hash_table_t *table, db_key_t *key);
+
+/** \ingroup dbprim_hash
+ * \brief FNV-1a hash function.
+ *
+ * This is a hash function, compatible with #hash_func_t, based around
+ * the FNV-1a hash algorithm.  See
+ * http://www.isthe.com/chongo/tech/comp/fnv/ for more information
+ * about FNV-1a.
+ *
+ * \param[in]		table	A pointer to a #hash_table_t.
+ * \param[in]		key	The database key to hash.
+ *
+ * \return	A 32-bit hash value for \p key.
+ */
+unsigned long hash_fnv1a(hash_table_t *table, db_key_t *key);
+
 /** \internal
  * \ingroup dbprim_hash
  * \brief Hash table structure.
@@ -1581,6 +1611,8 @@ unsigned long he_init(hash_entry_t *entry, void *value);
  *
  * This function frees all smat_entry_t objects on the internal free
  * list.  It is always successful and returns 0.
+ *
+ * \return	This function always returns 0.
  */
 unsigned long smat_cleanup(void);
 
@@ -1744,22 +1776,6 @@ struct _smat_table_s {
  */
 #define st_size(table) ((table)->st_table.ht_modulus * sizeof(link_head_t) + \
 			(table)->st_table.ht_count * sizeof(smat_entry_t))
-
-/** \internal
- * \ingroup dbprim_smat
- * \brief Sparse matrix hash function.
- *
- * This function is a hash table-compatible hash function for use by
- * sparse matrices.
- *
- * \param[in]		table	The hash table for which the hash is
- *				being generated.
- * \param[in]		key	The database key being hashed.
- *
- * \return	A <CODE>unsigned long</CODE> representing the hash
- *		value of \p key.
- */
-unsigned long _smat_hash(hash_table_t *table, db_key_t *key);
 
 /** \internal
  * \ingroup dbprim_smat

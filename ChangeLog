@@ -1,5 +1,36 @@
 2006-07-13  Kevin L. Mitchell  <klmitch@mit.edu>
 
+	* doc/Doxyfile.in: turn off man page generation
+
+	* st_init.c (st_init): use hash_fnv1a() instead of custom
+	_smat_hash() function
+
+	* st_find.c (st_find): initialize object pointers with memset() in
+	case of padding
+
+	* st_add.c (st_add): set key size
+
+	* smat_freelist.c (_smat_alloc): use memset() to initialize the
+	object pointers
+
+	* hash_fnv1a.c: implementation of FNV-1a hash
+
+	* hash_fnv1.c: implementation of FNV-1 hash
+
+	* dbprim_int.h: bump copyright date; add FNV hash parameters
+
+	* dbprim.h: bump copyright date; add FNV-1 and FNV-1a hash
+	functions; remove deprecated _smat_hash() function
+
+	* configure.ac: bump version number for impending updated
+	release...
+
+	* _smat_hash.c: remove now-deprecated _smat_hash() function
+
+	* Makefile.am: add FNV hash function files; remove old
+	_smat_hash.c file; tidy up sources list; update library version
+	info; drop man page information
+
 	* rn_init.c, rt_add.c, rt_find.c, rt_flush.c, rt_init.c,
 	rt_iter.c, rt_move.c, rt_next.c, rt_remove.c, sh_find.c,
 	sh_flush.c, sh_init.c, sh_iter.c, sh_move.c, smat_freelist.c,

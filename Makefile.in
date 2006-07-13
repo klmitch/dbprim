@@ -70,17 +70,17 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" \
 	"$(DESTDIR)$(man3dir)" "$(DESTDIR)$(pkgincludedir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
-am_libdbprim_la_OBJECTS = dbprim_version.lo _hash_prime.lo he_init.lo \
-	ht_add.lo ht_find.lo ht_flush.lo ht_free.lo ht_init.lo \
-	ht_iter.lo ht_move.lo ht_remove.lo ht_resize.lo le_init.lo \
-	ll_add.lo ll_find.lo ll_flush.lo ll_init.lo ll_iter.lo \
-	ll_move.lo ll_remove.lo _rb_locate.lo _rb_rotate.lo rn_init.lo \
-	rt_add.lo rt_find.lo rt_flush.lo rt_init.lo rt_iter.lo \
-	rt_move.lo rt_next.lo rt_remove.lo sh_find.lo sh_flush.lo \
-	sh_init.lo sh_iter.lo sh_move.lo _smat_comp.lo \
-	smat_freelist.lo _smat_hash.lo _smat_resize.lo st_add.lo \
-	st_find.lo st_flush.lo st_free.lo st_init.lo st_iter.lo \
-	st_remove.lo st_resize.lo
+am_libdbprim_la_OBJECTS = dbprim_version.lo _hash_prime.lo \
+	hash_fnv1.lo hash_fnv1a.lo he_init.lo ht_add.lo ht_find.lo \
+	ht_flush.lo ht_free.lo ht_init.lo ht_iter.lo ht_move.lo \
+	ht_remove.lo ht_resize.lo le_init.lo ll_add.lo ll_find.lo \
+	ll_flush.lo ll_init.lo ll_iter.lo ll_move.lo ll_remove.lo \
+	_rb_locate.lo _rb_rotate.lo rn_init.lo rt_add.lo rt_find.lo \
+	rt_flush.lo rt_init.lo rt_iter.lo rt_move.lo rt_next.lo \
+	rt_remove.lo sh_find.lo sh_flush.lo sh_init.lo sh_iter.lo \
+	sh_move.lo _smat_comp.lo smat_freelist.lo _smat_resize.lo \
+	st_add.lo st_find.lo st_flush.lo st_free.lo st_init.lo \
+	st_iter.lo st_remove.lo st_resize.lo
 libdbprim_la_OBJECTS = $(am_libdbprim_la_OBJECTS)
 binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
 SCRIPTS = $(bin_SCRIPTS)
@@ -238,23 +238,63 @@ ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = . tests
 AM_CPPFLAGS = -D__DBPRIM_LIBRARY__
 lib_LTLIBRARIES = libdbprim.la
-libdbprim_la_SOURCES = dbprim.h dbprim_err.h dbprim_int.h dbprim_version.c \
-		       \
-		       _hash_prime.c he_init.c ht_add.c ht_find.c ht_flush.c \
-		       ht_free.c ht_init.c ht_iter.c ht_move.c ht_remove.c \
-		       ht_resize.c \
-		       \
-		       le_init.c ll_add.c ll_find.c ll_flush.c ll_init.c \
-		       ll_iter.c ll_move.c ll_remove.c \
-		       \
-		       _rb_locate.c _rb_rotate.c rn_init.c rt_add.c rt_find.c \
-		       rt_flush.c rt_init.c rt_iter.c rt_move.c rt_next.c \
-		       rt_remove.c \
-		       \
-		       sh_find.c sh_flush.c sh_init.c sh_iter.c sh_move.c \
-		       _smat_comp.c smat_freelist.c _smat_hash.c \
-		       _smat_resize.c st_add.c st_find.c st_flush.c st_free.c \
-		       st_init.c st_iter.c st_remove.c st_resize.c
+libdbprim_la_SOURCES = \
+	dbprim.h \
+	dbprim_err.h \
+	dbprim_int.h \
+	dbprim_version.c \
+	\
+	_hash_prime.c \
+	hash_fnv1.c \
+	hash_fnv1a.c \
+	he_init.c \
+	ht_add.c \
+	ht_find.c \
+	ht_flush.c \
+	ht_free.c \
+	ht_init.c \
+	ht_iter.c \
+	ht_move.c \
+	ht_remove.c \
+	ht_resize.c \
+	\
+	le_init.c \
+	ll_add.c \
+	ll_find.c \
+	ll_flush.c \
+	ll_init.c \
+	ll_iter.c \
+	ll_move.c \
+	ll_remove.c \
+	\
+	_rb_locate.c \
+	_rb_rotate.c \
+	rn_init.c \
+	rt_add.c \
+	rt_find.c \
+	rt_flush.c \
+	rt_init.c \
+	rt_iter.c \
+	rt_move.c \
+	rt_next.c \
+	rt_remove.c \
+	\
+	sh_find.c \
+	sh_flush.c \
+	sh_init.c \
+	sh_iter.c \
+	sh_move.c \
+	_smat_comp.c \
+	smat_freelist.c \
+	_smat_resize.c \
+	st_add.c \
+	st_find.c \
+	st_flush.c \
+	st_free.c \
+	st_init.c \
+	st_iter.c \
+	st_remove.c \
+	st_resize.c
 
 libdbprim_la_LIBADD = @DBPRIM_ET_OBJS@
 libdbprim_la_DEPENDENCIES = @DBPRIM_ET_OBJS@
@@ -533,9 +573,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/_rb_locate.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/_rb_rotate.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/_smat_comp.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/_smat_hash.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/_smat_resize.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbprim_version.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash_fnv1.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash_fnv1a.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/he_init.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ht_add.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ht_find.Plo@am__quote@

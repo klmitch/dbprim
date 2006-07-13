@@ -25,6 +25,8 @@
  * This file contains the implementation of the st_find() function,
  * used to locate a specific entry in a sparse matrix table.
  */
+#include <string.h>
+
 #include "dbprim.h"
 #include "dbprim_int.h"
 
@@ -56,10 +58,11 @@ st_find(smat_table_t *table, smat_entry_t **entry_p, smat_head_t *head1,
     return DB_ERR_WRONGTABLE;
 
   /* Build the search key */
+  memset(object, 0, sizeof(object));
   object[SMAT_LOC_FIRST] = sh_object(head1);
   object[SMAT_LOC_SECOND] = sh_object(head2);
   dk_key(&key) = object;
-  dk_len(&key) = 0;
+  dk_len(&key) = sizeof(object);
 
   /* look up the entry */
   if ((retval = ht_find(&table->st_table, &ent, &key)))

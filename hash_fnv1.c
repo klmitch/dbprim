@@ -1,5 +1,5 @@
 /*
-** Copyright (C) 2002 by Kevin L. Mitchell <klmitch@mit.edu>
+** Copyright (C) 2006 by Kevin L. Mitchell <klmitch@mit.edu>
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -20,10 +20,11 @@
 */
 /** \internal
  * \file
- * \brief Implementation of st_init().
+ * \brief Implementation of hash_fnv1().
  *
- * This file contains the implementation of the st_init() function,
- * used to dynamically initialize a sparse matrix table.
+ * This file contains the implementation of the hash_fnv1() function,
+ * a generic hash function callback implementing the FNV-1 hash
+ * algorithm.
  */
 #include "dbprim.h"
 #include "dbprim_int.h"
@@ -31,25 +32,20 @@
 RCSTAG("@(#)$Id$");
 
 unsigned long
-st_init(smat_table_t *table, unsigned long flags, smat_resize_t resize,
-	void *extra, unsigned long init_mod)
+hash_fnv1(hash_table_t *table, db_key_t *key)
 {
-  unsigned long retval;
+  int i;
+  unsigned long hash = HASH_FNV_OFFSET;
+  unsigned char *c;
 
-  initialize_dbpr_error_table(); /* set up error tables */
+  if (!key || !dk_len(key) || !dk_key(key)) /* invalid key?  return 0 */
+    return 0;
 
-  if (!table) /* verify arguments */
-    return DB_ERR_BADARGS;
+  c = (unsigned char *)dk_key(key);
+  for (i = 0; i < dk_len(key); i++) { /* FNV-1 algorithm... */
+    hash *= HASH_FNV_PRIME; /* multiply by the prime... */
+    hash ^= *c; /* hash in the data octet */
+  }
 
-  table->st_extra = extra;
-  table->st_resize = resize;
-
-  /* initialize the hash table */
-  if ((retval = ht_init(&table->st_table, flags, hash_fnv1a, _smat_comp,
-			_smat_resize, table, init_mod)))
-    return retval;
-
-  table->st_magic = SMAT_TABLE_MAGIC; /* initialize the rest of the table */
-
-  return 0;
+  return hash;
 }

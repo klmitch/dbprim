@@ -1,5 +1,5 @@
 /*
-** Copyright (C) 2002 by Kevin L. Mitchell <klmitch@mit.edu>
+** Copyright (C) 2006 by Kevin L. Mitchell <klmitch@mit.edu>
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -20,10 +20,11 @@
 */
 /** \internal
  * \file
- * \brief Implementation of _smat_hash().
+ * \brief Implementation of hash_fnv1a().
  *
- * This file contains the implementation of the _smat_hash() function,
- * the hash callback used by sparse matrices.
+ * This file contains the implementation of the hash_fnv1a() function,
+ * a generic hash function callback implementing the FNV-1a hash
+ * algorithm.
  */
 #include "dbprim.h"
 #include "dbprim_int.h"
@@ -31,24 +32,20 @@
 RCSTAG("@(#)$Id$");
 
 unsigned long
-_smat_hash(hash_table_t *table, db_key_t *key)
+hash_fnv1a(hash_table_t *table, db_key_t *key)
 {
-  int i, j;
-  unsigned long hash = 0;
-  void **objects;
+  int i;
+  unsigned long hash = HASH_FNV_OFFSET;
   unsigned char *c;
 
-  if (!key || !dk_key(key)) /* if the key's invalid, return 0 */
+  if (!key || !dk_len(key) || !dk_key(key)) /* invalid key?  return 0 */
     return 0;
 
-  objects = dk_key(key); /* get the key--a pair of pointers */
-
-  /* walk through both elements in the array... */
-  for (i = SMAT_LOC_FIRST; i <= SMAT_LOC_SECOND; i++) {
-    c = (unsigned char *)&objects[i]; /* get a char pointer to pointer value */
-    for (j = 0; j < sizeof(void *); j++) /* step through each character */
-      hash = (hash * 257) + c[j];
+  c = (unsigned char *)dk_key(key);
+  for (i = 0; i < dk_len(key); i++) { /* FNV-1a algorithm... */
+    hash ^= *c; /* hash in the data octet */
+    hash *= HASH_FNV_PRIME; /* multiply by the prime... */
   }
 
-  return hash; /* return the hash value */
+  return hash;
 }

@@ -1,5 +1,5 @@
 /*
-** Copyright (C) 2002 by Kevin L. Mitchell <klmitch@mit.edu>
+** Copyright (C) 2002, 2006 by Kevin L. Mitchell <klmitch@mit.edu>
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -105,6 +105,26 @@ unsigned long _hash_prime(unsigned long start);
  * \return	The "fuzzed" size.
  */
 #define _hash_fuzz(mod)		(((mod) * 4) / 3)
+
+/** \internal
+ * \ingroup dbprim_hash
+ * \brief FNV offset basis parameter.
+ *
+ * This is the 32-bit offset basis for the FNV hash algorithm.  See
+ * http://www.isthe.com/chongo/tech/comp/fnv/ for more information
+ * about the FNV hash algorithm.
+ */
+#define HASH_FNV_OFFSET		2166136261UL
+
+/** \internal
+ * \ingroup dbprim_hash
+ * \brief FNV prime parameter.
+ *
+ * This is the 32-bit multiplication prime for the FNV hash algorithm.
+ * See http://www.isthe.com/chongo/tech/comp/fnv/ for more information
+ * about the FNV hash algorithm.
+ */
+#define HASH_FNV_PRIME		16777619UL
 
 /** \internal
  * \ingroup dbprim_smat

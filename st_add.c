@@ -68,8 +68,8 @@ st_add(smat_table_t *table, smat_entry_t **entry_p,
 
   se->se_object[SMAT_LOC_FIRST] = sh_object(head1); /* set up the hash key */
   se->se_object[SMAT_LOC_SECOND] = sh_object(head2);
-  dk_key(&key) = &se->se_object;
-  dk_len(&key) = 0;
+  dk_key(&key) = se->se_object;
+  dk_len(&key) = sizeof(se->se_object);
 
   /* add the element to the hash table first */
   if ((retval = ht_add(&table->st_table, &se->se_hash, &key)))

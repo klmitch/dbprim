@@ -28,6 +28,7 @@
  * structures that must be allocated by the sparse matrix system.
  */
 #include <stdlib.h>
+#include <string.h>
 
 #include "dbprim.h"
 #include "dbprim_int.h"
@@ -65,8 +66,7 @@ _smat_alloc(void)
   }
 
   se->se_table = 0; /* initialize the rest of the structure */
-  se->se_object[SMAT_LOC_FIRST] = 0;
-  se->se_object[SMAT_LOC_SECOND] = 0;
+  memset(se->se_object, 0, sizeof(se->se_object)); /* zero object pointers */
 
   se->se_magic = SMAT_ENTRY_MAGIC; /* set up the magic number */
 
