@@ -18,27 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of sh_init().
+ *
+ * This file contains the implementation of the sh_init() function,
+ * used to dynamically initialize a sparse matrix head structure.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_smat
- * \brief Dynamically initialize a sparse matrix row or column head.
- *
- * This function dynamically initializes a sparse matrix row or column
- * linked list head.  The \p elem argument specifies whether the
- * object is to be associated with a #SMAT_LOC_FIRST list or a
- * #SMAT_LOC_SECOND list.
- *
- * \param head	A pointer to a #smat_head_t to be initialized.
- * \param elem	Either #SMAT_LOC_FIRST or #SMAT_LOC_SECOND.
- * \param object
- *		A pointer to the object containing the sparse matrix
- *		row or column head.
- *
- * \retval DB_ERR_BADARGS	An invalid argument was given.
- */
 unsigned long
 sh_init(smat_head_t *head, smat_loc_t elem, void *object)
 {

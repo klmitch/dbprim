@@ -18,33 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of st_find().
+ *
+ * This file contains the implementation of the st_find() function,
+ * used to locate a specific entry in a sparse matrix table.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_smat
- * \brief Find an entry in a sparse matrix.
- *
- * This function looks up the entry matching the given \p head1 and \p
- * head2.
- *
- * \param table	A pointer to a #smat_table_t.
- * \param entry_p
- *		A pointer to a pointer to a #smat_entry_t.  This is a
- *		result parameter.  If \c NULL is passed, the lookup
- *		will be performed and an appropriate error code
- *		returned.
- * \param head1	A pointer to a #smat_head_t initialized to
- *		#SMAT_LOC_FIRST.
- * \param head2	A pointer to a #smat_head_t initialized to
- *		#SMAT_LOC_SECOND.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_WRONGTABLE	One or both of \p head1 or \p head2
- *				are not referenced in this table.
- * \retval DB_ERR_NOENTRY	No matching entry was found.
- */
 unsigned long
 st_find(smat_table_t *table, smat_entry_t **entry_p, smat_head_t *head1,
 	smat_head_t *head2)

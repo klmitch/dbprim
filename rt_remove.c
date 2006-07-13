@@ -18,12 +18,27 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of rt_remove().
+ *
+ * This file contains the implementation of the rt_remove() function,
+ * used to remove a node from a red-black tree.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/* Clear a node... */
+/** \internal
+ * \ingroup dbprim_rbtree
+ * \brief Clear a node.
+ *
+ * This macro is used to clear a red-black tree node, so that it is no
+ * longer in the tree.
+ *
+ * \param[in]		node	The #rb_node_t to clear.
+ */
 #define _rn_clear(node)							      \
 do {									      \
   (node)->rn_color = RB_COLOR_NONE; /* no color... */			      \
@@ -33,7 +48,19 @@ do {									      \
   (node)->rn_right = 0;							      \
 } while (0)
 
-/* update a node's parent to point to the new node */
+/** \internal
+ * \ingroup dbprim_rbtree
+ * \brief Update a node's parent.
+ *
+ * This macro is used to update the parent of the given \p node to
+ * point to the new child \p new.
+ *
+ * \param[in]		tree	The #rb_tree_t that the node is in.
+ * \param[in]		node	The #rb_node_t whose parent is being
+ *				updated.
+ * \param[in]		new	The new #rb_node_t for the parent to
+ *				point to.
+ */
 #define _rt_update_parent(tree, node, new)				      \
 do {									      \
   if (!(node)->rn_parent) /* node must be at root of tree... */		      \
@@ -44,35 +71,85 @@ do {									      \
     (node)->rn_parent->rn_right = (new); /* OK, right child, save tere */     \
 } while (0)
 
-/* is the node <n> the left child of the parent node <par>? */
+/** \internal
+ * \ingroup dbprim_rbtree
+ * \brief Determine if node is a left child of its parent.
+ *
+ * This macro simply tests whether a given node \p n is the left child
+ * of its parent \p par.
+ *
+ * \param[in]		par	The parent being tested.
+ * \param[in]		n	The node being tested.
+ *
+ * \return	Boolean \c true if \p n is the left child of \p par,
+ *		\c false otherwise.
+ */
 #define isleft(par, n)	((par)->rn_left == (n))
 
-/* select the right node if condition <t> is true */
+/** \internal
+ * \ingroup dbprim_rbtree
+ * \brief Select a child node based on a condition.
+ *
+ * This macro simply returns a pointer to the right child of \p n if
+ * the condition \p t is \c true.  If not, it returns the left child
+ * of \p n.
+ *
+ * \param[in]		t	The condition being tested.
+ * \param[in]		n	The node whose child is being
+ *				selected.
+ *
+ * \return	The left child of \p n if \p t is \c true, otherwise,
+ *		the right child of \p n.
+ */
 #define sel_lr(t, n)	((t) ? (n)->rn_right : (n)->rn_left)
 
-/* Locate sibling of the given node */
+/** \internal
+ * \ingroup dbprim_rbtree
+ * \brief Locate the sibling of a node.
+ *
+ * This macro retrieves the sibling of the node \p n.
+ *
+ * \warning	This macro evaluates the \p par argument twice.
+ *
+ * \param[in]		par	The parent of the node \p n.
+ * \param[in]		n	The node to find the sibling of.
+ *
+ * \return	The sibling of the node \p n.
+ */
 #define sibling(par, n)	(sel_lr(isleft((par), (n)), (par)))
 
-/* Locate "closer" nephew of the given node */
+/** \internal
+ * \ingroup dbprim_rbtree
+ * \brief Locate "closer" nephew of a node.
+ *
+ * This macro retrieves the "closer" nephew of the node \p n.
+ *
+ * \warning	This macro evaluates both of its arguments multiple
+ *		times.
+ *
+ * \param[in]		par	The parent of the node \p n.
+ * \param[in]		n	The node to find the nephew of.
+ *
+ * \return	The "closer" nephew of the node \p n.
+ */
 #define l_neph(par, n)	(sel_lr(!isleft((par), (n)), sibling((par), (n))))
 
-/* Locate "further" nephew of the given node */
+/** \internal
+ * \ingroup dbprim_rbtree
+ * \brief Locate "further" nephew of a node.
+ *
+ * This macro retrieves the "further" nephew of the node \p n.
+ *
+ * \warning	This macro evaluates both of its arguments multiple
+ *		times.
+ *
+ * \param[in]		par	The parent of the node \p n.
+ * \param[in]		n	The node to find the nephew of.
+ *
+ * \return	The "further" nephew of the node \p n.
+ */
 #define r_neph(par, n)	(sel_lr(isleft((par), (n)), sibling((par), (n))))
 
-/** \ingroup dbprim_rbtree
- * \brief Remove a node from a red-black tree.
- *
- * This function removes the given node from the specified red-black
- * tree.
- *
- * \param tree	A pointer to a #rb_tree_t.
- * \param node	A pointer to a #rb_node_t to be removed from the tree.
- *
- * \retval DB_ERR_BADARGS	An invalid argument was given.
- * \retval DB_ERR_UNUSED	Node is not in a red-black tree.
- * \retval DB_ERR_WRONGTABLE	Node is not in this tree.
- * \retval DB_ERR_FROZEN	Red-black tree is frozen.
- */
 unsigned long
 rt_remove(rb_tree_t *tree, rb_node_t *node)
 {

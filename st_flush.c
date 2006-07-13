@@ -18,17 +18,50 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of st_flush().
+ *
+ * This file contains the implementation of the st_flush() function,
+ * used to release all entries in a sparse matrix table.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix flush function shim structure.
+ *
+ * This structure is used by st_flush() in its call to ht_flush().
+ * The structure contains state that ht_flush() cannot directly pass
+ * to _st_flush_iter().
+ */
 struct _st_flush_s {
-  smat_table_t *sf_table;	/* pointer to the smat table */
-  smat_iter_t	sf_flush;	/* flush function */
-  void	       *sf_extra;	/* extra data */
+  smat_table_t *sf_table;	/**< Pointer to the smat table. */
+  smat_iter_t	sf_flush;	/**< Flush function. */
+  void	       *sf_extra;	/**< Extra data. */
 };
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix hash flush callback.
+ *
+ * This function is a #hash_iter_t iteration callback that is used as
+ * a shim between the st_flush() function and the ht_flush() function,
+ * which it uses internally.
+ *
+ * \param[in]		table	The hash table being iterated over.
+ * \param[in]		ent	The specific hash table entry being
+ *				processed.
+ * \param[in]		extra	Extra caller-specific data to pass to
+ *				the iteration function.  In this case,
+ *				a pointer to a struct _st_flush_s is
+ *				passed.
+ *
+ * \return	Zero to continue flushing, non-zero otherwise.
+ */
 static unsigned long
 _st_flush_iter(hash_table_t *table, hash_entry_t *ent, void *extra)
 {
@@ -49,26 +82,6 @@ _st_flush_iter(hash_table_t *table, hash_entry_t *ent, void *extra)
   return retval;
 }
 
-/** \ingroup dbprim_smat
- * \brief Flush a sparse matrix.
- *
- * This function flushes a sparse matrix--that is, it removes each
- * entry from the matrix.  If a \p flush_func is specified, it will be
- * called on the entry after it has been removed from the table, and
- * may safely call <CODE>free()</CODE>.
- *
- * \param table	A pointer to a #smat_table_t.
- * \param flush_func
- *		A pointer to a callback function used to perform
- *		user-specified actions on an entry after removing it
- *		from the table.  May be \c NULL.  See the
- *		documentation for #smat_iter_t for more information.
- * \param extra	A \c void pointer that will be passed to \p
- *		iter_func.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_FROZEN	The sparse matrix is frozen.
- */
 unsigned long
 st_flush(smat_table_t *table, smat_iter_t flush_func, void *extra)
 {

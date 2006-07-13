@@ -18,27 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of rt_find().
+ *
+ * This file contains the implementation of the rt_find() function,
+ * used to locate a specific node in a red-black tree.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_rbtree
- * \brief Find an entry in a red-black table.
- *
- * This function looks up an entry matching the given \p key.
- *
- * \param tree	A pointer to a #rb_tree_t.
- * \param node_p
- *		A pointer to a pointer to a #rb_node_t.  This is a
- *		result parameter.  If \c NULL is passed, the lookup
- *		will be performed and an appropriate error code
- *		returned.
- * \param key	A pointer to a #db_key_t describing the item to find.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_NOENTRY	No matching entry was found.
- */
 unsigned long
 rt_find(rb_tree_t *tree, rb_node_t **node_p, db_key_t *key)
 {

@@ -18,6 +18,13 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of _smat_comp().
+ *
+ * This file contains the implementation of the _smat_comp() function,
+ * the comparison callback used by sparse matrices.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 

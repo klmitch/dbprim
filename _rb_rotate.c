@@ -18,6 +18,13 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of _rb_rotate().
+ *
+ * This file contains the implementation of the _rb_rotate() function,
+ * used to perform a tree node rotation for tree balancing.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 

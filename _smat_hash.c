@@ -18,6 +18,13 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of _smat_hash().
+ *
+ * This file contains the implementation of the _smat_hash() function,
+ * the hash callback used by sparse matrices.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 

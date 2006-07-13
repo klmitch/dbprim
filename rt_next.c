@@ -18,34 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of rt_next().
+ *
+ * This file contains the implementation of the rt_next() function,
+ * used to locate the next node in a given iteration scheme.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_rbtree
- * \brief Get the next node.
- *
- * This function obtains the next node in the given iteration scheme.
- * The \p node_io parameter is a value-result parameter--if the node
- * pointer to which it points is \c NULL, the first node for the given
- * iteration order will be loaded; otherwise, the next node in the
- * given iteration order will be loaded.
- *
- * \param tree	A pointer to a #rb_tree_t.
- * \param node_io
- *		A pointer to a pointer to a #rb_node_t.  If the
- *		pointer to which node_io points is \c NULL, the first
- *		node will be loaded, otherwise the next node will be
- *		loaded.
- * \param flags	One of RBT_ORDER_PRE, RBT_ORDER_IN, or RBT_ORDER_POST,
- *		possibly ORed with DB_FLAG_REVERSE to reverse the
- *		order of iteration.  Zero is not allowed.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_WRONGTABLE	\p start is not in this red-black
- *				tree.
- */
 unsigned long
 rt_next(rb_tree_t *tree, rb_node_t **node_io, unsigned long flags)
 {

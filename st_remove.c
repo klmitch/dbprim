@@ -18,6 +18,14 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of _st_remove() and st_remove().
+ *
+ * This file contains the implementation of the _st_remove() and
+ * st_remove() functions, which cooperate in removing a sparse matrix
+ * entry from the table.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
@@ -51,21 +59,6 @@ _st_remove(smat_table_t *table, smat_entry_t *entry, unsigned int remflag)
   return 0;
 }
 
-/** \ingroup dbprim_smat
- * \brief Remove an entry from a sparse matrix.
- *
- * This function removes the given entry from the specified sparse
- * matrix.
- *
- * \param table	A pointer to a #smat_table_t.
- * \param entry	A pointer to a #smat_entry_t to be removed from the
- *		table.
- *
- * \retval DB_ERR_BADARGS	An invalid argument was given.
- * \retval DB_ERR_WRONGTABLE	Entry is not in this sparse matrix.
- * \retval DB_ERR_UNRECOVERABLE	An unrecoverable error occurred while
- *				removing the entry from the table.
- */
 unsigned long
 st_remove(smat_table_t *table, smat_entry_t *entry)
 {

@@ -18,18 +18,51 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of sh_flush().
+ *
+ * This file contains the implementation of the sh_flush() function,
+ * used to release all entries in a sparse matrix linked list.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix flush function shim structure.
+ *
+ * This structure is used by sh_flush() in its call to ll_flush().
+ * The structure contains state that ll_flush() cannot directly pass
+ * to _sh_flush_iter().
+ */
 struct _sh_flush_s {
-  smat_table_t *sf_table;	/* pointer to the smat table */
-  smat_loc_t	sf_elem;	/* which list we're traversing */
-  smat_iter_t	sf_flush;	/* flush function */
-  void	       *sf_extra;	/* extra data */
+  smat_table_t *sf_table;	/**< Pointer to the smat table. */
+  smat_loc_t	sf_elem;	/**< Which list we're traversing. */
+  smat_iter_t	sf_flush;	/**< Flush function. */
+  void	       *sf_extra;	/**< Extra data. */
 };
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix linked list flush callback.
+ *
+ * This function is a #link_iter_t iteration callback that is used as
+ * a shim between the sh_flush() function and the ll_flush() function,
+ * which it uses internally.
+ *
+ * \param[in]		head	The linked list being iterated over.
+ * \param[in]		elem	The specific linked list element being
+ *				processed.
+ * \param[in]		extra	Extra caller-specific data to pass to
+ *				the iteration function.  In this case,
+ *				a pointer to a struct _sh_flush_s is
+ *				passed.
+ *
+ * \return	Zero to continue flushing, non-zero otherwise.
+ */
 static unsigned long
 _sh_flush_iter(link_head_t *head, link_elem_t *elem, void *extra)
 {
@@ -53,26 +86,6 @@ _sh_flush_iter(link_head_t *head, link_elem_t *elem, void *extra)
   return retval;
 }
 
-/** ingroup dbprim_smat
- * \brief Flush a row or column of a sparse matrix.
- *
- * This function flushes a sparse matrix row or column--that is, it
- * removes each element from that row or column.  If a \p flush_func
- * is specified, it will be called on the entry after it has been
- * removed from the row or column, and may safely call
- * <CODE>free()</CODE>.
- *
- * \param list	A pointer to a #smat_head_t.
- * \param flush_func
- *		A pointer to a callback function used to perform
- *		user-specifed actions on an entry after removing it
- *		from the row or column.  May be \c NULL.  See the
- *		documentation for #smat_iter_t for more information.
- * \param extra	A \c void pointer that will be passed to \p
- *		flush_func.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- */
 unsigned long
 sh_flush(smat_head_t *head, smat_iter_t flush_func, void *extra)
 {

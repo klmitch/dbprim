@@ -18,37 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of rt_iter().
+ *
+ * This file contains the implementation of the rt_iter() function,
+ * used to iterate over all nodes in a red-black tree.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_rbtree
- * \brief Iterate over each entry in a red-black tree.
- *
- * This function iterates over every node in a red-black tree in the
- * given traversal order, executing the given \p iter_func on each
- * node.
- *
- * \param tree	A pointer to a #rb_tree_t.
- * \param start	A pointer to a #rb_node_t describing where in the tree
- *		to start.  If \c NULL is passed, the first element of
- *		the tree for the specified order will be assumed.
- * \param iter_func
- *		A pointer to a callback function used to perform
- *		user-specified actions on a node in the red-black
- *		tree.  \c NULL is an invalid value.  See the
- *		documentation for #rb_iter_t for more information.
- * \param extra	A \c void pointer that will be passed to \p
- *		iter_func.
- * \param flags	One of RBT_ORDER_PRE, RBT_ORDER_IN, or RBT_ORDER_POST,
- *		possibly ORed with DB_FLAG_REVERSE to reverse the
- *		order of iteration.  Zero is not allowed.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_WRONGTABLE	\p start is not in this red-black
- *				tree.
- */
 unsigned long
 rt_iter(rb_tree_t *tree, rb_node_t *start,
 	rb_iter_t iter_func, void *extra, unsigned long flags)

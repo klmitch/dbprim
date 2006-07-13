@@ -18,24 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of rt_init().
+ *
+ * This file contains the implementation of the rt_init() function,
+ * used to dynamically initialize a red-black tree.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_rbtree
- * \brief Dynamically initialize a red-black tree.
- *
- * This function dynamically initializes a red-black tree.
- *
- * \param tree	A pointer to a #rb_tree_t to be initialized.
- * \param comp	A #rb_comp_t function pointer for a comparison
- *		function.
- * \param extra	Extra pointer data that should be associated
- *		with the tree.
- *
- * \retval DB_ERR_BADARGS	An invalid argument was given.
- */
 unsigned long
 rt_init(rb_tree_t *tree, rb_comp_t comp, void *extra)
 {

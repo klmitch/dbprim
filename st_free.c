@@ -18,23 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of st_free().
+ *
+ * This file contains the implementation of the st_free() function,
+ * used to release memory allocated by the sparse matrix hash table.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_smat
- * \brief Free memory used by an empty sparse matrix table.
- *
- * This function releases the memory used by the bucket table of the
- * empty hash table associated with a sparse matrix.
- *
- * \param table	A pointer to a #smat_table_t.
- *
- * \retval DB_ERR_BADARGS	An invalid argument was given.
- * \retval DB_ERR_FROZEN	The table is frozen.
- * \retval DB_ERR_NOTEMPTY	The table is not empty.
- */
 unsigned long
 st_free(smat_table_t *table)
 {

@@ -18,33 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of st_init().
+ *
+ * This file contains the implementation of the st_init() function,
+ * used to dynamically initialize a sparse matrix table.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_smat
- *
- * This function initializes a sparse matrix table.
- *
- * \param table	A pointer to a #smat_table_t to be initialized.
- * \param flags	A bit-wise OR of #HASH_FLAG_AUTOGROW and
- *		#HASH_FLAG_AUTOSHRINK.  If neither behavior is
- *		desired, use 0.
- * \param resize
- *		A #hash_resize_t function pointer for determining
- *		whether resizing is permitted and/or for notification
- *		of the resize.
- * \param extra	Extra pointer data that should be associated with the
- *		sparse matrix table.
- * \param init_mod
- *		An initial modulus for the table.  This will
- *		presumably be extracted by st_modulus() in a previous
- *		invocation of the application.  A 0 value is valid.
- *
- * \retval DB_ERR_BADARGS	An invalid argument was given.
- * \retval ENOMEM		Unable to allocate memory.
- */
 unsigned long
 st_init(smat_table_t *table, unsigned long flags, smat_resize_t resize,
 	void *extra, unsigned long init_mod)

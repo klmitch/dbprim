@@ -18,15 +18,34 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of _hash_prime().
+ *
+ * This file contains the implementation of the _hash_prime()
+ * function, used to determine a prime number to use as a hash table
+ * modulus.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
+/** \internal
+ * \ingroup dbprim_hash
+ * \brief Largest prime.
+ *
+ * This is the largest prime number that can be handled by the
+ * _hash_prime() function.
+ */
 #define MAX_PRIME	4294967291UL
 
-/* Table of all 16-bit primes plus two extra--used for checking computed
- * primes for primality.
+/** \internal
+ * \ingroup dbprim_hash
+ * \brief Table of primes.
+ *
+ * This variable contains a table of 16-bit prime numbers, used by
+ * _hash_prime() to test the primality of potential primes.
  */
 static unsigned long primes[] = {
       3,     5,     7,    11,    13,    17,    19,    23,    29,

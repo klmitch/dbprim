@@ -1,3 +1,19 @@
+2006-07-13  Kevin L. Mitchell  <klmitch@mit.edu>
+
+	* rn_init.c, rt_add.c, rt_find.c, rt_flush.c, rt_init.c,
+	rt_iter.c, rt_move.c, rt_next.c, rt_remove.c, sh_find.c,
+	sh_flush.c, sh_init.c, sh_iter.c, sh_move.c, smat_freelist.c,
+	st_add.c, st_find.c, st_flush.c, st_free.c, st_init.c, st_iter.c,
+	st_remove.c, st_resize.c: pull documentation comments into
+	dbprim.h
+
+	* dbprim_int.h: document internal entities
+
+	* dbprim.h: finish futzing with documentation
+
+	* _hash_prime.c, _rb_locate.c, _rb_rotate.c, _smat_comp.c,
+	_smat_hash.c, _smat_resize.c: file documentation
+
 2006-07-12  Kevin L. Mitchell  <klmitch@mit.edu>
 
 	* tests/test-harness.h: update to most recent version

@@ -18,6 +18,13 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of _rb_locate().
+ *
+ * This file contains the implementation of the _rb_locate() function,
+ * used to locate a given node in a red-black tree.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 

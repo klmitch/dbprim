@@ -18,31 +18,19 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of rt_move().
+ *
+ * This file contains the implementation of the rt_move() function,
+ * used to move a node within a red-black tree to correspond to a new
+ * key.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_rbtree
- * \brief Move a node in a red-black tree.
- *
- * This function moves an existing node in the red-black tree to
- * correspond to the new key.
- *
- * \param tree	A pointer to a #rb_tree_t.
- * \param node	A pointer to a #rb_node_t to be moved.  It must
- *		already be in the red-black tree.
- * \param key	A pointer to a #db_key_t describing the new key for
- *		the node.
- *
- * \retval DB_ERR_BADARGS	An invalid argument was given.
- * \retval DB_ERR_UNUSED	Node is not in a red-black tree.
- * \retval DB_ERR_WRONGTABLE	Node is not in this tree.
- * \retval DB_ERR_FROZEN	Red-black tree is frozen.
- * \retval DB_ERR_DUPLICATE	New key is a duplicate of an existing
- *				key.
- * \retval DB_ERR_READDFAILED	Unable to re-add node to tree.
- */
 unsigned long
 rt_move(rb_tree_t *tree, rb_node_t *node, db_key_t *key)
 {

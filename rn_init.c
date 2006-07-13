@@ -18,23 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of rn_init().
+ *
+ * This file contains the implementation of the rn_init() function,
+ * used to dynamically initialize a red-black tree node.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_rbtree
- * \brief Dynamically initialize a red-black tree node.
- *
- * This function dynamically initializes a red-black tree node.
- *
- * \param node	A pointer to a #rb_tree_t to be initialized.
- * \param value	A pointer to \c void which will be the value of the
- *		red-black tree entry.
- *
- * \retval DB_ERR_BADARGS	A \c NULL pointer was passed for \p
- *				node.
- */
 unsigned long
 rn_init(rb_node_t *node, void *value)
 {

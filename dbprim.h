@@ -213,15 +213,15 @@
  * ordering, if you wish.
  */
 
-/** \def DBPRIM_BEGIN_C_DECLS
- * \internal
+/** \internal
+ * \def DBPRIM_BEGIN_C_DECLS
  * \brief Begin declaration in C namespace.
  *
  * This macro is defined to <CODE>extern "C" {</CODE> when compiling
  * with a C++ compiler.  See #DBPRIM_END_C_DECLS.
  */
-/** \def DBPRIM_END_C_DECLS
- * \internal
+/** \internal
+ * \def DBPRIM_END_C_DECLS
  * \brief End declaration in C namespace.
  *
  * This macro is defined to <CODE>}</CODE> when compiling with a C++
@@ -329,8 +329,18 @@ typedef struct _rb_node_s rb_node_t;
  * ll_flush().  It should return 0 for success.  A non-zero return
  * value will terminate the operation and will become the return value
  * of the ll_iter() or ll_flush() call.
+ *
+ * \param[in]		head	A pointer to a #link_head_t.
+ * \param[in]		elem	A pointer to the #link_elem_t being
+ *				considered.
+ * \param[in]		extra	A \c void pointer passed to ll_iter()
+ *				or ll_flush().
+ *
+ * \return	Zero for success, or non-zero to terminate the
+ *		iteration.
  */
-typedef unsigned long (*link_iter_t)(link_head_t *, link_elem_t *, void *);
+typedef unsigned long (*link_iter_t)(link_head_t *list, link_elem_t *elem,
+				     void *extra);
 
 /** \ingroup dbprim_link
  * \brief Linked list comparison callback.
@@ -338,8 +348,13 @@ typedef unsigned long (*link_iter_t)(link_head_t *, link_elem_t *, void *);
  * This function pointer references a callback used by ll_find().  It
  * should return 0 if the entry passed as the second argument matches
  * the key passed as the first argument.
+ *
+ * \param[in]		key	The database key being searched for.
+ * \param[in]		obj	The object to compare with the key.
+ *
+ * \return	Zero if \p key matches \p obj, non-zero otherwise.
  */
-typedef unsigned long (*link_comp_t)(db_key_t *, void *);
+typedef unsigned long (*link_comp_t)(db_key_t *key, void *obj);
 
 /** \ingroup dbprim_hash
  * \brief Hash table iteration callback.
@@ -348,8 +363,18 @@ typedef unsigned long (*link_comp_t)(db_key_t *, void *);
  * ht_flush().  It should return 0 for success.  A non-zero return
  * value will terminate the operation and will become the return value
  * of the ht_iter() or ht_flush() call.
+ *
+ * \param[in]		table	A pointer to a #hash_table_t.
+ * \param[in]		ent	A pointer to the #hash_entry_t being
+ *				considered.
+ * \param[in]		extra	A \c void pointer passed to ht_iter()
+ *				or ht_flush().
+ *
+ * \return	Zero for success, or non-zero to terminate the
+ *		iteration.
  */
-typedef unsigned long (*hash_iter_t)(hash_table_t *, hash_entry_t *, void *);
+typedef unsigned long (*hash_iter_t)(hash_table_t *table, hash_entry_t *ent,
+				     void *extra);
 
 /** \ingroup dbprim_hash
  * \brief Hash function callback.
@@ -358,8 +383,13 @@ typedef unsigned long (*hash_iter_t)(hash_table_t *, hash_entry_t *, void *);
  * for generating a hash value.  The full 32-bit range of an
  * <CODE>unsigned long</CODE> should be used--do *not* reduce the hash
  * value by the modulus of the hash table.
+ *
+ * \param[in]		table	A pointer to a #hash_table_t.
+ * \param[in]		key	The database key to hash.
+ *
+ * \return	A 32-bit hash value for \p key.
  */
-typedef unsigned long (*hash_func_t)(hash_table_t *, db_key_t *);
+typedef unsigned long (*hash_func_t)(hash_table_t *table, db_key_t *key);
 
 /** \ingroup dbprim_hash
  * \brief Hash table comparison callback.
@@ -368,8 +398,15 @@ typedef unsigned long (*hash_func_t)(hash_table_t *, db_key_t *);
  * in a hash table.  It should return 0 for identical entries and
  * non-zero otherwise.  No assumptions should be made about the order
  * in which the two keys are passed to this function.
+ *
+ * \param[in]		table	A pointer to a #hash_table_t.
+ * \param[in]		key1	The first key being compared.
+ * \param[in]		key2	The second key being compared.
+ *
+ * \return	Zero if the keys match, non-zero otherwise.
  */
-typedef unsigned long (*hash_comp_t)(hash_table_t *, db_key_t *, db_key_t *);
+typedef unsigned long (*hash_comp_t)(hash_table_t *table, db_key_t *key1,
+				     db_key_t *key2);
 
 /** \ingroup dbprim_hash
  * \brief Hash table resize callback.
@@ -378,8 +415,14 @@ typedef unsigned long (*hash_comp_t)(hash_table_t *, db_key_t *, db_key_t *);
  * with both the old and new hash table sizes whenever a hash table is
  * resized.  It should return non-zero only when the resize should be
  * inhibited.
+ *
+ * \param[in]		table	A pointer to a #hash_table_t.
+ * \param[in]		new_mod	The new table modulus.
+ *
+ * \return	Zero to permit the table resize, non-zero otherwise.
  */
-typedef unsigned long (*hash_resize_t)(hash_table_t *, unsigned long);
+typedef unsigned long (*hash_resize_t)(hash_table_t *table,
+				       unsigned long new_mod);
 
 /** \ingroup dbprim_smat
  * \brief Sparse matrix table resize callback.
@@ -388,8 +431,14 @@ typedef unsigned long (*hash_resize_t)(hash_table_t *, unsigned long);
  * with both the old and new sparse matrix table sizes whenever a
  * sparse matrix's hash table table is resized.  It should return
  * non-zero only when the resize should be inhibited.
+ *
+ * \param[in]		table	A pointer to a #smat_table_t.
+ * \param[in]		new_mod	The new table modulus.
+ *
+ * \return	Zero to permit the table resize, non-zero otherwise.
  */
-typedef unsigned long (*smat_resize_t)(smat_table_t *, unsigned long);
+typedef unsigned long (*smat_resize_t)(smat_table_t *table,
+				       unsigned long new_mod);
 
 /** \ingroup dbprim_smat
  * \brief Sparse matrix iteration callback.
@@ -398,8 +447,18 @@ typedef unsigned long (*smat_resize_t)(smat_table_t *, unsigned long);
  * st_flush(), sh_iter(), and sh_flush().  It should return 0 for
  * success.  A non-zero return value will terminate the operation and
  * will become the return value of the call.
+ *
+ * \param[in]		table	A pointer to a #smat_table_t.
+ * \param[in]		ent	A pointer to the #smat_entry_t being
+ *				considered.
+ * \param[in]		extra	A \c void pointer passed to st_iter(),
+ *				st_flush(), sh_iter(), or sh_flush().
+ *
+ * \return	Zero for success, or non-zero to terminate the
+ *		iteration.
  */
-typedef unsigned long (*smat_iter_t)(smat_table_t *, smat_entry_t *, void *);
+typedef unsigned long (*smat_iter_t)(smat_table_t *table, smat_entry_t *ent,
+				     void *extra);
 
 /** \ingroup dbprim_smat
  * \brief Sparse matrix comparison callback.
@@ -407,8 +466,14 @@ typedef unsigned long (*smat_iter_t)(smat_table_t *, smat_entry_t *, void *);
  * This function pointer references a callback used by sh_find().  It
  * should return 0 if the sparse matrix entry represented by the
  * second argument matches the key passed as the first argument.
+ *
+ * \param[in]		key	The database key being searched for.
+ * \param[in]		ent	A pointer to the #smat_entry_t being
+ *				considered.
+ *
+ * \return	Zero if \p key matches \p ent, non-zero otherwise.
  */
-typedef unsigned long (*smat_comp_t)(db_key_t *, smat_entry_t *);
+typedef unsigned long (*smat_comp_t)(db_key_t *key, smat_entry_t *ent);
 
 /** \ingroup dbprim_rbtree
  * \brief Red-black tree iteration callback.
@@ -417,8 +482,18 @@ typedef unsigned long (*smat_comp_t)(db_key_t *, smat_entry_t *);
  * rb_flush().  It should return 0 for success.  A non-zero return
  * value will terminate the operation and will become the return
  * value of the call.
+ *
+ * \param[in]		tree	A pointer to a #rb_tree_t.
+ * \param[in]		node	A pointer to the #rb_node_t being
+ *				considered.
+ * \param[in]		extra	A \c void pointer passed to rt_iter()
+ *				or rt_flush().
+ *
+ * \return	Zero for success, or non-zero to terminate the
+ *		iteration.
  */
-typedef unsigned long (*rb_iter_t)(rb_tree_t *, rb_node_t *, void *);
+typedef unsigned long (*rb_iter_t)(rb_tree_t *tree, rb_node_t *node,
+				   void *extra);
 
 /** \ingroup dbprim_rbtree
  * \brief Red-black tree comparison callback.
@@ -427,8 +502,16 @@ typedef unsigned long (*rb_iter_t)(rb_tree_t *, rb_node_t *, void *);
  * in a red-black tree.  It should return 0 for identical entries,
  * less than 0 if the first key is less than the second, or greater
  * than 0 if the first key is greater than the second.
+ *
+ * \param[in]		tree	A pointer to a #rb_tree_t.
+ * \param[in]		key1	The first key being compared.
+ * \param[in]		key2	The second key being compared.
+ *
+ * \return	Zero if the keys match, less than zero if the first
+ *		key orders before the second key, or greater than zero
+ *		if the first key orders after the second key.
  */
-typedef long (*rb_comp_t)(rb_tree_t *, db_key_t *, db_key_t *);
+typedef long (*rb_comp_t)(rb_tree_t *tree, db_key_t *key1, db_key_t *key2);
 
 /** \ingroup dbprim_link
  * \brief Linked list location.
@@ -507,8 +590,8 @@ struct _db_key_s {
  *
  * This macro allows a #db_key_t to be initialized statically.
  *
- * \param key	A pointer to the key.
- * \param size	Size of the key.
+ * \param[in]		key	A pointer to the key.
+ * \param[in]		size	Size of the key.
  */
 #define DB_KEY_INIT(key, size) { (key), (size) }
 
@@ -518,7 +601,7 @@ struct _db_key_s {
  * This macro allows access to the key field of a #db_key_t.  It may
  * be used as an lvalue in order to assign a key to a #db_key_t.
  *
- * \param key	A pointer to a #db_key_t.
+ * \param[in]		key	A pointer to a #db_key_t.
  *
  * \return	A pointer to a key (<CODE>void *</CODE>).
  */
@@ -531,7 +614,7 @@ struct _db_key_s {
  * It may be used as an lvalue in order to assign a length to a
  * #db_key_t.
  *
- * \param key	A pointer to a #db_key_t.
+ * \param[in]		key	A pointer to a #db_key_t.
  *
  * \return	An \c int describing the length of the key.
  */
@@ -572,8 +655,8 @@ struct _link_head_s {
  *
  * This macro statically initializes a #link_head_t.
  *
- * \param extra	Extra pointer data that should be associated with the
- *		list head.
+ * \param[in]		extra	Extra pointer data that should be
+ *				associated with the list head.
  */
 #define LINK_HEAD_INIT(extra)	{ LINK_HEAD_MAGIC, 0, 0, 0, (extra) }
 
@@ -583,12 +666,12 @@ struct _link_head_s {
  * This macro verifies that a given pointer actually does point to a
  * linked list head.
  *
- * \warning This macro evaluates the \p list argument twice.
+ * \warning	This macro evaluates the \p list argument twice.
  *
- * \param list	A pointer to a #link_head_t.
+ * \param[in]		list	A pointer to a #link_head_t.
  *
- * \return	Boolean true if \p list is a valid linked list head or
- *		false otherwise.
+ * \return	Boolean \c true if \p list is a valid linked list head
+ *		or \c false otherwise.
  */
 #define ll_verify(list)		((list) && \
 				 (list)->lh_magic == LINK_HEAD_MAGIC)
@@ -598,7 +681,7 @@ struct _link_head_s {
  *
  * This macro retrieves the number of elements in a linked list.
  *
- * \param list	A pointer to a #link_head_t.
+ * \param[in]		list	A pointer to a #link_head_t.
  *
  * \return	An <CODE>unsigned long</CODE> containing a count of
  *		the number of elements in the linked list.
@@ -610,7 +693,7 @@ struct _link_head_s {
  *
  * This macro retrieves the first element in a linked list.
  *
- * \param list	A pointer to a #link_head_t.
+ * \param[in]		list	A pointer to a #link_head_t.
  *
  * \return	A pointer to a #link_elem_t.
  */
@@ -621,7 +704,7 @@ struct _link_head_s {
  *
  * This macro retrieves the last element in a linked list.
  *
- * \param list	A pointer to a #link_head_t.
+ * \param[in]		list	A pointer to a #link_head_t.
  *
  * \return	A pointer to a #link_elem_t.
  */
@@ -633,7 +716,7 @@ struct _link_head_s {
  * This macro retrieves the extra pointer data associated with a
  * particular linked list.
  *
- * \param list	A pointer to a #link_head_t.
+ * \param[in]		list	A pointer to a #link_head_t.
  *
  * \return	A pointer to \c void.
  */
@@ -644,9 +727,11 @@ struct _link_head_s {
  *
  * This function dynamically initializes a linked list head.
  *
- * \param list	A pointer to a #link_head_t to be initialized.
- * \param extra	A pointer to \c void containing extra pointer data
- *		associated with the linked list.
+ * \param[in]		list	A pointer to a #link_head_t to be
+ *				initialized.
+ * \param[in]		extra	A pointer to \c void containing extra
+ *				pointer data associated with the
+ *				linked list.
  *
  * \retval DB_ERR_BADARGS	A \c NULL pointer was passed for \p
  *				list.
@@ -659,14 +744,15 @@ unsigned long ll_init(link_head_t *list, void *extra);
  * This function adds a given element to a specified linked list in
  * the specified location.
  *
- * \param list	A pointer to a #link_head_t.
- * \param new	A pointer to the #link_elem_t to be added to the
- *		linked list.
- * \param loc	A #link_loc_t indicating where the entry should be
- *		added.
- * \param elem	A pointer to a #link_elem_t describing another element
- *		in the list if \p loc is #LINK_LOC_BEFORE or
- *		#LINK_LOC_AFTER.
+ * \param[in]		list	A pointer to a #link_head_t.
+ * \param[in]		new	A pointer to the #link_elem_t to be
+ *				added to the linked list.
+ * \param[in]		loc	A #link_loc_t indicating where the
+ *				entry should be added.
+ * \param[in]		elem	A pointer to a #link_elem_t describing
+ *				another element in the list if \p loc
+ *				is #LINK_LOC_BEFORE or
+ *				#LINK_LOC_AFTER.
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_BUSY		The element is already in a list.
@@ -681,14 +767,15 @@ unsigned long ll_add(link_head_t *list, link_elem_t *new, link_loc_t loc,
  *
  * This function moves a specified element within the linked list.
  *
- * \param list	A pointer to a #link_head_t.
- * \param new	A pointer to the #link_elem_t describing the element
- *		to be moved.
- * \param loc	A #link_loc_t indicating where the entry should be
- *		moved to.
- * \param elem	A pointer to a #link_elem_t describing another element
- *		in the list if \p loc is #LINK_LOC_BEFORE or
- *		#LINK_LOC_AFTER.
+ * \param[in]		list	A pointer to a #link_head_t.
+ * \param[in]		new	A pointer to the #link_elem_t
+ *				describing the element to be moved.
+ * \param[in]		loc	A #link_loc_t indicating where the
+ *				entry should be moved to.
+ * \param[in]		elem	A pointer to a #link_elem_t describing
+ *				another element in the list if \p loc
+ *				is #LINK_LOC_BEFORE or
+ *				#LINK_LOC_AFTER.
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_BUSY		\p new and \p elem are the same
@@ -706,9 +793,9 @@ unsigned long ll_move(link_head_t *list, link_elem_t *elem, link_loc_t loc,
  *
  * This function removes a specified element from a linked list.
  *
- * \param list	A pointer to a #link_head_t.
- * \param elem	A pointer to the #link_elem_t describing the element
- *		to be removed.
+ * \param[in]		list	A pointer to a #link_head_t.
+ * \param[in]		elem	A pointer to the #link_elem_t
+ *				describing the element to be removed.
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_UNUSED	\p elem is not in a linked list.
@@ -722,18 +809,21 @@ unsigned long ll_remove(link_head_t *list, link_elem_t *elem);
  * This function iterates through a linked list looking for an element
  * that matches the given \p key.
  *
- * \param list	A pointer to a #link_head_t.
- * \param elem_p
- *		A pointer to a pointer to a #link_elem_t.  This is a
- *		result parameter.  \c NULL is an invalid value.
- * \param comp_func
- *		A pointer to a comparison function used to compare the
- *		key to a particular element.  See the documentation
- *		for #link_comp_t for more information.
- * \param start	A pointer to a #link_elem_t describing where in the
- *		linked list to start.  If \c NULL is passed, the
- *		beginning of the list will be assumed.
- * \param key	A key to search for.
+ * \param[in]		list	A pointer to a #link_head_t.
+ * \param[out]		elem_p	A pointer to a pointer to a
+ *				#link_elem_t.  \c NULL is an invalid
+ *				value.
+ * \param[in]		comp_func
+ *				A pointer to a comparison function
+ *				used to compare the key to a
+ *				particular element.  See the
+ *				documentation for #link_comp_t for
+ *				more information.
+ * \param[in]		start	A pointer to a #link_elem_t describing
+ *				where in the linked list to start.  If
+ *				\c NULL is passed, the beginning of
+ *				the list will be assumed.
+ * \param[in]		key	A key to search for.
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_WRONGTABLE	\p start is not in this linked list.
@@ -749,19 +839,23 @@ unsigned long ll_find(link_head_t *list, link_elem_t **elem_p,
  * This function iterates over a linked list, executing the given \p
  * iter_func for each entry.
  *
- * \param list	A pointer to a #link_head_t.
- * \param start	A pointer to a #link_elem_t describing where in the
- *		linked list to start.  If \c NULL is passed, the
- *		beginning of the list will be assumed.
- * \param iter_func
- *		A pointer to a callback function used to perform
- *		user-specified actions on an element in a linked
- *		list.  \c NULL is an invalid value.  See the
- *		documentation for #link_iter_t for more information.
- * \param extra	A \c void pointer that will be passed to \p
- *		iter_func.
- * \param flags	If #DB_FLAG_REVERSE is given, iteration will be done
- *		from the end of the list backwards towards the head.
+ * \param[in]		list	A pointer to a #link_head_t.
+ * \param[in]		start	A pointer to a #link_elem_t describing
+ *				where in the linked list to start.  If
+ *				\c NULL is passed, the beginning of
+ *				the list will be assumed.
+ * \param[in]		iter_func
+ *				A pointer to a callback function used
+ *				to perform user-specified actions on
+ *				an element in a linked list.  \c NULL
+ *				is an invalid value.  See the
+ *				documentation for #link_iter_t for
+ *				more information.
+ * \param[in]		extra	A \c void pointer that will be passed
+ *				to \p iter_func.
+ * \param[in]		flags	If #DB_FLAG_REVERSE is given,
+ *				iteration will be done from the end of
+ *				the list backwards towards the head.
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_WRONGTABLE	\p start is not in this linked list.
@@ -777,14 +871,16 @@ unsigned long ll_iter(link_head_t *list, link_elem_t *start,
  * called on the entry after it has been removed from the list, and
  * may safely call <CODE>free()</CODE>.
  *
- * \param list	A pointer to a #link_head_t.
- * \param flush_func
- *		A pointer to a callback function used to perform
- *		user-specified actions on an element after removing it
- *		from the list.  May be \c NULL.  See the documentation
- *		for #link_iter_t for more information.
- * \param extra	A \c void pointer that will be passed to \p
- *		flush_func.
+ * \param[in]		list	A pointer to a #link_head_t.
+ * \param[in]		flush_func
+ *				A pointer to a callback function used
+ *				to perform user-specified actions on
+ *				an element after removing it from the
+ *				list.  May be \c NULL.  See the
+ *				documentation for #link_iter_t for
+ *				more information.
+ * \param[in]		extra	A \c void pointer that will be passed
+ *				to \p flush_func.
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
  */
@@ -819,8 +915,8 @@ struct _link_elem_s {
  *
  * This macro statically initializes a #link_elem_t.
  *
- * \param obj	A pointer to \c void representing the object
- *		associated with the element.
+ * \param[in]		obj	A pointer to \c void representing the
+ *				object associated with the element.
  */
 #define LINK_ELEM_INIT(obj) { LINK_ELEM_MAGIC, 0, 0, (obj), 0, 0 }
 
@@ -830,13 +926,12 @@ struct _link_elem_s {
  * This macro verifies that a given pointer actually does point to a
  * linked list element.
  *
- * \warning This macro evaluates the \p element argument twice.
+ * \warning	This macro evaluates the \p element argument twice.
  *
- * \param element
- *		A pointer to a #link_elem_t.
+ * \param[in]		element	A pointer to a #link_elem_t.
  *
- * \return	Boolean true if \p element is a valid linked list
- *		element or false otherwise.
+ * \return	Boolean \c true if \p element is a valid linked list
+ *		element or \c false otherwise.
  */
 #define le_verify(element)	((element) && \
 				 (element)->le_magic == LINK_ELEM_MAGIC)
@@ -847,7 +942,7 @@ struct _link_elem_s {
  * This macro retrieves a pointer to the next element in the linked
  * list.
  *
- * \param elem	A pointer to a #link_elem_t.
+ * \param[in]		elem	A pointer to a #link_elem_t.
  *
  * \return	A pointer to a #link_elem_t representing the next
  *		element in the linked list.
@@ -860,7 +955,7 @@ struct _link_elem_s {
  * This macro retrieves a pointer to the previous element in the
  * linked list.
  *
- * \param elem	A pointer to a #link_elem_t.
+ * \param[in]		elem	A pointer to a #link_elem_t.
  *
  * \return	A pointer to a #link_elem_t representing the previous
  *		element in the linked list.
@@ -874,7 +969,7 @@ struct _link_elem_s {
  * element.  It may be used as an lvalue to change the object pointed
  * to.  Care should be taken when using this feature.
  *
- * \param elem	A pointer to a #link_elem_t.
+ * \param[in]		elem	A pointer to a #link_elem_t.
  *
  * \return	A pointer to \c void representing the object
  *		associated with the linked list element.
@@ -887,7 +982,7 @@ struct _link_elem_s {
  * This macro retrieves a pointer to the head of the linked list that
  * the element is in.
  *
- * \param elem	A pointer to a #link_elem_t.
+ * \param[in]		elem	A pointer to a #link_elem_t.
  *
  * \return	A pointer to a #link_head_t representing the head of
  *		the linked list the element is in.
@@ -900,7 +995,7 @@ struct _link_elem_s {
  * This macro retrieves a set of user-defined flags associated with
  * the element.  It may be used as an lvalue to set those flags.
  *
- * \param elem	A pointer to a #link_elem_t.
+ * \param[in]		elem	A pointer to a #link_elem_t.
  *
  * \return	An <CODE>unsigned long</CODE> containing the flags
  *		associated with the element.
@@ -912,10 +1007,11 @@ struct _link_elem_s {
  *
  * This function dynamically initializes a linked list element.
  *
- * \param elem	A pointer to a #link_elem_t to be initialized.
- * \param object
- *		A pointer to \c void used to represent the object
- *		associated with the element.
+ * \param[in]		elem	A pointer to a #link_elem_t to be
+ *				initialized.
+ * \param[in]		object	A pointer to \c void used to represent
+ *				the object associated with the
+ *				element.
  *
  * \retval DB_ERR_BADARGS	A \c NULL pointer was passed for \p
  *				elem or \p object.
@@ -988,18 +1084,19 @@ struct _hash_table_s {
  *
  * This macro statically initializes a #hash_table_t.
  *
- * \param flags	A bit-wise OR of #HASH_FLAG_AUTOGROW and
- *		#HASH_FLAG_AUTOSHRINK.  If neither behavior is
- *		desired, use 0.
- * \param func	A #hash_func_t function pointer for a hash function.
- * \param comp	A #hash_comp_t function pointer for a comparison
- *		function.
- * \param resize
- *		A #hash_resize_t function pointer for determining
- *		whether resizing is permitted and/or for notification
- *		of the resize.
- * \param extra	Extra pointer data that should be associated with the
- *		hash table.
+ * \param[in]		flags	A bit-wise OR of #HASH_FLAG_AUTOGROW
+ *				and #HASH_FLAG_AUTOSHRINK.  If neither
+ *				behavior is desired, use 0.
+ * \param[in]		func	A #hash_func_t function pointer for a
+ *				hash function.
+ * \param[in]		comp	A #hash_comp_t function pointer for a
+ *				comparison function.
+ * \param[in]		resize	A #hash_resize_t function pointer for
+ *				determining whether resizing is
+ *				permitted and/or for notification of
+ *				the resize.
+ * \param[in]		extra	Extra pointer data that should be
+ *				associated with the hash table.
  */
 #define HASH_TABLE_INIT(flags, func, comp, resize, extra) \
 	{ HASH_TABLE_MAGIC, (flags) & HASH_FLAG_MASK, 0, 0, 0, 0, 0, \
@@ -1011,12 +1108,12 @@ struct _hash_table_s {
  * This macro verifies that a given pointer actually does point to a
  * hash table.
  *
- * \warning This macro evaluates the \p table argument twice.
+ * \warning	This macro evaluates the \p table argument twice.
  *
- * \param table	A pointer to a #hash_table_t.
+ * \param[in]		table	A pointer to a #hash_table_t.
  *
- * \return	Boolean true if \p table is a valid hash table or
- *		false otherwise.
+ * \return	Boolean \c true if \p table is a valid hash table or
+ *		\c false otherwise.
  */
 #define ht_verify(table)	((table) && \
 				 (table)->ht_magic == HASH_TABLE_MAGIC)
@@ -1030,7 +1127,7 @@ struct _hash_table_s {
  * library.  This macro may be used as an lvalue, but care must be
  * taken to avoid modifying the library-specific bits.
  *
- * \param table	A pointer to a #hash_table_t.
+ * \param[in]		table	A pointer to a #hash_table_t.
  *
  * \return	An <CODE>unsigned long</CODE> containing the flags for
  *		the hash table.
@@ -1044,7 +1141,7 @@ struct _hash_table_s {
  * frozen.  The hash table may be frozen if there is an iteration in
  * progress.
  *
- * \param table	A pointer to a #hash_table_t.
+ * \param[in]		table	A pointer to a #hash_table_t.
  *
  * \return	A zero value if the table is not frozen or a non-zero
  *		value if the table is frozen.
@@ -1059,7 +1156,7 @@ struct _hash_table_s {
  * invocations to avoid the overhead of growing the table while
  * filling it with data.
  *
- * \param table	A pointer to a #hash_table_t.
+ * \param[in]		table	A pointer to a #hash_table_t.
  *
  * \return	An <CODE>unsigned long</CODE> containing the number of
  *		buckets allocated for the hash table.
@@ -1072,7 +1169,7 @@ struct _hash_table_s {
  * This macro retrieves the total number of items actually in the hash
  * table.
  *
- * \param table	A pointer to a #hash_table_t.
+ * \param[in]		table	A pointer to a #hash_table_t.
  *
  * \return	An <CODE>unsigned long</CODE> containing a count of
  *		the number of items in the hash table.
@@ -1084,7 +1181,7 @@ struct _hash_table_s {
  *
  * This macro retrieves the hash function pointer.
  *
- * \param table	A pointer to a #hash_table_t.
+ * \param[in]		table	A pointer to a #hash_table_t.
  *
  * \return	A #hash_func_t.
  */
@@ -1095,7 +1192,7 @@ struct _hash_table_s {
  *
  * This macro retrieves the comparison function pointer.
  *
- * \param table	A pointer to a #hash_table_t.
+ * \param[in]		table	A pointer to a #hash_table_t.
  *
  * \return	A #hash_comp_t.
  */
@@ -1106,7 +1203,7 @@ struct _hash_table_s {
  *
  * This macro retrieves the resize callback function pointer.
  *
- * \param table	A pointer to a #hash_table_t.
+ * \param[in]		table	A pointer to a #hash_table_t.
  *
  * \return	A #hash_resize_t.
  */
@@ -1118,7 +1215,7 @@ struct _hash_table_s {
  * This macro retrieves the extra pointer data associated with a
  * particular hash table.
  *
- * \param table	A pointer to a #hash_table_t.
+ * \param[in]		table	A pointer to a #hash_table_t.
  *
  * \return	A pointer to \c void.
  */
@@ -1130,7 +1227,7 @@ struct _hash_table_s {
  * This macro returns the physical size of the bucket array allocated
  * by the library for this hash table.
  *
- * \param table	A pointer to a #hash_table_t.
+ * \param[in]		table	A pointer to a #hash_table_t.
  *
  * \return	A \c size_t.
  */
@@ -1141,23 +1238,27 @@ struct _hash_table_s {
  *
  * This function dynamically initializes a hash table.
  *
- * \param table	A pointer to a #hash_table_t to be initialized.
- * \param flags	A bit-wise OR of #HASH_FLAG_AUTOGROW and
- *		#HASH_FLAG_AUTOSHRINK.  If neither behavior is
- *		desired, use 0.
- * \param func	A #hash_func_t function pointer for a hash function.
- * \param comp	A #hash_comp_t function pointer for a comparison
- *		function.
- * \param resize
- *		A #hash_resize_t function pointer for determining
- *		whether resizing is permitted and/or for notification
- *		of the resize.
- * \param extra	Extra pointer data that should be associated with the
- *		hash table.
- * \param init_mod
- *		An initial modulus for the table.  This will
- *		presumably be extracted by ht_modulus() in a previous
- *		invocation of the application.  A 0 value is valid.
+ * \param[in]		table	A pointer to a #hash_table_t to be
+ *				initialized.
+ * \param[in]		flags	A bit-wise OR of #HASH_FLAG_AUTOGROW
+ *				and #HASH_FLAG_AUTOSHRINK.  If neither
+ *				behavior is desired, use 0.
+ * \param[in]		func	A #hash_func_t function pointer for a
+ *				hash function.
+ * \param[in]		comp	A #hash_comp_t function pointer for a
+ *				comparison function.
+ * \param[in]		resize	A #hash_resize_t function pointer for
+ *				determining whether resizing is
+ *				permitted and/or for notification of
+ *				the resize.
+ * \param[in]		extra	Extra pointer data that should be
+ *				associated with the hash table.
+ * \param[in]		init_mod
+ *				An initial modulus for the table.
+ *				This will presumably be extracted by
+ *				ht_modulus() in a previous invocation
+ *				of the application.  A 0 value is
+ *				valid.
  *
  * \retval DB_ERR_BADARGS	An invalid argument was given.
  * \retval ENOMEM		Unable to allocate memory.
@@ -1172,11 +1273,11 @@ unsigned long ht_init(hash_table_t *table, unsigned long flags,
  *
  * This function adds an entry to a hash table.
  *
- * \param table	A pointer to a #hash_table_t.
- * \param entry	A pointer to a #hash_entry_t to be added to the
- *		table.
- * \param key	A pointer to a #db_key_t containing the key for the
- *		entry.
+ * \param[in]		table	A pointer to a #hash_table_t.
+ * \param[in]		entry	A pointer to a #hash_entry_t to be
+ *				added to the table.
+ * \param[in]		key	A pointer to a #db_key_t containing
+ *				the key for the entry.
  *
  * \retval DB_ERR_BADARGS	An invalid argument was given.
  * \retval DB_ERR_BUSY		The entry is already in a table.
@@ -1197,11 +1298,12 @@ unsigned long ht_add(hash_table_t *table, hash_entry_t *entry, db_key_t *key);
  * This function moves an existing entry in the hash table to
  * correspond to the new key.
  *
- * \param table	A pointer to a #hash_table_t.
- * \param entry	A pointer to a #hash_entry_t to be moved.  It must
- *		already be in the hash table.
- * \param key	A pointer to a #db_key_t describing the new key for
- *		the entry.
+ * \param[in]		table	A pointer to a #hash_table_t.
+ * \param[in]		entry	A pointer to a #hash_entry_t to be
+ *				moved.  It must already be in the hash
+ *				table.
+ * \param[in]		key	A pointer to a #db_key_t describing
+ *				the new key for the entry.
  *
  * \retval DB_ERR_BADARGS	An invalid argument was given.
  * \retval DB_ERR_UNUSED	Entry is not in a hash table.
@@ -1219,9 +1321,9 @@ unsigned long ht_move(hash_table_t *table, hash_entry_t *entry, db_key_t *key);
  * This function removes the given element from the specified hash
  * table.
  *
- * \param table	A pointer to a #hash_table_t.
- * \param entry	A pointer to a #hash_entry_t to be removed from the
- *		table.
+ * \param[in]		table	A pointer to a #hash_table_t.
+ * \param[in]		entry	A pointer to a #hash_entry_t to be
+ *				removed from the table.
  *
  * \retval DB_ERR_BADARGS	An invalid argument was given.
  * \retval DB_ERR_UNUSED	Entry is not in a hash table.
@@ -1237,13 +1339,13 @@ unsigned long ht_remove(hash_table_t *table, hash_entry_t *entry);
  *
  * This function looks up an entry matching the given \p key.
  *
- * \param table	A pointer to a #hash_table_t.
- * \param entry_p
- *		A pointer to a pointer to a #hash_entry_t.  This is a
- *		result parameter.  If \c NULL is passed, the lookup
- *		will be performed and an appropriate error code
- *		returned. 
- * \param key	A pointer to a #db_key_t describing the item to find.
+ * \param[in]		table	A pointer to a #hash_table_t.
+ * \param[out]		entry_p	A pointer to a pointer to a
+ *				#hash_entry_t.  If \c NULL is passed,
+ *				the lookup will be performed and an
+ *				appropriate error code returned. 
+ * \param[in]		key	A pointer to a #db_key_t describing
+ *				the item to find.
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_NOENTRY	No matching entry was found.
@@ -1257,14 +1359,16 @@ unsigned long ht_find(hash_table_t *table, hash_entry_t **entry_p,
  * This function iterates over every entry in a hash table (in an
  * unspecified order), executing the given \p iter_func on each entry.
  *
- * \param table	A pointer to a #hash_table_t.
- * \param iter_func
- *		A pointer to a callback function used to perform
- *		user-specified actions on an entry in a hash table. \c
- *		NULL is an invalid value.  See the documentation for
- *		#hash_iter_t for more information.
- * \param extra	A \c void pointer that will be passed to \p
- *		iter_func.
+ * \param[in]		table	A pointer to a #hash_table_t.
+ * \param[in]		iter_func
+ *				A pointer to a callback function used
+ *				to perform user-specified actions on
+ *				an entry in a hash table. \c NULL is
+ *				an invalid value.  See the
+ *				documentation for #hash_iter_t for
+ *				more information.
+ * \param[in]		extra	A \c void pointer that will be passed
+ *				to \p iter_func.
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_FROZEN	The hash table is frozen.
@@ -1279,14 +1383,16 @@ unsigned long ht_iter(hash_table_t *table, hash_iter_t iter_func, void *extra);
  * on the entry after it has been removed from the table, and may
  * safely call <CODE>free()</CODE>.
  *
- * \param table	A pointer to a #hash_table_t.
- * \param flush_func
- *		A pointer to a callback function used to perform
- *		user-specified actions on an entry after removing it
- *		from the table.  May be \c NULL.  See the
- *		documentation for #hash_iter_t for more information.
- * \param extra	A \c void pointer that will be passed to \p
- *		flush_func.
+ * \param[in]		table	A pointer to a #hash_table_t.
+ * \param[in]		flush_func
+ *				A pointer to a callback function used
+ *				to perform user-specified actions on
+ *				an entry after removing it from the
+ *				table.  May be \c NULL.  See the
+ *				documentation for #hash_iter_t for
+ *				more information.
+ * \param[in]		extra	A \c void pointer that will be passed
+ *				to \p flush_func.
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_FROZEN	The hash table is frozen.
@@ -1301,9 +1407,9 @@ unsigned long ht_flush(hash_table_t *table, hash_iter_t flush_func,
  * new_size is 0, then an appropriate new size based on the current
  * number of items in the hash table will be selected.
  *
- * \param table	A pointer to a #hash_table_t.
- * \param new_size
- *		A new size value for the table.
+ * \param[in]		table	A pointer to a #hash_table_t.
+ * \param[in]		new_size
+ *				A new size value for the table.
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_FROZEN	The table is currently frozen.
@@ -1320,7 +1426,7 @@ unsigned long ht_resize(hash_table_t *table, unsigned long new_size);
  * This function releases the memory used by the bucket table in an
  * empty hash table.
  *
- * \param table	A pointer to a #hash_table_t.
+ * \param[in]		table	A pointer to a #hash_table_t.
  *
  * \retval DB_ERR_BADARGS	An invalid argument was given.
  * \retval DB_ERR_FROZEN	The table is frozen.
@@ -1356,8 +1462,8 @@ struct _hash_entry_s {
  *
  * This macro statically initializes a #hash_entry_t.
  *
- * \param value	A pointer to \c void representing the object
- *		associated with the entry.
+ * \param[in]		value	A pointer to \c void representing the
+ *				object associated with the entry.
  */
 #define HASH_ENTRY_INIT(value) \
       { HASH_ENTRY_MAGIC, LINK_ELEM_INIT(0), 0, 0, DB_KEY_INIT(0, 0), (value) }
@@ -1368,12 +1474,12 @@ struct _hash_entry_s {
  * This macro verifies that a given pointer actually does point to a
  * hash table entry.
  *
- * \warning This macro evaluates the \p entry argument twice.
+ * \warning	This macro evaluates the \p entry argument twice.
  *
- * \param entry	A pointer to a #hash_entry_t.
+ * \param[in]		entry	A pointer to a #hash_entry_t.
  *
- * \return	Boolean true if \p entry is a valid hash table entry
- *		or false otherwise.
+ * \return	Boolean \c true if \p entry is a valid hash table
+ *		entry or \c false otherwise.
  */
 #define he_verify(entry)	((entry) && \
 				 (entry)->he_magic == HASH_ENTRY_MAGIC)
@@ -1386,7 +1492,7 @@ struct _hash_entry_s {
  * a hash table.  The purpose of this macro is to allow an object
  * containing a hash table entry to be placed upon a free list.
  *
- * \param entry	A pointer to a #hash_entry_t.
+ * \param[in]		entry	A pointer to a #hash_entry_t.
  *
  * \return	A pointer to a #link_elem_t.
  */
@@ -1398,7 +1504,7 @@ struct _hash_entry_s {
  * This macro retrieves a set of user-defined flags associated with
  * the entry.  It may be used as an lvalue to set those flags.
  *
- * \param entry	A pointer to a #hash_entry_t.
+ * \param[in]		entry	A pointer to a #hash_entry_t.
  *
  * \return	An <CODE>unsigned long</CODE> containing the flags
  *		associated with the entry.
@@ -1410,7 +1516,7 @@ struct _hash_entry_s {
  *
  * This macro retrieves a pointer to the hash table the entry is in.
  *
- * \param entry	A pointer to a #hash_entry_t.
+ * \param[in]		entry	A pointer to a #hash_entry_t.
  *
  * \return	A pointer to a #hash_table_t.
  */
@@ -1423,7 +1529,7 @@ struct _hash_entry_s {
  * the hash table has been resized, this value may not be the same as
  * a previous value.
  *
- * \param entry	A pointer to a #hash_entry_t.
+ * \param[in]		entry	A pointer to a #hash_entry_t.
  *
  * \return	An <CODE>unsigned long</CODE> containing the hash code
  *		for the entry.
@@ -1435,7 +1541,7 @@ struct _hash_entry_s {
  *
  * This macro retrieves the key associated with the hash table entry.
  *
- * \param entry	A pointer to a #hash_entry_t.
+ * \param[in]		entry	A pointer to a #hash_entry_t.
  *
  * \return	A pointer to a #db_key_t.
  */
@@ -1448,7 +1554,7 @@ struct _hash_entry_s {
  * entry.  It may be treated as an lvalue to change that value.  Care
  * should be taken when using this option.
  *
- * \param entry	A pointer to a #hash_entry_t.
+ * \param[in]		entry	A pointer to a #hash_entry_t.
  *
  * \return	A pointer to \c void representing the value associated
  *		with this entry.
@@ -1460,28 +1566,69 @@ struct _hash_entry_s {
  *
  * This function dynamically initializes a hash table entry.
  *
- * \param entry	A pointer to a #hash_entry_t to be initialized.
- * \param value	A pointer to \c void which will be the value of the
- *		hash table entry.
+ * \param[in]		entry	A pointer to a #hash_entry_t to be
+ *				initialized.
+ * \param[in]		value	A pointer to \c void which will be the
+ *				value of the hash table entry.
  *
  * \retval DB_ERR_BADARGS	A \c NULL pointer was passed for \p
  *				entry.
  */
 unsigned long he_init(hash_entry_t *entry, void *value);
 
+/** \ingroup dbprim_smat
+ * \brief Clean up the smat free list.
+ *
+ * This function frees all smat_entry_t objects on the internal free
+ * list.  It is always successful and returns 0.
+ */
 unsigned long smat_cleanup(void);
+
+/** \ingroup dbprim_smat
+ * \brief Report how much memory is used by the free list.
+ *
+ * This function returns the amount of memory being used by the
+ * internal free list of smat_entry_t objects.
+ *
+ * \return	A number indicating the size, in bytes, of the memory
+ *		allocated for smat_entry_t objects on the free list.
+ */
 unsigned long smat_freemem(void);
 
-/* Macro to convert a link_elem_t into a smat_entry_t */
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Retrieve pointer to sparse matrix entry.
+ *
+ * This simple macro simply retrieves a pointer to the sparse matrix
+ * entry from a linked list element.  It is a helper macro for the
+ * other macros that access sparse matrix entries.
+ *
+ * \param[in]		ent	A pointer to a #link_elem_t.
+ *
+ * \return	A pointer to the relevant #smat_entry_t.
+ */
 #define _smat_ent(ent)	((smat_entry_t *)le_object(ent))
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix table structure.
+ *
+ * This is the implementation of the #smat_table_t type.
+ */
 struct _smat_table_s {
-  unsigned long	st_magic;	/* magic number */
-  smat_resize_t	st_resize;	/* function pointer for resize callback */
-  void	       *st_extra;	/* extra data pointer */
-  hash_table_t	st_table;	/* hash table */
+  unsigned long	st_magic;	/**< Magic number. */
+  smat_resize_t	st_resize;	/**< Function pointer for resize callback. */
+  void	       *st_extra;	/**< Extra data pointer. */
+  hash_table_t	st_table;	/**< Hash table. */
 };
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix table magic number.
+ *
+ * This is the magic number used for the sparse matrix table
+ * structure.
+ */
 #define SMAT_TABLE_MAGIC 0x2f92a7b1
 
 /** \ingroup dbprim_smat
@@ -1490,12 +1637,12 @@ struct _smat_table_s {
  * This macro verifies that a given pointer actually does point to a
  * sparse matrix table.
  *
- * \warning This macro evaluates the \p table argument twice.
+ * \warning	This macro evaluates the \p table argument twice.
  *
- * \param table	A pointer to a #smat_table_t.
+ * \param[in]		table	A pointer to a #smat_table_t.
  *
- * \return	Boolean true if \p table is a valid sparse matrix
- *		table or false otherwise.
+ * \return	Boolean \c true if \p table is a valid sparse matrix
+ *		table or \c false otherwise.
  */
 #define st_verify(table)	((table) && \
 				 (table)->st_magic == SMAT_TABLE_MAGIC)
@@ -1509,7 +1656,7 @@ struct _smat_table_s {
  * the library.  This macro may be used as an lvalue, but care must be
  * taken to avoid modifying the library-specific bits.
  *
- * \param table	A pointer to a #smat_table_t.
+ * \param[in]		table	A pointer to a #smat_table_t.
  *
  * \return	An <CODE>unsigned long</CODE> containing the flags for
  *		the sparse matrix table.
@@ -1523,12 +1670,12 @@ struct _smat_table_s {
  * frozen.  The sparse matrix may be frozen if there is an iteration
  * in progress.
  *
- * \param table	A pointer to a #smat_table_t.
+ * \param[in]		table	A pointer to a #smat_table_t.
  *
  * \return	A zero value if the matrix is not frozen or a non-zero
  *		value if the matrix is frozen.
  */
-#define st_frozen(table)  ((table)->st_table.ht_flags & HASH_FLAG_FROZEN)
+#define st_frozen(table)  ((table)->st_table.ht_flags & HASH_FLAG_FREEZE)
 
 /** \ingroup dbprim_smat
  * \brief Sparse matrix table modulus.
@@ -1538,7 +1685,7 @@ struct _smat_table_s {
  * invocations to avoid the overhead of growing the table while
  * filling it with data.
  *
- * \param table	A pointer to a #smat_table_t.
+ * \param[in]		table	A pointer to a #smat_table_t.
  *
  * \return	An <CODE>unsigned long</CODE> containing the number of
  *		buckets allocated for the sparse matrix table.
@@ -1551,7 +1698,7 @@ struct _smat_table_s {
  * This macro retrieves the total number of items actually in the
  * sparse matrix table.
  *
- * \param table	A pointer to a #smat_table_t.
+ * \param[in]		table	A pointer to a #smat_table_t.
  *
  * \return	An <CODE>unsigned long</CODE> containing a count of
  *		the number of items in the sparse matrix table.
@@ -1563,7 +1710,7 @@ struct _smat_table_s {
  *
  * This macro retrieves the resize callback function pointer.
  *
- * \param table	A pointer to a #smat_table_t.
+ * \param[in]		table	A pointer to a #smat_table_t.
  *
  * \return	A #smat_resize_t.
  */
@@ -1575,7 +1722,7 @@ struct _smat_table_s {
  * This macro retrieves the extra pointer data associated with a
  * particular sparse matrix table.
  *
- * \param table	A pointer to a #smat_table_t.
+ * \param[in]		table	A pointer to a #smat_table_t.
  *
  * \return	A pointer to \c void.
  */
@@ -1591,39 +1738,288 @@ struct _smat_table_s {
  * in the table.  Summing the results of sh_size() and st_size() will
  * over-count the amount of memory actually in use. 
  *
- * \param table	A pointer to a #smat_table_t.
+ * \param[in]		table	A pointer to a #smat_table_t.
  *
  * \return	A \c size_t.
  */
 #define st_size(table) ((table)->st_table.ht_modulus * sizeof(link_head_t) + \
 			(table)->st_table.ht_count * sizeof(smat_entry_t))
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix hash function.
+ *
+ * This function is a hash table-compatible hash function for use by
+ * sparse matrices.
+ *
+ * \param[in]		table	The hash table for which the hash is
+ *				being generated.
+ * \param[in]		key	The database key being hashed.
+ *
+ * \return	A <CODE>unsigned long</CODE> representing the hash
+ *		value of \p key.
+ */
 unsigned long _smat_hash(hash_table_t *table, db_key_t *key);
+
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix comparison function.
+ *
+ * This function is a hash table-compatible comparison function for
+ * use by sparse matrices.
+ *
+ * \param[in]		table	The hash table for which the
+ *				comparison is being performed.
+ * \param[in]		key1	The first database key being
+ *				compared.
+ * \param[in]		key2	The second database key being
+ *				compared.
+ *
+ * \return	Zero if the database keys are identical, non-zero
+ *		otherwise.
+ */
 unsigned long _smat_comp(hash_table_t *table, db_key_t *key1, db_key_t *key2);
+
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix resize function.
+ *
+ * This function is a hash table-compatible resize callback for use by
+ * sparse matrices.
+ *
+ * \param[in]		table	The hash table being resized.
+ * \param[in]		new_mod	The new hash table bucket size.
+ *
+ * \return	Zero if the resize operation should be performed,
+ *		non-zero otherwise.
+ */
 unsigned long _smat_resize(hash_table_t *table, unsigned long new_mod);
 
+/** \ingroup dbprim_smat
+ * \brief Dynamically initialize a sparse matrix table.
+ *
+ * This function initializes a sparse matrix table.
+ *
+ * \param[in]		table	A pointer to a #smat_table_t to be
+ *				initialized.
+ * \param[in]		flags	A bit-wise OR of #HASH_FLAG_AUTOGROW
+ *				and #HASH_FLAG_AUTOSHRINK.  If neither
+ *				behavior is desired, use 0.
+ * \param[in]		resize	A #hash_resize_t function pointer for
+ *				determining whether resizing is
+ *				permitted and/or for notification of
+ *				the resize.
+ * \param[in]		extra	Extra pointer data that should be
+ *				associated with the sparse matrix
+ *				table.
+ * \param[in]		init_mod
+ *				An initial modulus for the table.
+ *				This will presumably be extracted by
+ *				st_modulus() in a previous invocation
+ *				of the application.  A 0 value is
+ *				valid.
+ *
+ * \retval DB_ERR_BADARGS	An invalid argument was given.
+ * \retval ENOMEM		Unable to allocate memory.
+ */
 unsigned long st_init(smat_table_t *table, unsigned long flags,
 		      smat_resize_t resize, void *extra,
 		      unsigned long init_mod);
+
+/** \ingroup dbprim_smat
+ * \brief Add an entry to a sparse matrix.
+ *
+ * This function adds an entry to a sparse matrix.  The entry is
+ * referenced in three different places, thus the complex set of
+ * arguments.  This function will allocate a #smat_entry_t and return
+ * it through the \c entry_p result parameter.
+ *
+ * \param[in]		table	A pointer to a #smat_table_t.
+ * \param[out]		entry_p	A pointer to a pointer to a
+ *				#smat_entry_t.  If \c NULL is passed,
+ *				the addition will be performed and an
+ *				appropriate error code returned.
+ * \param[in]		head1	A pointer to a #smat_head_t
+ * 				representing a #SMAT_LOC_FIRST sparse
+ *				matrix list.
+ * \param[in]		loc1	A #link_loc_t indicating where the
+ *				entry should be added for \c head1.
+ * \param[in]		ent1	A pointer to a #smat_entry_t
+ *				describing another element in the list
+ *				represented by \c head1 if \p loc1 is
+ *				#LINK_LOC_BEFORE or #LINK_LOC_AFTER.
+ * \param[in]		head2	A pointer to a #smat_head_t
+ *				representing a #SMAT_LOC_SECOND sparse
+ *				matrix list.
+ * \param[in]		loc2	A #link_loc_t indicating where the
+ *				entry should be added for \c head2.
+ * \param[in]		ent2	A pointer to a #smat_entry_t
+ *				describing another element in the list
+ *				represented by \c head2 if \p loc2 is
+ *				#LINK_LOC_BEFORE or #LINK_LOC_AFTER.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_BUSY		One of the arguments is already in the
+ *				table.
+ * \retval DB_ERR_FROZEN	The table is currently frozen.
+ * \retval DB_ERR_NOTABLE	The bucket table has not been
+ *				allocated and automatic growth is not
+ *				enabled.
+ * \retval DB_ERR_WRONGTABLE	One of the arguments was not in the
+ *				proper table or list.
+ * \retval DB_ERR_UNUSED	One of the \c ent arguments is not
+ *				presently in a list.
+ * \retval DB_ERR_UNRECOVERABLE	An unrecoverable error occurred while
+ *				resizing the table.
+ * \retval ENOMEM		No memory could be allocated for the
+ *				#smat_entry_t structure.
+ */
 unsigned long st_add(smat_table_t *table, smat_entry_t **entry_p,
 		     smat_head_t *head1, link_loc_t loc1, smat_entry_t *ent1,
 		     smat_head_t *head2, link_loc_t loc2, smat_entry_t *ent2);
+
+/** \ingroup dbprim_smat
+ * \brief Remove an entry from a sparse matrix.
+ *
+ * This function removes the given entry from the specified sparse
+ * matrix.
+ *
+ * \param[in]		table	A pointer to a #smat_table_t.
+ * \param[in]		entry	A pointer to a #smat_entry_t to be
+ *				removed from the table.
+ *
+ * \retval DB_ERR_BADARGS	An invalid argument was given.
+ * \retval DB_ERR_WRONGTABLE	Entry is not in this sparse matrix.
+ * \retval DB_ERR_UNRECOVERABLE	An unrecoverable error occurred while
+ *				removing the entry from the table.
+ */
 unsigned long st_remove(smat_table_t *table, smat_entry_t *entry);
+
+/** \ingroup dbprim_smat
+ * \brief Find an entry in a sparse matrix.
+ *
+ * This function looks up the entry matching the given \p head1 and \p
+ * head2.
+ *
+ * \param[in]		table	A pointer to a #smat_table_t.
+ * \param[out]		entry_p	A pointer to a pointer to a
+ *				#smat_entry_t.  If \c NULL is passed,
+ *				the lookup will be performed and an
+ *				appropriate error code returned.
+ * \param[in]		head1	A pointer to a #smat_head_t
+ *				initialized to #SMAT_LOC_FIRST.
+ * \param[in]		head2	A pointer to a #smat_head_t
+ *				initialized to #SMAT_LOC_SECOND.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_WRONGTABLE	One or both of \p head1 or \p head2
+ *				are not referenced in this table.
+ * \retval DB_ERR_NOENTRY	No matching entry was found.
+ */
 unsigned long st_find(smat_table_t *table, smat_entry_t **entry_p,
 		      smat_head_t *head1, smat_head_t *head2);
+
+/** \ingroup dbprim_smat
+ * \brief Iterate over each entry in a sparse matrix.
+ *
+ * This function iterates over every entry in a sparse matrix (in an
+ * unspecified order), executing the given \p iter_func on each entry.
+ *
+ * \param[in]		table	A pointer to a #smat_table_t.
+ * \param[in]		iter_func
+ *				A pointer to a callback function used
+ *				to perform user-specified actions on
+ *				an entry in a sparse matrix.  \c NULL
+ *				is an invalid value.  See the
+ *				documentation for #smat_iter_t for
+ *				more information.
+ * \param[in]		extra	A \c void pointer that will be passed
+ *				to \p iter_func.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_FROZEN	The sparse matrix is frozen.
+ */
 unsigned long st_iter(smat_table_t *table, smat_iter_t iter_func, void *extra);
+
+/** \ingroup dbprim_smat
+ * \brief Flush a sparse matrix.
+ *
+ * This function flushes a sparse matrix--that is, it removes each
+ * entry from the matrix.  If a \p flush_func is specified, it will be
+ * called on the entry after it has been removed from the table, and
+ * may safely call <CODE>free()</CODE>.
+ *
+ * \param[in]		table	A pointer to a #smat_table_t.
+ * \param[in]		flush_func
+ *				A pointer to a callback function used
+ *				to perform user-specified actions on
+ *				an entry after removing it from the
+ *				table.  May be \c NULL.  See the
+ *				documentation for #smat_iter_t for
+ *				more information.
+ * \param[in]		extra	A \c void pointer that will be passed
+ *				to \p iter_func.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_FROZEN	The sparse matrix is frozen.
+ */
 unsigned long st_flush(smat_table_t *table, smat_iter_t flush_func,
 		       void *extra);
+
+/** \ingroup dbprim_smat
+ * \brief Resize a sparse matrix table.
+ *
+ * This function resizes the hash table associated with a sparse
+ * matrix based on the \p new_size parameter.  See the documentation
+ * for ht_resize() for more information.
+ *
+ * \param[in]		table	A pointer to a #smat_table_t.
+ * \param[in]		new_size
+ *				A new size value for the table.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_FROZEN	The table is currently frozen.
+ * \retval DB_ERR_UNRECOVERABLE	A catastrophic error was encountered.
+ *				The table is now unusable.
+ * \retval ENOMEM		No memory could be allocated for the
+ *				new bucket table.
+ */
 unsigned long st_resize(smat_table_t *table, unsigned long new_size);
+
+/** \ingroup dbprim_smat
+ * \brief Free memory used by an empty sparse matrix table.
+ *
+ * This function releases the memory used by the bucket table of the
+ * empty hash table associated with a sparse matrix.
+ *
+ * \param[in]		table	A pointer to a #smat_table_t.
+ *
+ * \retval DB_ERR_BADARGS	An invalid argument was given.
+ * \retval DB_ERR_FROZEN	The table is frozen.
+ * \retval DB_ERR_NOTEMPTY	The table is not empty.
+ */
 unsigned long st_free(smat_table_t *table);
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix list head structure.
+ *
+ * This is the implementation of the #smat_head_t type.
+ */
 struct _smat_head_s {
-  unsigned long sh_magic;	/* magic number */
-  smat_loc_t	sh_elem;	/* 0 or 1 to indicate first or second */
-  smat_table_t *sh_table;	/* table this object's in */
-  link_head_t	sh_head;	/* linked list head */
+  unsigned long sh_magic;	/**< Magic number. */
+  smat_loc_t	sh_elem;	/**< 0 or 1 to indicate first or second. */
+  smat_table_t *sh_table;	/**< Table this object's in. */
+  link_head_t	sh_head;	/**< Linked list head. */
 };
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix list head magic number.
+ *
+ * This is the magic number used for the sparse matrix list head
+ * structure.
+ */
 #define SMAT_HEAD_MAGIC 0x4e5d9b8e
 
 /** \ingroup dbprim_smat
@@ -1631,12 +2027,12 @@ struct _smat_head_s {
  *
  * This macro statically initializes a #smat_head_t.
  *
- * \param elem	One of #SMAT_LOC_FIRST or #SMAT_LOC_SECOND specifing
- *		whether the object is a member of the set of rows or
- *		columns.
- * \param object
- *		A pointer to \c void representing the object
- *		associated with the list head.
+ * \param[in]		elem	One of #SMAT_LOC_FIRST or
+ *				#SMAT_LOC_SECOND specifing whether the
+ *				object is a member of the set of rows
+ *				or columns.
+ * \param[in]		object	A pointer to \c void representing the
+ *				object associated with the list head.
  */
 #define SMAT_HEAD_INIT(elem, object) \
 	{ SMAT_HEAD_MAGIC, (elem), 0, LINK_HEAD_INIT(object) }
@@ -1647,12 +2043,12 @@ struct _smat_head_s {
  * This macro verifies that a given pointer actually does point to a
  * sparse matrix head.
  *
- * \warning This macro evaluates the \p head argument twice.
+ * \warning	This macro evaluates the \p head argument twice.
  *
- * \param head	A pointer to a #smat_head_t.
+ * \param[in]		head	A pointer to a #smat_head_t.
  *
- * \return	Boolean true if \p head is a valid sparse matrix head
- *		or false otherwise.
+ * \return	Boolean \c true if \p head is a valid sparse matrix
+ *		head or \c false otherwise.
  */
 #define sh_verify(head)		((head) && \
 				 (head)->sh_magic == SMAT_HEAD_MAGIC)
@@ -1663,7 +2059,7 @@ struct _smat_head_s {
  * This macro retrieves the position indicator for the sparse matrix
  * head.  It will return one of #SMAT_LOC_FIRST or #SMAT_LOC_SECOND.
  *
- * \param head	A pointer to #smat_head_t.
+ * \param[in]		head	A pointer to #smat_head_t.
  *
  * \return	An #smat_loc_t.
  */
@@ -1675,7 +2071,7 @@ struct _smat_head_s {
  * If there are any elements in this sparse matrix list head, this
  * macro will retrieve a pointer to the table in which they reside.
  *
- * \param head	A pointer to #smat_head_t.
+ * \param[in]		head	A pointer to #smat_head_t.
  *
  * \return	A pointer to #smat_table_t.
  */
@@ -1688,7 +2084,7 @@ struct _smat_head_s {
  * frozen.  The sparse matrix may be frozen if there is an iteration
  * in progress.
  *
- * \param head	A pointer to a #smat_head_t.
+ * \param[in]		head	A pointer to a #smat_head_t.
  *
  * \return	A zero value if the matrix is not frozen or a non-zero
  *		value if the matrix is frozen.
@@ -1701,40 +2097,64 @@ struct _smat_head_s {
  * This macro retrieves the number of elements in the sparse matrix
  * list rooted at \p head.
  *
- * \param head	A pointer to #smat_head_t.
+ * \param[in]		head	A pointer to #smat_head_t.
  *
  * \return	An <CODE>unsigned long</CODE> containing a count of
  *		the number of elements in the sparse matrix list.
  */
 #define sh_count(head)	((head)->sh_head.lh_count)
 
-/* helper macro to directly reference the link element */
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Access the first element pointer in a #smat_head_t.
+ *
+ * This helper macro is used to directly access the first linked list
+ * element of a #smat_head_t.
+ *
+ * \param[in]		head	A pointer to #smat_head_t.
+ *
+ * \return	A pointer to a #link_elem_t indicating the first
+ *		element in the list.
+ */
 #define _sh_first(head)	((head)->sh_head.lh_first)
+
 /** \ingroup dbprim_smat
  * \brief First element in sparse matrix list.
  *
  * This macro retrieves a pointer to the #smat_entry_t for the first
  * element in the sparse matrix list.
  *
- * \warning This macro evaluates the \p head argument twice.
+ * \warning	This macro evaluates the \p head argument twice.
  *
- * \param head	A pointer to #smat_head_t.
+ * \param[in]		head	A pointer to #smat_head_t.
  *
  * \return	A pointer to #smat_entry_t.
  */
 #define sh_first(head)	(_sh_first(head) ? _smat_ent(_sh_first(head)) : 0)
 
-/* helper macro to directly reference the link element */
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Access the last element pointer in a #smat_head_t.
+ *
+ * This helper macro is used to directly access the last linked list
+ * element of a #smat_head_t.
+ *
+ * \param[in]		head	A pointer to #smat_head_t.
+ *
+ * \return	A pointer to a #link_elem_t indicating the last
+ *		element in the list.
+ */
 #define _sh_last(head)	((head)->sh_head.lh_last)
+
 /** \ingroup dbprim_smat
  * \brief Last element in sparse matrix list.
  *
  * This macro retrieves a pointer to the #smat_entry_t for the last
  * element in the sparse matrix list.
  *
- * \warning This macro evaluates the \p head argument twice.
+ * \warning	This macro evaluates the \p head argument twice.
  *
- * \param head	A pointer to #smat_head_t.
+ * \param[in]		head	A pointer to #smat_head_t.
  *
  * \return	A pointer to #smat_entry_t.
  */
@@ -1746,7 +2166,7 @@ struct _smat_head_s {
  * This macro retrieves a pointer to the object referenced by the
  * sparse matrix list head.
  *
- * \param head	A pointer to #smat_head_t.
+ * \param[in]		head	A pointer to #smat_head_t.
  *
  * \return	A pointer to \c void.
  */
@@ -1762,30 +2182,167 @@ struct _smat_head_s {
  * in the table.  Summing the results of sh_size() and st_size() will
  * over-count the amount of memory actually in use. 
  *
- * \param head	A pointer to #smat_head_t.
+ * \param[in]		head	A pointer to #smat_head_t.
  *
  * \return	A \c size_t.
  */
 #define sh_size(head)	((head)->sh_elem.lh_count * sizeof(smat_entry_t))
 
+/** \ingroup dbprim_smat
+ * \brief Dynamically initialize a sparse matrix row or column head.
+ *
+ * This function dynamically initializes a sparse matrix row or column
+ * linked list head.  The \p elem argument specifies whether the
+ * object is to be associated with a #SMAT_LOC_FIRST list or a
+ * #SMAT_LOC_SECOND list.
+ *
+ * \param[in]		head	A pointer to a #smat_head_t to be
+ *				initialized.
+ * \param[in]		elem	Either #SMAT_LOC_FIRST or
+ *				#SMAT_LOC_SECOND.
+ * \param[in]		object	A pointer to the object containing the
+ *				sparse matrix row or column head.
+ *
+ * \retval DB_ERR_BADARGS	An invalid argument was given.
+ */
 unsigned long sh_init(smat_head_t *head, smat_loc_t elem, void *object);
+
+/** \ingroup dbprim_smat
+ * \brief Move an entry within a row or column list.
+ *
+ * This function allows the specified entry to be shifted within the
+ * linked list describing the row or column.  It is very similar to
+ * the ll_move() function.
+ *
+ * \param[in]		head	A pointer to a #smat_head_t.
+ * \param[in]		elem	A pointer to the #smat_entry_t
+ *				describing the entry to be moved.
+ * \param[in]		loc	A #link_loc_t indicating where the
+ *				entry should be moved to.
+ * \param[in]		elem2	A pointer to a #smat_entry_t
+ *				describing another entry in the list
+ *				if \p loc is #LINK_LOC_BEFORE or
+ *				#LINK_LOC_AFTER.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_BUSY		\p elem and \p elem2 are the same
+ *				entry.
+ * \retval DB_ERR_WRONGTABLE	\p elem or \p elem2 are in a different
+ *				row or column.
+ * \retval DB_ERR_UNUSED	\p elem or \p elem2 are not in any row
+ *				or column.
+ */
 unsigned long sh_move(smat_head_t *head, smat_entry_t *elem, link_loc_t loc,
 		      smat_entry_t *elem2);
+
+/** \ingroup dbprim_smat
+ * \brief Find an entry in a row or column of a sparse matrix.
+ *
+ * This function iterates through the given row or column of a
+ * sparse matrix looking for an element that matches the given \p key.
+ *
+ * \param[in]		head	A pointer to a #smat_head_t.
+ * \param[out]		elem_p	A pointer to a pointer to a
+ *				#smat_entry_t.  \c NULL is an invalid
+ *				value.
+ * \param[in]		comp_func
+ *				A pointer to a comparison function
+ *				used to compare the key to a
+ *				particular entry.  See the
+ *				documentation for #smat_comp_t for
+ *				more information.
+ * \param[in]		start	A pointer to a #smat_entry_t
+ *				describing where in the row or column
+ *				to start.  If \c NULL is passed, the
+ *				beginning of the row or column will be
+ *				assumed.
+ * \param[in]		key	A key to search for.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_WRONGTABLE	\p start is not in this row or column.
+ * \retval DB_ERR_NOENTRY	No matching entry was found.
+ */
 unsigned long sh_find(smat_head_t *head, smat_entry_t **elem_p,
 		      smat_comp_t comp_func, smat_entry_t *start,
 		      db_key_t *key);
+
+/** \ingroup dbprim_smat
+ * \brief Iterate over each entry in a row or column of a sparse
+ * matrix.
+ *
+ * This function iterates over a row or column of a sparse matrix,
+ * executing the given \p iter_func for each entry.
+ *
+ * \param[in]		head	A pointer to a #smat_head_t.
+ * \param[in]		start	A pointer to a #smat_entry_t
+ *				describing where in the row or column
+ *				to start.  If \c NULL is passed, the
+ *				beginning of the row or column will be
+ *				assumed.
+ * \param[in]		iter_func
+ *				A pointer to a callback function used
+ *				to perform user-specified actions on
+ *				an entry in a row or column of a
+ *				sparse matrix.  \c NULL is an invalid
+ *				value.  See the documentation for
+ *				#smat_iter_t for more information.
+ * \param[in]		extra	A \c void pointer that will be passed
+ *				to \p iter_func.
+ * \param[in]		flags	If #DB_FLAG_REVERSE is given,
+ *				iteration will be done from the end of
+ *				the list backwards towards the head.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_WRONGTABLE	\p start is not in this row or column.
+ */
 unsigned long sh_iter(smat_head_t *head, smat_entry_t *start,
 		      smat_iter_t iter_func, void *extra, unsigned long flags);
+
+/** ingroup dbprim_smat
+ * \brief Flush a row or column of a sparse matrix.
+ *
+ * This function flushes a sparse matrix row or column--that is, it
+ * removes each element from that row or column.  If a \p flush_func
+ * is specified, it will be called on the entry after it has been
+ * removed from the row or column, and may safely call
+ * <CODE>free()</CODE>.
+ *
+ * \param[in]		list	A pointer to a #smat_head_t.
+ * \param[in]		flush_func
+ *				A pointer to a callback function used
+ *				to perform user-specifed actions on an
+ *				entry after removing it from the row
+ *				or column.  May be \c NULL.  See the
+ *				documentation for #smat_iter_t for
+ *				more information.
+ * \param[in]		extra	A \c void pointer that will be passed
+ *				to \p flush_func.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ */
 unsigned long sh_flush(smat_head_t *head, smat_iter_t flush_func, void *extra);
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix entry structure.
+ *
+ * This is the implementation of the #smat_entry_t type.
+ */
 struct _smat_entry_s {
-  unsigned long	se_magic;	/* magic number */
-  smat_table_t *se_table;	/* sparse matrix table */
-  hash_entry_t	se_hash;	/* hash table entry */
-  link_elem_t	se_link[2];	/* linked list elements */
-  void	       *se_object[2];	/* objects */
+  unsigned long	se_magic;	/**< Magic number. */
+  smat_table_t *se_table;	/**< Sparse matrix table. */
+  hash_entry_t	se_hash;	/**< Hash table entry. */
+  link_elem_t	se_link[2];	/**< Linked list elements. */
+  void	       *se_object[2];	/**< Objects. */
 };
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix entry magic number.
+ *
+ * This is the magic number used for the sparse matrix entry
+ * structure.
+ */
 #define SMAT_ENTRY_MAGIC 0x466b34b5
 
 /** \ingroup dbprim_smat
@@ -1794,12 +2351,12 @@ struct _smat_entry_s {
  * This macro verifies that a given pointer actually does point to a
  * sparse matrix entry.
  *
- * \warning This macro evaluates the \p entry argument twice.
+ * \warning	This macro evaluates the \p entry argument twice.
  *
- * \param entry	A pointer to a #smat_entry_t.
+ * \param[in]		entry	A pointer to a #smat_entry_t.
  *
- * \return	Boolean true if \p entry is a valid sparse matrix
- *		entry or false otherwise.
+ * \return	Boolean \c true if \p entry is a valid sparse matrix
+ *		entry or \c false otherwise.
  */
 #define se_verify(entry)	((entry) && \
 				 (entry)->se_magic == SMAT_ENTRY_MAGIC)
@@ -1810,7 +2367,7 @@ struct _smat_entry_s {
  * This macro retrieves a pointer to the table that the sparse matrix
  * entry is in.
  *
- * \param entry	A pointer to a #smat_entry_t.
+ * \param[in]		entry	A pointer to a #smat_entry_t.
  *
  * \return	A pointer to a #smat_table_t.
  */
@@ -1823,7 +2380,7 @@ struct _smat_entry_s {
  * This macro provides access to the linked list element buried in the
  * sparse matrix entry for use by the free list routines.
  *
- * \param entry	A pointer to a #smat_entry_t.
+ * \param[in]		entry	A pointer to a #smat_entry_t.
  *
  * \return	A pointer to a #link_elem_t.
  */
@@ -1835,7 +2392,7 @@ struct _smat_entry_s {
  * This macro retrieves a set of user-defined flags associated with
  * the entry.  It may be used as an lvalue to set those flags.
  *
- * \param entry	A pointer to a #smat_entry_t.
+ * \param[in]		entry	A pointer to a #smat_entry_t.
  *
  * \return	An <CODE>unsigned long</CODE> containing the flags
  *		associated with the entry.
@@ -1849,47 +2406,79 @@ struct _smat_entry_s {
  * entry.  If the sparse matrix hash been resized, this value may not
  * be the same as a previous value.
  *
- * \param entry	A pointer to a #smat_entry_t.
+ * \param[in]		entry	A pointer to a #smat_entry_t.
  *
  * \return	An <CODE>unsigned long</CODE> containing the hash code
  *		for the entry.
  */
 #define se_hash(entry)	    ((entry)->se_hash.he_hash)
 
-/* helper macro to directly reference the link element */
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Access the next element pointer in a #smat_entry_t.
+ *
+ * This helper macro is used to directly access the next linked list
+ * element in a specific sparse matrix linked list.
+ *
+ * \param[in]		entry	A pointer to #smat_entry_t.
+ * \param[in]		n	One of #SMAT_LOC_FIRST or
+ *				#SMAT_LOC_SECOND to specify which list
+ *				thread is desired.
+ *
+ * \return	A pointer to a #link_elem_t indicating the next
+ *		element in the list.
+ */
 #define _se_next(entry, n)  ((entry)->se_link[(n)].le_next)
+
 /** \ingroup dbprim_smat
  * \brief Next element in sparse matrix list.
  *
  * This macro retrieves a pointer to the #link_elem_t for the next
  * element in the sparse matrix list.
  *
- * \warning This macro evaluates the \p entry and \p n arguments
- * twice.
+ * \warning	This macro evaluates the \p entry and \p n arguments
+ *		twice.
  *
- * \param entry	A pointer to #smat_entry_t.
- * \param n	One of #SMAT_LOC_FIRST or #SMAT_LOC_SECOND to specify
- *		which list thread is desired.
+ * \param[in]		entry	A pointer to #smat_entry_t.
+ * \param[in]		n	One of #SMAT_LOC_FIRST or
+ *				#SMAT_LOC_SECOND to specify which list
+ *				thread is desired.
  *
  * \return	A pointer to #smat_entry_t.
  */
 #define se_next(entry, n)   (_se_next(entry, n) ? \
 			     _smat_ent(_se_next(entry, n)) : 0)
 
-/* helper macro to directly reference the link element */
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Access the previous element pointer in a #smat_entry_t.
+ *
+ * This helper macro is used to directly access the previous linked
+ * list element in a specific sparse matrix linked list.
+ *
+ * \param[in]		entry	A pointer to #smat_entry_t.
+ * \param[in]		n	One of #SMAT_LOC_FIRST or
+ *				#SMAT_LOC_SECOND to specify which list
+ *				thread is desired.
+ *
+ * \return	A pointer to a #link_elem_t indicating the previous
+ *		element in the list.
+ */
 #define _se_prev(entry, n)  ((entry)->se_link[(n)].le_prev)
+
 /** \ingroup dbprim_smat
  * \brief Previous element in sparse matrix list.
  *
  * This macro retrieves a pointer to the #link_elem_t for the previous
  * element in the sparse matrix list.
  *
- * \warning This macro evaluates the \p entry and \p n arguments
- * twice.
+ * \warning	This macro evaluates the \p entry and \p n arguments
+ *		twice.
  *
- * \param entry	A pointer to #smat_entry_t.
- * \param n	One of #SMAT_LOC_FIRST or #SMAT_LOC_SECOND to specify
- *		which list thread is desired.
+ * \param[in]		entry	A pointer to #smat_entry_t.
+ * \param[in]		n	One of #SMAT_LOC_FIRST or
+ *				#SMAT_LOC_SECOND to specify which list
+ *				thread is desired.
  *
  * \return	A pointer to #smat_entry_t.
  */
@@ -1903,9 +2492,10 @@ struct _smat_entry_s {
  * the entry in a sparse matrix list.  It may be used as an lvalue to
  * set those flags.
  *
- * \param entry	A pointer to #smat_entry_t.
- * \param n	One of #SMAT_LOC_FIRST or #SMAT_LOC_SECOND to specify
- *		which list thread is desired.
+ * \param[in]		entry	A pointer to #smat_entry_t.
+ * \param[in]		n	One of #SMAT_LOC_FIRST or
+ *				#SMAT_LOC_SECOND to specify which list
+ *				thread is desired.
  *
  * \return	An <CODE>unsigned long</CODE> containing the flags
  *		associated with the entry.
@@ -1919,25 +2509,44 @@ struct _smat_entry_s {
  * the entry.  It may be used as an lvalue to change the object
  * pointed to.  Care should be taken when using this feature.
  *
- * \param entry	A pointer to #smat_entry_t.
- * \param n	One of #SMAT_LOC_FIRST or #SMAT_LOC_SECOND to specify
- *		which list thread is desired.
+ * \param[in]		entry	A pointer to #smat_entry_t.
+ * \param[in]		n	One of #SMAT_LOC_FIRST or
+ *				#SMAT_LOC_SECOND to specify which list
+ *				thread is desired.
  *
  * \return	A pointer to \c void representing the object.
  */
 #define se_object(entry, n) ((entry)->se_object[(n)])
 
+/** \internal
+ * \ingroup dbprim_rbtree
+ * \brief Red-black tree structure.
+ *
+ * This is the implementation of the #rb_tree_t type.
+ */
 struct _rb_tree_s {
-  unsigned long	rt_magic;	/* magic number */
-  unsigned long	rt_flags;	/* flags associated with the table */
-  unsigned long	rt_count;	/* number of nodes in the tree */
-  rb_node_t    *rt_root;	/* pointer to the root node of the tree */
-  rb_comp_t	rt_comp;	/* function for comparing tree keys */
-  void	       *rt_extra;	/* extra data associated with the tree */
+  unsigned long	rt_magic;	/**< Magic number. */
+  unsigned long	rt_flags;	/**< Flags associated with the table. */
+  unsigned long	rt_count;	/**< Number of nodes in the tree. */
+  rb_node_t    *rt_root;	/**< Pointer to the root node of the tree. */
+  rb_comp_t	rt_comp;	/**< Function for comparing tree keys. */
+  void	       *rt_extra;	/**< Extra data associated with the tree. */
 };
 
+/** \internal
+ * \ingroup dbprim_rbtree
+ * \brief Red-black tree magic number.
+ *
+ * This is the magic number used for the red-black tree structure.
+ */
 #define RB_TREE_MAGIC 0xd52695be
 
+/** \internal
+ * \brief Flag indicating red-black tree is frozen.
+ *
+ * This flag, if set on a red-black tree, indicates that the tree is
+ * frozen and may not be modified.
+ */
 #define RBT_FLAG_FREEZE 0x80000000 /* tree frozen */
 
 /** \ingroup dbprim_rbtree
@@ -1945,10 +2554,10 @@ struct _rb_tree_s {
  *
  * This macro statically initializes a #rb_tree_t.
  *
- * \param comp	A #rb_comp_t function pointer for a comparison
- *		function.
- * \param extra	Extra pointer data that should be associated with the
- *		red-black tree.
+ * \param[in]		comp	A #rb_comp_t function pointer for a
+ *				comparison function.
+ * \param[in]		extra	Extra pointer data that should be
+ *				associated with the red-black tree.
  */
 #define RB_TREE_INIT(comp, extra)   { RB_TREE_MAGIC, 0, 0, 0, (comp), (extra) }
 
@@ -1958,12 +2567,12 @@ struct _rb_tree_s {
  * This macro verifies that a given pointer actually does point to a
  * red-black tree.
  *
- * \warning This macro evaluates the \p tree argument twice.
+ * \warning	This macro evaluates the \p tree argument twice.
  *
- * \param tree	A pointer to a #rb_tree_t.
+ * \param[in]		tree	A pointer to a #rb_tree_t.
  *
- * \return	Boolean true if \p tree is a valid red-black tree or
- *		false otherwise.
+ * \return	Boolean \c true if \p tree is a valid red-black tree
+ *		or \c false otherwise.
  */
 #define rt_verify(tree)		((tree) && \
 				 (tree)->rt_magic == RB_TREE_MAGIC)
@@ -1975,7 +2584,7 @@ struct _rb_tree_s {
  * frozen.  The red-black tree may be frozen if there is an
  * iteration in progress.
  *
- * \param tree	A pointer to a #rb_tree_t.
+ * \param[in]		tree	A pointer to a #rb_tree_t.
  *
  * \return	A zero value if the table is not frozen or a non-zero
  *		value if the table is frozen.
@@ -1988,7 +2597,7 @@ struct _rb_tree_s {
  * This macro retrieves the total number of items actually in the
  * red-black tree.
  *
- * \param tree	A pointer to a #rb_tree_t.
+ * \param[in]		tree	A pointer to a #rb_tree_t.
  *
  * \return	An <CODE>unsigned long</CODE> containing a count of
  *		the number of items in the red-black tree.
@@ -2000,7 +2609,7 @@ struct _rb_tree_s {
  *
  * This macro retrieves the root node of the tree.
  *
- * \param tree	A pointer to a #rb_tree_t.
+ * \param[in]		tree	A pointer to a #rb_tree_t.
  *
  * \return	A pointer to a #rb_node_t.
  */
@@ -2011,7 +2620,7 @@ struct _rb_tree_s {
  *
  * This macro retrieves the comparison function pointer.
  *
- * \param tree	A pointer to a #rb_tree_t.
+ * \param[in]		tree	A pointer to a #rb_tree_t.
  *
  * \return	A #rb_comp_t.
  */
@@ -2023,7 +2632,7 @@ struct _rb_tree_s {
  * This macro retrieves the extra pointer data associated with a
  * particular red-black tree.
  *
- * \param tree	A pointer to a #rb_tree_t.
+ * \param[in]		tree	A pointer to a #rb_tree_t.
  *
  * \return	A pointer to \c void.
  */
@@ -2053,6 +2662,11 @@ struct _rb_tree_s {
  */
 #define RBT_ORDER_POST	3
 
+/** \ingroup dbprim_rbtree
+ * \brief Tree traversal method mask.
+ *
+ * This flag mask may be used to obtain the tree traversal order.
+ */
 #define RBT_ORDER_MASK	0x00000003
 
 /** \ingroup dbprim_rbtree
@@ -2060,32 +2674,225 @@ struct _rb_tree_s {
  *
  * Obtains the previous node in the given iteration scheme.  See
  * rt_next() for more information.
+ *
+ * \param[in]		tree	A pointer to a #rb_tree_t.
+ * \param[in,out]	node_io	A pointer to a pointer to a
+ *				#rb_node_t.  If the pointer to which
+ *				node_io points is \c NULL, the first
+ *				node will be loaded, otherwise the
+ *				next node will be loaded.
+ * \param[in]		flags	One of RBT_ORDER_PRE, RBT_ORDER_IN, or
+ *				RBT_ORDER_POST, possibly ORed with
+ *				DB_FLAG_REVERSE to reverse the order
+ *				of iteration.  Zero is not allowed.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_WRONGTABLE	\p start is not in this red-black
+ *				tree.
  */
 #define rt_prev(tree, node_io, flags) \
 	(rt_next((tree), (node_io), (flags) ^ DB_FLAG_REVERSE))
 
+/** \ingroup dbprim_rbtree
+ * \brief Dynamically initialize a red-black tree.
+ *
+ * This function dynamically initializes a red-black tree.
+ *
+ * \param[in]		tree	A pointer to a #rb_tree_t to be
+ *				initialized.
+ * \param[in]		comp	A #rb_comp_t function pointer for a
+ *				comparison function.
+ * \param[in]		extra	Extra pointer data that should be
+ *				associated with the tree.
+ *
+ * \retval DB_ERR_BADARGS	An invalid argument was given.
+ */
 unsigned long rt_init(rb_tree_t *tree, rb_comp_t comp, void *extra);
+
+/** \ingroup dbprim_rbtree
+ * \brief Add a node to a red-black tree.
+ *
+ * This function adds a node to a red-black tree.
+ *
+ * \param[in]		tree	A pointer to a #rb_tree_t.
+ * \param[in]		node	A pointer to a #rb_node_t to be added
+ *				to the tree.
+ * \param[in]		key	A pointer to a #db_key_t containing
+ *				the key for the node.
+ *
+ * \retval DB_ERR_BADARGS	An invalid argument was given.
+ * \retval DB_ERR_BUSY		The node is already in a tree.
+ * \retval DB_ERR_FROZEN	The tree is currently frozen.
+ * \retval DB_ERR_DUPLICATE	The entry is a duplicate of an
+ *				existing node.
+ */
 unsigned long rt_add(rb_tree_t *tree, rb_node_t *node, db_key_t *key);
+
+/** \ingroup dbprim_rbtree
+ * \brief Move a node in a red-black tree.
+ *
+ * This function moves an existing node in the red-black tree to
+ * correspond to the new key.
+ *
+ * \param[in]		tree	A pointer to a #rb_tree_t.
+ * \param[in]		node	A pointer to a #rb_node_t to be moved.
+ *				It must already be in the red-black
+ *				tree.
+ * \param[in]		key	A pointer to a #db_key_t describing
+ *				the new key for the node.
+ *
+ * \retval DB_ERR_BADARGS	An invalid argument was given.
+ * \retval DB_ERR_UNUSED	Node is not in a red-black tree.
+ * \retval DB_ERR_WRONGTABLE	Node is not in this tree.
+ * \retval DB_ERR_FROZEN	Red-black tree is frozen.
+ * \retval DB_ERR_DUPLICATE	New key is a duplicate of an existing
+ *				key.
+ * \retval DB_ERR_READDFAILED	Unable to re-add node to tree.
+ */
 unsigned long rt_move(rb_tree_t *tree, rb_node_t *node, db_key_t *key);
+
+/** \ingroup dbprim_rbtree
+ * \brief Remove a node from a red-black tree.
+ *
+ * This function removes the given node from the specified red-black
+ * tree.
+ *
+ * \param[in]		tree	A pointer to a #rb_tree_t.
+ * \param[in]		node	A pointer to a #rb_node_t to be
+ *				removed from the tree.
+ *
+ * \retval DB_ERR_BADARGS	An invalid argument was given.
+ * \retval DB_ERR_UNUSED	Node is not in a red-black tree.
+ * \retval DB_ERR_WRONGTABLE	Node is not in this tree.
+ * \retval DB_ERR_FROZEN	Red-black tree is frozen.
+ */
 unsigned long rt_remove(rb_tree_t *tree, rb_node_t *node);
+
+/** \ingroup dbprim_rbtree
+ * \brief Find an entry in a red-black table.
+ *
+ * This function looks up an entry matching the given \p key.
+ *
+ * \param[in]		tree	A pointer to a #rb_tree_t.
+ * \param[out]		node_p	A pointer to a pointer to a
+ *				#rb_node_t.  If \c NULL is passed, the
+ *				lookup will be performed and an
+ *				appropriate error code returned.
+ * \param[in]		key	A pointer to a #db_key_t describing
+ *				the item to find.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_NOENTRY	No matching entry was found.
+ */
 unsigned long rt_find(rb_tree_t *tree, rb_node_t **node_p, db_key_t *key);
+
+/** \ingroup dbprim_rbtree
+ * \brief Get the next node.
+ *
+ * This function obtains the next node in the given iteration scheme.
+ * The \p node_io parameter is a value-result parameter--if the node
+ * pointer to which it points is \c NULL, the first node for the given
+ * iteration order will be loaded; otherwise, the next node in the
+ * given iteration order will be loaded.
+ *
+ * \param[in]		tree	A pointer to a #rb_tree_t.
+ * \param[in,out]	node_io	A pointer to a pointer to a
+ *				#rb_node_t.  If the pointer to which
+ *				node_io points is \c NULL, the first
+ *				node will be loaded, otherwise the
+ *				next node will be loaded.
+ * \param[in]		flags	One of RBT_ORDER_PRE, RBT_ORDER_IN, or
+ *				RBT_ORDER_POST, possibly ORed with
+ *				DB_FLAG_REVERSE to reverse the order
+ *				of iteration.  Zero is not allowed.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_WRONGTABLE	\p start is not in this red-black
+ *				tree.
+ */
 unsigned long rt_next(rb_tree_t *tree, rb_node_t **node_io,
 		      unsigned long flags);
+
+/** \ingroup dbprim_rbtree
+ * \brief Iterate over each entry in a red-black tree.
+ *
+ * This function iterates over every node in a red-black tree in the
+ * given traversal order, executing the given \p iter_func on each
+ * node.
+ *
+ * \param[in]		tree	A pointer to a #rb_tree_t.
+ * \param[in]		start	A pointer to a #rb_node_t describing
+ *				where in the tree to start.  If \c
+ *				NULL is passed, the first element of
+ *				the tree for the specified order will
+ *				be assumed.
+ * \param[in]		iter_func
+ *				A pointer to a callback function used
+ *				to perform user-specified actions on a
+ *				node in the red-black tree.  \c NULL
+ *				is an invalid value.  See the
+ *				documentation for #rb_iter_t for more
+ *				information.
+ * \param[in]		extra	A \c void pointer that will be passed
+ *				to \p iter_func.
+ * \param[in]		flags	One of RBT_ORDER_PRE, RBT_ORDER_IN, or
+ *				RBT_ORDER_POST, possibly ORed with
+ *				DB_FLAG_REVERSE to reverse the order
+ *				of iteration.  Zero is not allowed.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_WRONGTABLE	\p start is not in this red-black
+ *				tree.
+ */
 unsigned long rt_iter(rb_tree_t *tree, rb_node_t *start,
 		      rb_iter_t iter_func, void *extra, unsigned long flags);
+
+/** \ingroup dbprim_rbtree
+ * \brief Flush a red-black tree.
+ *
+ * This function flushes a red-black tree--that is, it removes each
+ * node from the tree.  If a \p flush_func is specified, it will be
+ * called on the node after it has been removed from the tree, and may
+ * safely call <CODE>free()</CODE>.
+ *
+ * \param[in]		tree	A pointer to a #rb_tree_t.
+ * \param[in]		flush_func
+ *				A pointer to a callback function used
+ *				to perform user-specified actions on a
+ *				node after removing it from the tree.
+ *				May be \c NULL.  See the documentation
+ *				for #rb_iter_t for more information.
+ * \param[in]		extra	A \c void pointer that will be passed
+ *				to \p flush_func.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_FROZEN	The red-black tree is frozen.
+ */
 unsigned long rt_flush(rb_tree_t *tree, rb_iter_t flush_func, void *extra);
 
+/** \internal
+ * \ingroup dbprim_rbtree
+ * \brief Red-black tree node structure.
+ *
+ * This is the implementation of the #rb_node_t type.
+ */
 struct _rb_node_s {
-  unsigned long	rn_magic;	/* magic number */
-  rb_color_t	rn_color;	/* node's color */
-  rb_tree_t    *rn_tree;	/* tree node is in */
-  rb_node_t    *rn_parent;	/* parent of this node */
-  rb_node_t    *rn_left;	/* left child of this node */
-  rb_node_t    *rn_right;	/* right child of this node */
-  db_key_t	rn_key;		/* node's key */
-  void	       *rn_value;	/* node's value */
+  unsigned long	rn_magic;	/**< Magic number. */
+  rb_color_t	rn_color;	/**< Node's color. */
+  rb_tree_t    *rn_tree;	/**< Tree node is in. */
+  rb_node_t    *rn_parent;	/**< Parent of this node. */
+  rb_node_t    *rn_left;	/**< Left child of this node. */
+  rb_node_t    *rn_right;	/**< Right child of this node. */
+  db_key_t	rn_key;		/**< Node's key. */
+  void	       *rn_value;	/**< Node's value. */
 };
 
+/** \internal
+ * \ingroup dbprim_rbtree
+ * \brief Red-black tree node magic number.
+ *
+ * This is the magic number used for the red-black tree structure.
+ */
 #define RB_NODE_MAGIC 0x3dea4d01
 
 /** \ingroup dbprim_rbtree
@@ -2093,8 +2900,8 @@ struct _rb_node_s {
  *
  * This macro statically initializes a #rb_node_t.
  *
- * \param value	A pointer to \c void representing the object
- *		associated with the node.
+ * \param[in]		value	A pointer to \c void representing the
+ *				object associated with the node.
  */
 #define RB_NODE_INIT(value) \
 	{ RB_NODE_MAGIC, RB_COLOR_NONE, 0, 0, 0, 0, DB_KEY_INIT(0, 0), (value)}
@@ -2105,12 +2912,12 @@ struct _rb_node_s {
  * This macro verifies that a given pointer actually does point to a
  * red-black tree node.
  *
- * \warning This macro evaluates the \p node argument twice.
+ * \warning	This macro evaluates the \p node argument twice.
  *
- * \param node	A pointer to a #rb_node_t.
+ * \param[in]		node	A pointer to a #rb_node_t.
  *
- * \return	Boolean true if \p entry is a valid red-black tree
- *		node or false otherwise.
+ * \return	Boolean \c true if \p entry is a valid red-black tree
+ *		node or \c false otherwise.
  */
 #define rn_verify(node)		((node) && \
 				 (node)->rn_magic == RB_NODE_MAGIC)
@@ -2120,7 +2927,7 @@ struct _rb_node_s {
  *
  * This macro retrieves the color of the \p node.
  *
- * \param node	A pointer to a #rb_node_t.
+ * \param[in]		node	A pointer to a #rb_node_t.
  *
  * \return	A #rb_color_t value expressing the color of the
  *		\p node.
@@ -2133,7 +2940,7 @@ struct _rb_node_s {
  * This macro retrieves a pointer to the red-black tree the node
  * is in.
  *
- * \param node	A pointer to a #rb_node_t.
+ * \param[in]		node	A pointer to a #rb_node_t.
  *
  * \return	A pointer to a #rb_tree_t.
  */
@@ -2144,7 +2951,7 @@ struct _rb_node_s {
  *
  * This macro retrieves a pointer to the node's parent node.
  *
- * \param node	A pointer to a #rb_node_t.
+ * \param[in]		node	A pointer to a #rb_node_t.
  *
  * \return	A pointer to a #rb_node_t representing the parent
  *		of the given \p node.
@@ -2156,7 +2963,7 @@ struct _rb_node_s {
  *
  * This macro retrieves a pointer to the node's left node.
  *
- * \param node	A pointer to a #rb_node_t.
+ * \param[in]		node	A pointer to a #rb_node_t.
  *
  * \return	A pointer to a #rb_node_t representing the left
  *		node of the given \p node.
@@ -2168,7 +2975,7 @@ struct _rb_node_s {
  *
  * This macro retrieves a pointer to the node's right node.
  *
- * \param node	A pointer to a #rb_node_t.
+ * \param[in]		node	A pointer to a #rb_node_t.
  *
  * \return	A pointer to a #rb_node_t representing the right
  *		node of the given \p node.
@@ -2181,7 +2988,7 @@ struct _rb_node_s {
  * This macro retrieves the key associated with the red-black tree
  * node.
  *
- * \param node	A pointer to a #rb_node_t.
+ * \param[in]		node	A pointer to a #rb_node_t.
  *
  * \return	A pointer to a #db_key_t.
  */
@@ -2194,7 +3001,7 @@ struct _rb_node_s {
  * tree's node.  It may be treated as an lvalue to change that value.
  * Care should be taken when using this option.
  *
- * \param node	A pointer to a #rb_node_t.
+ * \param[in]		node	A pointer to a #rb_node_t.
  *
  * \return	A pointer to \c void representing the value associated
  *		with this node.
@@ -2207,11 +3014,12 @@ struct _rb_node_s {
  * This macro safely tests whether a given red-black tree node is
  * black.
  *
- * \warning This macro evaluates the \p node argument twice.
+ * \warning	This macro evaluates the \p node argument twice.
  *
- * \param node	A pointer to a #rb_node_t.
+ * \param[in]		node	A pointer to a #rb_node_t.
  *
- * \return	Boolean true if \p node is black or false otherwise.
+ * \return	Boolean \c true if \p node is black or \c false
+ *		otherwise.
  */
 #define rn_isblack(node)	(!(node) || (node)->rn_color == RB_COLOR_BLACK)
 
@@ -2221,11 +3029,12 @@ struct _rb_node_s {
  * This macro safely tests whether a given red-black tree node is
  * red.
  *
- * \warning This macro evaluates the \p node argument twice.
+ * \warning	This macro evaluates the \p node argument twice.
  *
- * \param node	A pointer to a #rb_node_t.
+ * \param[in]		node	A pointer to a #rb_node_t.
  *
- * \return	Boolean true if \p node is red or false otherwise.
+ * \return	Boolean \c true if \p node is red or \c false
+ *		otherwise.
  */
 #define rn_isred(node)		((node) && (node)->rn_color == RB_COLOR_RED)
 
@@ -2235,13 +3044,13 @@ struct _rb_node_s {
  * This macro safely tests whether a given red-black tree node is
  * the left node of its parent.
  *
- * \warning This macro evaluates the \p node argument three
- * times.
+ * \warning	This macro evaluates the \p node argument three
+ *		times.
  *
- * \param node	A pointer to a #rb_node_t.
+ * \param[in]		node	A pointer to a #rb_node_t.
  *
- * \return	Boolean true if \p node is the left node of its
- *		parent or false otherwise.
+ * \return	Boolean \c true if \p node is the left node of its
+ *		parent or \c false otherwise.
  */
 #define rn_isleft(node)		((node)->rn_parent && \
 				 (node)->rn_parent->rn_left == (node))
@@ -2252,17 +3061,30 @@ struct _rb_node_s {
  * This macro safely tests whether a given red-black tree node is
  * the right node of its parent.
  *
- * \warning This macro evaluates the \p node argument three
- * times.
+ * \warning	This macro evaluates the \p node argument three
+ *		times.
  *
- * \param node	A pointer to a #rb_node_t.
+ * \param[in]		node	A pointer to a #rb_node_t.
  *
- * \return	Boolean true if \p node is the right node of its
- *		parent or false otherwise.
+ * \return	Boolean \c true if \p node is the right node of its
+ *		parent or \c false otherwise.
  */
 #define rn_isright(node)	((node)->rn_parent && \
 				 (node)->rn_parent->rn_right == (node))
 
+/** \ingroup dbprim_rbtree
+ * \brief Dynamically initialize a red-black tree node.
+ *
+ * This function dynamically initializes a red-black tree node.
+ *
+ * \param[in]		node	A pointer to a #rb_tree_t to be
+ *				initialized.
+ * \param[in]		value	A pointer to \c void which will be the
+ *				value of the red-black tree entry.
+ *
+ * \retval DB_ERR_BADARGS	A \c NULL pointer was passed for \p
+ *				node.
+ */
 unsigned long rn_init(rb_node_t *node, void *value);
 
 DBPRIM_END_C_DECLS

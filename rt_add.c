@@ -18,37 +18,46 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of rt_add().
+ *
+ * This file contains the implementation of the rt_add() function,
+ * used to add a red-black tree node to a given tree.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/* Locate the uncle of the given node */
+/** \internal
+ * \ingroup dbprim_rbtree
+ * \brief Locate the uncle of a node.
+ *
+ * This macro is used to locate the "uncle"--parent's sibling--of a
+ * given red-black tree node.
+ *
+ * \param[in]		node	The #rb_node_t to look up the uncle
+ *				for.
+ *
+ * \return	The #rb_node_t representing the uncle of \p node.
+ */
 #define uncle(node)	(rn_isleft((node)->rn_parent) ? \
 			 (node)->rn_parent->rn_parent->rn_right : \
 			 (node)->rn_parent->rn_parent->rn_left)
 
-/* Flip the color of the given node */
+/** \internal
+ * \ingroup dbprim_rbtree
+ * \brief Flip the color of a node.
+ *
+ * This macro is used to flip the color of a specific node.
+ *
+ * \param[in]		node	The #rb_node_t to flip.
+ */
 #define flip(node)	((node)->rn_color = \
 			 ((node)->rn_color == RB_COLOR_BLACK) ? \
 			 RB_COLOR_RED : RB_COLOR_BLACK)
 
-/** \ingroup dbprim_rbtree
- * \brief Add a node to a red-black tree.
- *
- * This function adds a node to a red-black tree.
- *
- * \param tree	A pointer to a #rb_tree_t.
- * \param node	A pointer to a #rb_node_t to be added to the tree.
- * \param key	A pointer to a #db_key_t containing the key for the
- *		node.
- *
- * \retval DB_ERR_BADARGS	An invalid argument was given.
- * \retval DB_ERR_BUSY		The node is already in a tree.
- * \retval DB_ERR_FROZEN	The tree is currently frozen.
- * \retval DB_ERR_DUPLICATE	The entry is a duplicate of an
- *				existing node.
- */
 unsigned long
 rt_add(rb_tree_t *tree, rb_node_t *node, db_key_t *key)
 {

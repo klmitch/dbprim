@@ -18,31 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of rt_flush().
+ *
+ * This file contains the implementation of the rt_flush() function,
+ * used to flush nodes from a red-black tree.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_rbtree
- * \brief Flush a red-black tree.
- *
- * This function flushes a red-black tree--that is, it removes each
- * node from the tree.  If a \p flush_func is specified, it will be
- * called on the node after it has been removed from the tree, and may
- * safely call <CODE>free()</CODE>.
- *
- * \param tree	A pointer to a #rb_tree_t.
- * \param flush_func
- *		A pointer to a callback function used to perform
- *		user-specified actions on a node after removing it
- *		from the tree.  May be \c NULL.  See the documentation
- *		for #rb_iter_t for more information.
- * \param extra	A \c void pointer that will be passed to \p
- *		flush_func.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_FROZEN	The red-black tree is frozen.
- */
 unsigned long
 rt_flush(rb_tree_t *tree, rb_iter_t flush_func, void *extra)
 {

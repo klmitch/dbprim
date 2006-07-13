@@ -18,35 +18,19 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of sh_move().
+ *
+ * This file contains the implementation of the sh_move() function,
+ * used to move sparse matrix entries from one place to another in a
+ * sparse matrix head list.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_smat
- * \brief Move an entry within a row or column list.
- *
- * This function allows the specified entry to be shifted within the
- * linked list describing the row or column.  It is very similar to
- * the ll_move() function.
- *
- * \param head	A pointer to a #smat_head_t.
- * \param elem	A pointer to the #smat_entry_t describing the entry to
- *		be moved.
- * \param loc	A #link_loc_t indicating where the entry should be
- *		moved to.
- * \param elem2	A pointer to a #smat_entry_t describing another entry
- *		in the list if \p loc is #LINK_LOC_BEFORE or
- *		#LINK_LOC_AFTER.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_BUSY		\p elem and \p elem2 are the same
- *				entry.
- * \retval DB_ERR_WRONGTABLE	\p elem or \p elem2 are in a different
- *				row or column.
- * \retval DB_ERR_UNUSED	\p elem or \p elem2 are not in any row
- *				or column.
- */
 unsigned long
 sh_move(smat_head_t *head, smat_entry_t *elem, link_loc_t loc,
 	smat_entry_t *elem2)

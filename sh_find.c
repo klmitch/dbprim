@@ -18,16 +18,45 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of sh_find().
+ *
+ * This file contains the implementation of the sh_find() function,
+ * used to look up a specific #smat_entry_t in a sparse matrix head.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix head find shim structure.
+ *
+ * This structure is used by sh_find() in its call to ll_find().  The
+ * structure contains state that ll_find() cannot directly pass to
+ * _sh_find_comp().
+ */
 struct _sh_find_s {
-  smat_comp_t	sf_comp;	/* comparison function */
-  db_key_t     *sf_key;		/* original key */
+  smat_comp_t	sf_comp;	/**< Comparison function. */
+  db_key_t     *sf_key;		/**< Original key. */
 };
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix linked list comparision function.
+ *
+ * This function is a #link_comp_t comparison callback that is used as
+ * a shim between the sh_find() function and the ll_find function,
+ * which it uses internally.
+ *
+ * \param[in]		key	The database key being searched for.
+ * \param[in]		data	The sparse matrix linked list entry.
+ *
+ * \return	Zero if the sparse matrix linked list entry matches
+ *		the \p key, non-zero otherwise.
+ */
 static unsigned long
 _sh_find_comp(db_key_t *key, void *data)
 {
@@ -39,29 +68,6 @@ _sh_find_comp(db_key_t *key, void *data)
   return (*sf->sf_comp)(sf->sf_key, data);
 }
 
-/** \ingroup dbprim_smat
- * \brief Find an entry in a row or column of a sparse matrix.
- *
- * This function iterates through the given row or column of a
- * sparse matrix looking for an element that matches the given \p key.
- *
- * \param head	A pointer to a #smat_head_t.
- * \param elem_p
- *		A pointer to a pointer to a #smat_entry_t.  This is a
- *		result pramater.  \c NULL is an invalid value.
- * \param comp_func
- *		A pointer to a comparison function used to compare the
- *		key to a particular entry.  See the documentation for
- *		#smat_comp_t for more information.
- * \param start	A pointer to a #smat_entry_t describing where in the
- *		row or column to start.  If \c NULL is passed, the
- *		beginning of the row or column will be assumed.
- * \param key	A key to search for.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_WRONGTABLE	\p start is not in this row or column.
- * \retval DB_ERR_NOENTRY	No matching entry was found.
- */
 unsigned long
 sh_find(smat_head_t *head, smat_entry_t **elem_p, smat_comp_t comp_func,
 	smat_entry_t *start, db_key_t *key)

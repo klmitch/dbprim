@@ -18,6 +18,15 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of sparse matrix free list.
+ *
+ * This file contains the implementation of the sparse matrix freelist
+ * and its support functions.  The freelist is intended to avoid
+ * memory fragmentation due to the large number of hash entry
+ * structures that must be allocated by the sparse matrix system.
+ */
 #include <stdlib.h>
 
 #include "dbprim.h"
@@ -25,6 +34,13 @@
 
 RCSTAG("@(#)$Id$");
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix freelist.
+ *
+ * This variable is the head of a linked list of free #smat_entry_t
+ * structures.
+ */
 static link_head_t _smat_freelist = LINK_HEAD_INIT(0);
 
 smat_entry_t *
@@ -70,12 +86,6 @@ _smat_free(smat_entry_t *entry)
     free(entry); /* addition failed, so free the entry */
 }
 
-/** \ingroup dbprim_smat
- * \brief Clean up the smat free list.
- *
- * This function frees all smat_entry_t objects on the internal free
- * list.  It is always successful and returns 0.
- */
 unsigned long
 smat_cleanup(void)
 {
@@ -92,15 +102,6 @@ smat_cleanup(void)
   return 0;
 }
 
-/** \ingroup dbprim_smat
- * \brief Report how much memory is used by the free list.
- *
- * This function returns the amount of memory being used by the
- * internal free list of smat_entry_t objects.
- *
- * \return	A number indicating the size, in bytes, of the memory
- *		allocated for smat_entry_t objects on the free list.
- */
 unsigned long
 smat_freemem(void)
 {

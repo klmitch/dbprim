@@ -18,6 +18,13 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of st_add().
+ *
+ * This file contains the implementation of the st_add() function,
+ * used to add an entry to a sparse matrix table.
+ */
 #include <errno.h>
 
 #include "dbprim.h"
@@ -25,51 +32,6 @@
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_smat
- * \brief Add an entry to a sparse matrix.
- *
- * This function adds an entry to a sparse matrix.  The entry is
- * referenced in three different places, thus the complex set of
- * arguments.  This function will allocate a #smat_entry_t and return
- * it through the \c entry_p result parameter.
- *
- * \param table	A pointer to a #smat_table_t.
- * \param entry_p
- *		A pointer to a pointer to a #smat_entry_t.  This is a
- *		result parameter.  If \c NULL is passed, the addition
- *		will be performed and an appropriate error code
- *		returned.
- * \param head1	A pointer to a #smat_head_t representing a
- *		#SMAT_LOC_FIRST sparse matrix list.
- * \param loc1	A #link_loc_t indicating where the entry should be
- *		added for \c head1.
- * \param ent1	A pointer to a #smat_entry_t describing another
- *		element in the list represented by \c head1 if \p loc1
- *		is #LINK_LOC_BEFORE or #LINK_LOC_AFTER.
- * \param head2	A pointer to a #smat_head_t representing a
- *		#SMAT_LOC_SECOND sparse matrix list.
- * \param loc2	A #link_loc_t indicating where the entry should be
- *		added for \c head2.
- * \param ent2	A pointer to a #smat_entry_t describing another
- *		element in the list represented by \c head2 if \p loc2
- *		is #LINK_LOC_BEFORE or #LINK_LOC_AFTER.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_BUSY		One of the arguments is already in the
- *				table.
- * \retval DB_ERR_FROZEN	The table is currently frozen.
- * \retval DB_ERR_NOTABLE	The bucket table has not been
- *				allocated and automatic growth is not
- *				enabled.
- * \retval DB_ERR_WRONGTABLE	One of the arguments was not in the
- *				proper table or list.
- * \retval DB_ERR_UNUSED	One of the \c ent arguments is not
- *				presently in a list.
- * \retval DB_ERR_UNRECOVERABLE	An unrecoverable error occurred while
- *				resizing the table.
- * \retval ENOMEM		No memory could be allocated for the
- *				#smat_entry_t structure.
- */
 unsigned long
 st_add(smat_table_t *table, smat_entry_t **entry_p,
        smat_head_t *head1, link_loc_t loc1, smat_entry_t *ent1,

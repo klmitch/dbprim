@@ -18,29 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of st_resize().
+ *
+ * This file contains the implementation of the st_resize() function,
+ * used to force a resize of the sparse matrix hash table.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_smat
- * \brief Resize a sparse matrix table.
- *
- * This function resizes the hash table associated with a sparse
- * matrix based on the \p new_size parameter.  See the documentation
- * for ht_resize() for more information.
- *
- * \param table	A pointer to a #smat_table_t.
- * \param new_size
- *		A new size value for the table.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_FROZEN	The table is currently frozen.
- * \retval DB_ERR_UNRECOVERABLE	A catastrophic error was encountered.
- *				The table is now unusable.
- * \retval ENOMEM		No memory could be allocated for the
- *				new bucket table.
- */
 unsigned long
 st_resize(smat_table_t *table, unsigned long new_size)
 {

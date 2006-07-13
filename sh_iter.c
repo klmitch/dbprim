@@ -18,17 +18,50 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of sh_iter().
+ *
+ * This file contains the implementation of the sh_iter() function,
+ * used to iterate over all entries in a sparse matrix list.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix iteration function shim structure.
+ *
+ * This structure is used by sh_iter() in its call to ll_iter().  The
+ * structure contains state that ll_iter() cannot directly pass to
+ * _sh_iter_iter().
+ */
 struct _sh_iter_s {
-  smat_table_t *si_table;	/* pointer to the smat table */
-  smat_iter_t	si_iter;	/* iter function */
-  void	       *si_extra;	/* extra data */
+  smat_table_t *si_table;	/**< Pointer to the smat table. */
+  smat_iter_t	si_iter;	/**< Iter function. */
+  void	       *si_extra;	/**< Extra data. */
 };
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix linked list iteration callback.
+ *
+ * This function is a #link_iter_t iteration callback that is used as
+ * a shim between the st_iter() function and the ll_iter() function,
+ * which it uses internally.
+ *
+ * \param[in]		head	The linked list being iterated over.
+ * \param[in]		elem	The specific linked list element being
+ *				processed.
+ * \param[in]		extra	Extra caller-specific data to pass to
+ *				the iteration function.  In this case,
+ *				a pointer to a struct _sh_iter_s is
+ *				passed.
+ *
+ * \return	Zero to continue iteration, non-zero otherwise.
+ */
 static unsigned long
 _sh_iter_iter(link_head_t *head, link_elem_t *elem, void *extra)
 {
@@ -40,31 +73,6 @@ _sh_iter_iter(link_head_t *head, link_elem_t *elem, void *extra)
   return (*si->si_iter)(si->si_table, le_object(elem), si->si_extra);
 }
 
-/** \ingroup dbprim_smat
- * \brief Iterate over each entry in a row or column of a sparse
- * matrix.
- *
- * This function iterates over a row or column of a sparse matrix,
- * executing the given \p iter_func for each entry.
- *
- * \param head	A pointer to a #smat_head_t.
- * \param start	A pointer to a #smat_entry_t describing where in the
- *		row or column to start.  If \c NULL is passed, the
- *		beginning of the row or column will be assumed.
- * \param iter_func
- *		A pointer to a callback function used to perform
- *		user-specified actions on an entry in a row or column
- *		of a sparse matrix.  \c NULL is an invalid value.  See
- *		the documentation for #smat_iter_t for more
- *		information.
- * \param extra	A \c void pointer that will be passed to \p
- *		iter_func.
- * \param flags	If #DB_FLAG_REVERSE is given, iteration will be done
- *		from the end of the list backwards towards the head.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_WRONGTABLE	\p start is not in this row or column.
- */
 unsigned long
 sh_iter(smat_head_t *head, smat_entry_t *start,
 	smat_iter_t iter_func, void *extra, unsigned long flags)

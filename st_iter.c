@@ -18,17 +18,50 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of st_iter().
+ *
+ * This file contains the implementation of the st_iter() function,
+ * used to iterate over all entries in a sparse matrix table.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix iteration function shim structure.
+ *
+ * This structure is used by st_iter() in its call to ht_iter().  The
+ * structure contains state that ht_iter() cannot directly pass to
+ * _st_iter_iter().
+ */
 struct _st_iter_s {
-  smat_table_t *si_table;	/* pointer to the smat table */
-  smat_iter_t	si_iter;	/* iter function */
-  void	       *si_extra;	/* extra data */
+  smat_table_t *si_table;	/**< Pointer to the smat table. */
+  smat_iter_t	si_iter;	/**< Iter function. */
+  void	       *si_extra;	/**< Extra data. */
 };
 
+/** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix hash iteration callback.
+ *
+ * This function is a #hash_iter_t iteration callback that is used as
+ * a shim between the st_iter() function and the ht_iter() function,
+ * which it uses internally.
+ *
+ * \param[in]		table	The hash table being iterated over.
+ * \param[in]		ent	The specific hash table entry being
+ *				processed.
+ * \param[in]		extra	Extra caller-specific data to pass to
+ *				the iteration function.  In this case,
+ *				a pointer to a struct _st_iter_s is
+ *				passed.
+ *
+ * \return	Zero to continue iteration, non-zero otherwise.
+ */
 static unsigned long
 _st_iter_iter(hash_table_t *table, hash_entry_t *ent, void *extra)
 {
@@ -40,24 +73,6 @@ _st_iter_iter(hash_table_t *table, hash_entry_t *ent, void *extra)
   return (*si->si_iter)(si->si_table, he_value(ent), si->si_extra);
 }
 
-/** \ingroup dbprim_smat
- * \brief Iterate over each entry in a sparse matrix.
- *
- * This function iterates over every entry in a sparse matrix (in an
- * unspecified order), executing the given \p iter_func on each entry.
- *
- * \param table	A pointer to a #smat_table_t.
- * \param iter_func
- *		A pointer to a callback function used to perform
- *		user-specified actions on an entry in a sparse
- *		matrix.  \c NULL is an invalid value.  See the
- *		documentation for #smat_iter_t for more information.
- * \param extra	A \c void pointer that will be passed to \p
- *		iter_func.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_FROZEN	The sparse matrix is frozen.
- */
 unsigned long
 st_iter(smat_table_t *table, smat_iter_t iter_func, void *extra)
 {
