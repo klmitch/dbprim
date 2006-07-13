@@ -18,29 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of ht_iter().
+ *
+ * This file contains the implementation of the ht_iter() function,
+ * used to iterate over every entry in a hash table.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_hash
- * \brief Iterate over each entry in a hash table.
- *
- * This function iterates over every entry in a hash table (in an
- * unspecified order), executing the given \p iter_func on each entry.
- *
- * \param table	A pointer to a #hash_table_t.
- * \param iter_func
- *		A pointer to a callback function used to perform
- *		user-specified actions on an entry in a hash table. \c
- *		NULL is an invalid value.  See the documentation for
- *		#hash_iter_t for more information.
- * \param extra	A \c void pointer that will be passed to \p
- *		iter_func.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_FROZEN	The hash table is frozen.
- */
 unsigned long
 ht_iter(hash_table_t *table, hash_iter_t iter_func, void *extra)
 {

@@ -18,6 +18,14 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of ht_resize().
+ *
+ * This file contains the implementation of the ht_resize() function,
+ * used to hint to the library that the hash table may perform better
+ * with a specific starting size.
+ */
 #include <stdlib.h>
 #include <errno.h>
 
@@ -26,24 +34,6 @@
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_hash
- * \brief Resize a hash table.
- *
- * This function resizes a hash table to the given \p new_size.  If \p
- * new_size is 0, then an appropriate new size based on the current
- * number of items in the hash table will be selected.
- *
- * \param table	A pointer to a #hash_table_t.
- * \param new_size
- *		A new size value for the table.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_FROZEN	The table is currently frozen.
- * \retval DB_ERR_UNRECOVERABLE	A catastrophic error was encountered.
- *				The table is now unusable.
- * \retval ENOMEM		No memory could be allocated for the
- *				new bucket table.
- */
 unsigned long
 ht_resize(hash_table_t *table, unsigned long new_size)
 {

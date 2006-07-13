@@ -18,31 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of ll_add().
+ *
+ * This file contains the implementation of the ll_add() function,
+ * used to add an element to a linked list.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_link
- * \brief Add an element to a linked list.
- *
- * This function adds a given element to a specified linked list in
- * the specified location.
- *
- * \param list	A pointer to a #link_head_t.
- * \param new	A pointer to the #link_elem_t to be added to the
- *		linked list.
- * \param loc	A #link_loc_t indicating where the entry should be
- *		added.
- * \param elem	A pointer to a #link_elem_t describing another element
- *		in the list if \p loc is #LINK_LOC_BEFORE or
- *		#LINK_LOC_AFTER.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_BUSY		The element is already in a list.
- * \retval DB_ERR_WRONGTABLE	\p elem is in a different list.
- * \retval DB_ERR_UNUSED	\p elem is not in any list.
- */
 unsigned long
 ll_add(link_head_t *list, link_elem_t *new, link_loc_t loc,
        link_elem_t *elem)

@@ -18,23 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of ll_init().
+ *
+ * This file contains the implementation of the ll_init() function,
+ * used to dynamically initialize a linked list head.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_link
- * \brief Dynamically initialize a linked list head.
- *
- * This function dynamically initializes a linked list head.
- *
- * \param list	A pointer to a #link_head_t to be initialized.
- * \param extra	A pointer to \c void containing extra pointer data
- *		associated with the linked list.
- *
- * \retval DB_ERR_BADARGS	A \c NULL pointer was passed for \p
- *				list.
- */
 unsigned long
 ll_init(link_head_t *list, void *extra)
 {

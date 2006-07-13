@@ -32,6 +32,14 @@
  * list.
  */
 
+/** \file dbprim/dbprim.h
+ * \brief Core Database Primitives header file.
+ *
+ * This header file contains the necessary structures, \#define's, and
+ * function declarations to make use of the Database Primitives
+ * library.
+ */
+
 /** \defgroup dbprim Database Primitives
  *
  * This module describes interfaces common to all database
@@ -205,9 +213,31 @@
  * ordering, if you wish.
  */
 
+/** \def DBPRIM_BEGIN_C_DECLS
+ * \internal
+ * \brief Begin declaration in C namespace.
+ *
+ * This macro is defined to <CODE>extern "C" {</CODE> when compiling
+ * with a C++ compiler.  See #DBPRIM_END_C_DECLS.
+ */
+/** \def DBPRIM_END_C_DECLS
+ * \internal
+ * \brief End declaration in C namespace.
+ *
+ * This macro is defined to <CODE>}</CODE> when compiling with a C++
+ * compiler.  See #DBPRIM_BEGIN_C_DECLS.
+ */
+#undef DBPRIM_BEGIN_C_DECLS
+#undef DBPRIM_END_C_DECLS
 #ifdef __cplusplus
-extern "C" {
+# define DBPRIM_BEGIN_C_DECLS extern "C" {
+# define DBPRIM_END_C_DECLS }
+#else
+# define DBPRIM_BEGIN_C_DECLS /* empty */
+# define DBPRIM_END_C_DECLS   /* empty */
 #endif
+
+DBPRIM_BEGIN_C_DECLS
 
 #ifndef __DBPRIM_LIBRARY__
 #include <dbprim/dbprim_err.h>
@@ -461,9 +491,15 @@ enum _rb_color_e {
  */
 typedef enum _rb_color_e rb_color_t;
 
+/** \internal
+ * \ingroup dbprim
+ * \brief Database key structure.
+ *
+ * This is the implementation of the #db_key_t type.
+ */
 struct _db_key_s {
-  void *dk_key;		/* Pointer to the key. */
-  int   dk_len;		/* Length of the key, if that has any meaning. */
+  void *dk_key;		/**< Pointer to the key. */
+  int   dk_len;		/**< Length of the key, if that has any meaning. */
 };
 
 /** \ingroup dbprim
@@ -483,6 +519,7 @@ struct _db_key_s {
  * be used as an lvalue in order to assign a key to a #db_key_t.
  *
  * \param key	A pointer to a #db_key_t.
+ *
  * \return	A pointer to a key (<CODE>void *</CODE>).
  */
 #define dk_key(key)	((key)->dk_key)
@@ -495,6 +532,7 @@ struct _db_key_s {
  * #db_key_t.
  *
  * \param key	A pointer to a #db_key_t.
+ *
  * \return	An \c int describing the length of the key.
  */
 #define dk_len(key)	((key)->dk_len)
@@ -507,14 +545,26 @@ struct _db_key_s {
  */
 #define DB_FLAG_REVERSE		0x80000000
 
+/** \internal
+ * \ingroup dbprim_link
+ * \brief Linked list head structure.
+ *
+ * This is the implementation of the #link_head_t type.
+ */
 struct _link_head_s {
-  unsigned long	lh_magic;	/* Magic number. */
-  unsigned long	lh_count;	/* Number of entries in the linked list. */
-  link_elem_t  *lh_first;	/* First element in the list. */
-  link_elem_t  *lh_last;	/* Last element in the list. */
-  void	       *lh_extra;	/* Extra data associated with list. */
+  unsigned long	lh_magic;	/**< Magic number. */
+  unsigned long	lh_count;	/**< Number of entries in the linked list. */
+  link_elem_t  *lh_first;	/**< First element in the list. */
+  link_elem_t  *lh_last;	/**< Last element in the list. */
+  void	       *lh_extra;	/**< Extra data associated with list. */
 };
 
+/** \internal
+ * \ingroup dbprim_link
+ * \brief Linked list head magic number.
+ *
+ * This is the magic number used for the linked list head structure.
+ */
 #define LINK_HEAD_MAGIC	0x4c6155d7
 
 /** \ingroup dbprim_link
@@ -533,7 +583,7 @@ struct _link_head_s {
  * This macro verifies that a given pointer actually does point to a
  * linked list head.
  *
- * \warning This macro may evaluate the \c list argument twice.
+ * \warning This macro evaluates the \p list argument twice.
  *
  * \param list	A pointer to a #link_head_t.
  *
@@ -589,28 +639,179 @@ struct _link_head_s {
  */
 #define ll_extra(list)	((list)->lh_extra)
 
+/** \ingroup dbprim_link
+ * \brief Dynamically initialize a linked list head.
+ *
+ * This function dynamically initializes a linked list head.
+ *
+ * \param list	A pointer to a #link_head_t to be initialized.
+ * \param extra	A pointer to \c void containing extra pointer data
+ *		associated with the linked list.
+ *
+ * \retval DB_ERR_BADARGS	A \c NULL pointer was passed for \p
+ *				list.
+ */
 unsigned long ll_init(link_head_t *list, void *extra);
+
+/** \ingroup dbprim_link
+ * \brief Add an element to a linked list.
+ *
+ * This function adds a given element to a specified linked list in
+ * the specified location.
+ *
+ * \param list	A pointer to a #link_head_t.
+ * \param new	A pointer to the #link_elem_t to be added to the
+ *		linked list.
+ * \param loc	A #link_loc_t indicating where the entry should be
+ *		added.
+ * \param elem	A pointer to a #link_elem_t describing another element
+ *		in the list if \p loc is #LINK_LOC_BEFORE or
+ *		#LINK_LOC_AFTER.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_BUSY		The element is already in a list.
+ * \retval DB_ERR_WRONGTABLE	\p elem is in a different list.
+ * \retval DB_ERR_UNUSED	\p elem is not in any list.
+ */
 unsigned long ll_add(link_head_t *list, link_elem_t *new, link_loc_t loc,
 		     link_elem_t *elem);
+
+/** \ingroup dbprim_link
+ * \brief Move an element within a linked list.
+ *
+ * This function moves a specified element within the linked list.
+ *
+ * \param list	A pointer to a #link_head_t.
+ * \param new	A pointer to the #link_elem_t describing the element
+ *		to be moved.
+ * \param loc	A #link_loc_t indicating where the entry should be
+ *		moved to.
+ * \param elem	A pointer to a #link_elem_t describing another element
+ *		in the list if \p loc is #LINK_LOC_BEFORE or
+ *		#LINK_LOC_AFTER.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_BUSY		\p new and \p elem are the same
+ *				element.
+ * \retval DB_ERR_WRONGTABLE	\p new or \p elem are in a different
+ *				list.
+ * \retval DB_ERR_UNUSED	\p new or \p elem are not in any
+ *				list.
+ */
 unsigned long ll_move(link_head_t *list, link_elem_t *elem, link_loc_t loc,
 		      link_elem_t *elem2);
+
+/** \ingroup dbprim_link
+ * \brief Remove an element from a linked list.
+ *
+ * This function removes a specified element from a linked list.
+ *
+ * \param list	A pointer to a #link_head_t.
+ * \param elem	A pointer to the #link_elem_t describing the element
+ *		to be removed.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_UNUSED	\p elem is not in a linked list.
+ * \retval DB_ERR_WRONGTABLE	\p elem is not in this linked list.
+ */
 unsigned long ll_remove(link_head_t *list, link_elem_t *elem);
+
+/** \ingroup dbprim_link
+ * \brief Find an element in a linked list.
+ *
+ * This function iterates through a linked list looking for an element
+ * that matches the given \p key.
+ *
+ * \param list	A pointer to a #link_head_t.
+ * \param elem_p
+ *		A pointer to a pointer to a #link_elem_t.  This is a
+ *		result parameter.  \c NULL is an invalid value.
+ * \param comp_func
+ *		A pointer to a comparison function used to compare the
+ *		key to a particular element.  See the documentation
+ *		for #link_comp_t for more information.
+ * \param start	A pointer to a #link_elem_t describing where in the
+ *		linked list to start.  If \c NULL is passed, the
+ *		beginning of the list will be assumed.
+ * \param key	A key to search for.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_WRONGTABLE	\p start is not in this linked list.
+ * \retval DB_ERR_NOENTRY	No matching entry was found.
+ */
 unsigned long ll_find(link_head_t *list, link_elem_t **elem_p,
 		      link_comp_t comp_func, link_elem_t *start,
 		      db_key_t *key);
+
+/** \ingroup dbprim_link
+ * \brief Iterate over each entry in a linked list.
+ *
+ * This function iterates over a linked list, executing the given \p
+ * iter_func for each entry.
+ *
+ * \param list	A pointer to a #link_head_t.
+ * \param start	A pointer to a #link_elem_t describing where in the
+ *		linked list to start.  If \c NULL is passed, the
+ *		beginning of the list will be assumed.
+ * \param iter_func
+ *		A pointer to a callback function used to perform
+ *		user-specified actions on an element in a linked
+ *		list.  \c NULL is an invalid value.  See the
+ *		documentation for #link_iter_t for more information.
+ * \param extra	A \c void pointer that will be passed to \p
+ *		iter_func.
+ * \param flags	If #DB_FLAG_REVERSE is given, iteration will be done
+ *		from the end of the list backwards towards the head.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_WRONGTABLE	\p start is not in this linked list.
+ */
 unsigned long ll_iter(link_head_t *list, link_elem_t *start,
 		      link_iter_t iter_func, void *extra, unsigned long flags);
+
+/** \ingroup dbprim_link
+ * \brief Flush a linked list.
+ *
+ * This function flushes a linked list--that is, it removes each
+ * element from the list.  If a \p flush_func is specified, it will be
+ * called on the entry after it has been removed from the list, and
+ * may safely call <CODE>free()</CODE>.
+ *
+ * \param list	A pointer to a #link_head_t.
+ * \param flush_func
+ *		A pointer to a callback function used to perform
+ *		user-specified actions on an element after removing it
+ *		from the list.  May be \c NULL.  See the documentation
+ *		for #link_iter_t for more information.
+ * \param extra	A \c void pointer that will be passed to \p
+ *		flush_func.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ */
 unsigned long ll_flush(link_head_t *list, link_iter_t flush_func, void *extra);
 
+/** \internal
+ * \ingroup dbprim_link
+ * \brief Linked list element structure.
+ *
+ * This is the implementation of the #link_elem_t type.
+ */
 struct _link_elem_s {
-  unsigned long	le_magic;	/* magic number */
-  link_elem_t  *le_next;	/* next element in list */
-  link_elem_t  *le_prev;	/* previous element in list */
-  void	       *le_object;	/* the object pointed to by this link */
-  link_head_t  *le_head;	/* the head of the list */
-  unsigned long	le_flags;	/* flags associated with this element */
+  unsigned long	le_magic;	/**< Magic number. */
+  link_elem_t  *le_next;	/**< Next element in list. */
+  link_elem_t  *le_prev;	/**< Previous element in list. */
+  void	       *le_object;	/**< The object pointed to by this link. */
+  link_head_t  *le_head;	/**< The head of the list. */
+  unsigned long	le_flags;	/**< Flags associated with this element. */
 };
 
+/** \internal
+ * \ingroup dbprim_link
+ * \brief Linked list element magic number.
+ *
+ * This is the magic number used for the linked list element
+ * structure.
+ */
 #define LINK_ELEM_MAGIC	0x97cdf72a
 
 /** \ingroup dbprim_link
@@ -629,7 +830,7 @@ struct _link_elem_s {
  * This macro verifies that a given pointer actually does point to a
  * linked list element.
  *
- * \warning This macro may evaluate the \c element argument twice.
+ * \warning This macro evaluates the \p element argument twice.
  *
  * \param element
  *		A pointer to a #link_elem_t.
@@ -706,22 +907,48 @@ struct _link_elem_s {
  */
 #define le_flags(elem)	((elem)->le_flags)
 
+/** \ingroup dbprim_link
+ * \brief Dynamically initialize a linked list element.
+ *
+ * This function dynamically initializes a linked list element.
+ *
+ * \param elem	A pointer to a #link_elem_t to be initialized.
+ * \param object
+ *		A pointer to \c void used to represent the object
+ *		associated with the element.
+ *
+ * \retval DB_ERR_BADARGS	A \c NULL pointer was passed for \p
+ *				elem or \p object.
+ */
 unsigned long le_init(link_elem_t *elem, void *object);
 
+/** \internal
+ * \ingroup dbprim_hash
+ * \brief Hash table structure.
+ *
+ * This is the implementation of the #hash_table_t type.
+ */
 struct _hash_table_s {
-  unsigned long	ht_magic;	/* magic number */
-  unsigned long	ht_flags;	/* flags associated with the table */
-  unsigned long	ht_modulus;	/* size (modulus) of the hash table--prime */
-  unsigned long	ht_count;	/* number of elements in the table */
-  unsigned long	ht_rollover;	/* size at which the table grows */
-  unsigned long	ht_rollunder;	/* size at which the table shrinks */
-  link_head_t  *ht_table;	/* actual table entries */
-  hash_func_t	ht_func;	/* function for computing the hash */
-  hash_comp_t	ht_comp;	/* function for comparing hash keys */
-  hash_resize_t	ht_resize;	/* function for resize notify/inhibit */
-  void	       *ht_extra;	/* extra data associated with the table */
+  unsigned long	ht_magic;	/**< Magic number. */
+  unsigned long	ht_flags;	/**< Flags associated with the table. */
+  unsigned long	ht_modulus;	/**< Size (modulus) of the hash
+				     table--must be prime. */
+  unsigned long	ht_count;	/**< Number of elements in the table. */
+  unsigned long	ht_rollover;	/**< Size at which the table grows. */
+  unsigned long	ht_rollunder;	/**< Size at which the table shrinks. */
+  link_head_t  *ht_table;	/**< Actual table entries. */
+  hash_func_t	ht_func;	/**< Function for computing the hash. */
+  hash_comp_t	ht_comp;	/**< Function for comparing hash keys. */
+  hash_resize_t	ht_resize;	/**< Function for resize notify/inhibit. */
+  void	       *ht_extra;	/**< Extra data associated with the table. */
 };
 
+/** \internal
+ * \ingroup dbprim_hash
+ * \brief Hash table magic number.
+ *
+ * This is the magic number used for the hash table structure.
+ */
 #define HASH_TABLE_MAGIC 0x2da7ffd9
 
 /** \ingroup dbprim_hash
@@ -740,8 +967,20 @@ struct _hash_table_s {
  */
 #define HASH_FLAG_AUTOSHRINK 0x00000002 /* let table automatically shrink */
 
+/** \ingroup dbprim_hash
+ * \brief Hash table flags that may be set by the user.
+ *
+ * This flag mask may be used to obtain flags that the hash table user
+ * may set on a hash table.
+ */
 #define HASH_FLAG_MASK	     (HASH_FLAG_AUTOGROW | HASH_FLAG_AUTOSHRINK)
 
+/** \internal
+ * \brief Flag indicating hash table is frozen.
+ *
+ * This flag, if set on a hash table, indicates that the table is
+ * frozen and may not be modified.
+ */
 #define HASH_FLAG_FREEZE     0x80000000 /* hash table frozen */
 
 /** \ingroup dbprim_hash
@@ -772,7 +1011,7 @@ struct _hash_table_s {
  * This macro verifies that a given pointer actually does point to a
  * hash table.
  *
- * \warning This macro may evaluate the \c table argument twice.
+ * \warning This macro evaluates the \p table argument twice.
  *
  * \param table	A pointer to a #hash_table_t.
  *
@@ -897,30 +1136,219 @@ struct _hash_table_s {
  */
 #define ht_size(table)	  ((table)->ht_modulus * sizeof(link_head_t))
 
+/** \ingroup dbprim_hash
+ * \brief Dynamically initialize a hash table.
+ *
+ * This function dynamically initializes a hash table.
+ *
+ * \param table	A pointer to a #hash_table_t to be initialized.
+ * \param flags	A bit-wise OR of #HASH_FLAG_AUTOGROW and
+ *		#HASH_FLAG_AUTOSHRINK.  If neither behavior is
+ *		desired, use 0.
+ * \param func	A #hash_func_t function pointer for a hash function.
+ * \param comp	A #hash_comp_t function pointer for a comparison
+ *		function.
+ * \param resize
+ *		A #hash_resize_t function pointer for determining
+ *		whether resizing is permitted and/or for notification
+ *		of the resize.
+ * \param extra	Extra pointer data that should be associated with the
+ *		hash table.
+ * \param init_mod
+ *		An initial modulus for the table.  This will
+ *		presumably be extracted by ht_modulus() in a previous
+ *		invocation of the application.  A 0 value is valid.
+ *
+ * \retval DB_ERR_BADARGS	An invalid argument was given.
+ * \retval ENOMEM		Unable to allocate memory.
+ */
 unsigned long ht_init(hash_table_t *table, unsigned long flags,
 		      hash_func_t func, hash_comp_t comp,
 		      hash_resize_t resize, void *extra,
 		      unsigned long init_mod);
+
+/** \ingroup dbprim_hash
+ * \brief Add an entry to a hash table.
+ *
+ * This function adds an entry to a hash table.
+ *
+ * \param table	A pointer to a #hash_table_t.
+ * \param entry	A pointer to a #hash_entry_t to be added to the
+ *		table.
+ * \param key	A pointer to a #db_key_t containing the key for the
+ *		entry.
+ *
+ * \retval DB_ERR_BADARGS	An invalid argument was given.
+ * \retval DB_ERR_BUSY		The entry is already in a table.
+ * \retval DB_ERR_FROZEN	The table is currently frozen.
+ * \retval DB_ERR_NOTABLE	The bucket table has not been
+ *				allocated and automatic growth is not
+ *				enabled.
+ * \retval DB_ERR_DUPLICATE	The entry is a duplicate of an
+ *				existing entry.
+ * \retval DB_ERR_UNRECOVERABLE	An unrecoverable error occurred while
+ *				resizing the table.
+ */
 unsigned long ht_add(hash_table_t *table, hash_entry_t *entry, db_key_t *key);
+
+/** \ingroup dbprim_hash
+ * \brief Move an entry in the hash table.
+ *
+ * This function moves an existing entry in the hash table to
+ * correspond to the new key.
+ *
+ * \param table	A pointer to a #hash_table_t.
+ * \param entry	A pointer to a #hash_entry_t to be moved.  It must
+ *		already be in the hash table.
+ * \param key	A pointer to a #db_key_t describing the new key for
+ *		the entry.
+ *
+ * \retval DB_ERR_BADARGS	An invalid argument was given.
+ * \retval DB_ERR_UNUSED	Entry is not in a hash table.
+ * \retval DB_ERR_WRONGTABLE	Entry is not in this hash table.
+ * \retval DB_ERR_FROZEN	Hash table is frozen.
+ * \retval DB_ERR_DUPLICATE	New key is a duplicate of an existing
+ *				key.
+ * \retval DB_ERR_READDFAILED	Unable to re-add entry to table.
+ */
 unsigned long ht_move(hash_table_t *table, hash_entry_t *entry, db_key_t *key);
+
+/** \ingroup dbprim_hash
+ * \brief Remove an element from a hash table.
+ *
+ * This function removes the given element from the specified hash
+ * table.
+ *
+ * \param table	A pointer to a #hash_table_t.
+ * \param entry	A pointer to a #hash_entry_t to be removed from the
+ *		table.
+ *
+ * \retval DB_ERR_BADARGS	An invalid argument was given.
+ * \retval DB_ERR_UNUSED	Entry is not in a hash table.
+ * \retval DB_ERR_WRONGTABLE	Entry is not in this hash table.
+ * \retval DB_ERR_FROZEN	Hash table is frozen.
+ * \retval DB_ERR_UNRECOVERABLE	An unrecoverable error occurred while
+ *				resizing the table.
+ */
 unsigned long ht_remove(hash_table_t *table, hash_entry_t *entry);
+
+/** \ingroup dbprim_hash
+ * \brief Find an entry in a hash table.
+ *
+ * This function looks up an entry matching the given \p key.
+ *
+ * \param table	A pointer to a #hash_table_t.
+ * \param entry_p
+ *		A pointer to a pointer to a #hash_entry_t.  This is a
+ *		result parameter.  If \c NULL is passed, the lookup
+ *		will be performed and an appropriate error code
+ *		returned. 
+ * \param key	A pointer to a #db_key_t describing the item to find.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_NOENTRY	No matching entry was found.
+ */
 unsigned long ht_find(hash_table_t *table, hash_entry_t **entry_p,
 		      db_key_t *key);
+
+/** \ingroup dbprim_hash
+ * \brief Iterate over each entry in a hash table.
+ *
+ * This function iterates over every entry in a hash table (in an
+ * unspecified order), executing the given \p iter_func on each entry.
+ *
+ * \param table	A pointer to a #hash_table_t.
+ * \param iter_func
+ *		A pointer to a callback function used to perform
+ *		user-specified actions on an entry in a hash table. \c
+ *		NULL is an invalid value.  See the documentation for
+ *		#hash_iter_t for more information.
+ * \param extra	A \c void pointer that will be passed to \p
+ *		iter_func.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_FROZEN	The hash table is frozen.
+ */
 unsigned long ht_iter(hash_table_t *table, hash_iter_t iter_func, void *extra);
+
+/** \ingroup dbprim_hash
+ * \brief Flush a hash table.
+ *
+ * This function flushes a hash table--that is, it removes each entry
+ * from the table.  If a \p flush_func is specified, it will be called
+ * on the entry after it has been removed from the table, and may
+ * safely call <CODE>free()</CODE>.
+ *
+ * \param table	A pointer to a #hash_table_t.
+ * \param flush_func
+ *		A pointer to a callback function used to perform
+ *		user-specified actions on an entry after removing it
+ *		from the table.  May be \c NULL.  See the
+ *		documentation for #hash_iter_t for more information.
+ * \param extra	A \c void pointer that will be passed to \p
+ *		flush_func.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_FROZEN	The hash table is frozen.
+ */
 unsigned long ht_flush(hash_table_t *table, hash_iter_t flush_func,
 		       void *extra);
+
+/** \ingroup dbprim_hash
+ * \brief Resize a hash table.
+ *
+ * This function resizes a hash table to the given \p new_size.  If \p
+ * new_size is 0, then an appropriate new size based on the current
+ * number of items in the hash table will be selected.
+ *
+ * \param table	A pointer to a #hash_table_t.
+ * \param new_size
+ *		A new size value for the table.
+ *
+ * \retval DB_ERR_BADARGS	An argument was invalid.
+ * \retval DB_ERR_FROZEN	The table is currently frozen.
+ * \retval DB_ERR_UNRECOVERABLE	A catastrophic error was encountered.
+ *				The table is now unusable.
+ * \retval ENOMEM		No memory could be allocated for the
+ *				new bucket table.
+ */
 unsigned long ht_resize(hash_table_t *table, unsigned long new_size);
+
+/** \ingroup dbprim_hash
+ * \brief Free memory used by an empty hash table.
+ *
+ * This function releases the memory used by the bucket table in an
+ * empty hash table.
+ *
+ * \param table	A pointer to a #hash_table_t.
+ *
+ * \retval DB_ERR_BADARGS	An invalid argument was given.
+ * \retval DB_ERR_FROZEN	The table is frozen.
+ * \retval DB_ERR_NOTEMPTY	The table is not empty.
+ */
 unsigned long ht_free(hash_table_t *table);
 
+/** \internal
+ * \ingroup dbprim_hash
+ * \brief Hash table entry structure.
+ *
+ * This is the implementation of the #hash_entry_t type.
+ */
 struct _hash_entry_s {
-  unsigned long he_magic;	/* magic number */
-  link_elem_t	he_elem;	/* link element */
-  hash_table_t *he_table;	/* hash table we're in */
-  unsigned long	he_hash;	/* hash value */
-  db_key_t	he_key;		/* entry's key */
-  void	       *he_value;	/* actual entry */
+  unsigned long he_magic;	/**< Magic number. */
+  link_elem_t	he_elem;	/**< Link element. */
+  hash_table_t *he_table;	/**< Hash table we're in. */
+  unsigned long	he_hash;	/**< Hash value. */
+  db_key_t	he_key;		/**< Entry's key. */
+  void	       *he_value;	/**< Actual entry. */
 };
 
+/** \internal
+ * \ingroup dbprim_hash
+ * \brief Hash table entry magic number.
+ *
+ * This is the magic number used for the hash table entry structure.
+ */
 #define HASH_ENTRY_MAGIC 0x35afaf51
 
 /** \ingroup dbprim_hash
@@ -940,7 +1368,7 @@ struct _hash_entry_s {
  * This macro verifies that a given pointer actually does point to a
  * hash table entry.
  *
- * \warning This macro may evaluate the \c entry argument twice.
+ * \warning This macro evaluates the \p entry argument twice.
  *
  * \param entry	A pointer to a #hash_entry_t.
  *
@@ -1027,6 +1455,18 @@ struct _hash_entry_s {
  */
 #define he_value(entry)	((entry)->he_value)
 
+/** \ingroup dbprim_hash
+ * \brief Dynamically initialize a hash table entry.
+ *
+ * This function dynamically initializes a hash table entry.
+ *
+ * \param entry	A pointer to a #hash_entry_t to be initialized.
+ * \param value	A pointer to \c void which will be the value of the
+ *		hash table entry.
+ *
+ * \retval DB_ERR_BADARGS	A \c NULL pointer was passed for \p
+ *				entry.
+ */
 unsigned long he_init(hash_entry_t *entry, void *value);
 
 unsigned long smat_cleanup(void);
@@ -1050,7 +1490,7 @@ struct _smat_table_s {
  * This macro verifies that a given pointer actually does point to a
  * sparse matrix table.
  *
- * \warning This macro may evaluate the \c table argument twice.
+ * \warning This macro evaluates the \p table argument twice.
  *
  * \param table	A pointer to a #smat_table_t.
  *
@@ -1207,7 +1647,7 @@ struct _smat_head_s {
  * This macro verifies that a given pointer actually does point to a
  * sparse matrix head.
  *
- * \warning This macro may evaluate the \c head argument twice.
+ * \warning This macro evaluates the \p head argument twice.
  *
  * \param head	A pointer to a #smat_head_t.
  *
@@ -1276,7 +1716,7 @@ struct _smat_head_s {
  * This macro retrieves a pointer to the #smat_entry_t for the first
  * element in the sparse matrix list.
  *
- * \warning This macro may evaluate the \c head argument twice.
+ * \warning This macro evaluates the \p head argument twice.
  *
  * \param head	A pointer to #smat_head_t.
  *
@@ -1292,7 +1732,7 @@ struct _smat_head_s {
  * This macro retrieves a pointer to the #smat_entry_t for the last
  * element in the sparse matrix list.
  *
- * \warning This macro may evaluate the \c head argument twice.
+ * \warning This macro evaluates the \p head argument twice.
  *
  * \param head	A pointer to #smat_head_t.
  *
@@ -1354,7 +1794,7 @@ struct _smat_entry_s {
  * This macro verifies that a given pointer actually does point to a
  * sparse matrix entry.
  *
- * \warning This macro may evaluate the \c entry argument twice.
+ * \warning This macro evaluates the \p entry argument twice.
  *
  * \param entry	A pointer to a #smat_entry_t.
  *
@@ -1424,7 +1864,7 @@ struct _smat_entry_s {
  * This macro retrieves a pointer to the #link_elem_t for the next
  * element in the sparse matrix list.
  *
- * \warning This macro may evaluate the \c entry and \c n arguments
+ * \warning This macro evaluates the \p entry and \p n arguments
  * twice.
  *
  * \param entry	A pointer to #smat_entry_t.
@@ -1444,7 +1884,7 @@ struct _smat_entry_s {
  * This macro retrieves a pointer to the #link_elem_t for the previous
  * element in the sparse matrix list.
  *
- * \warning This macro may evaluate the \c entry and \c n arguments
+ * \warning This macro evaluates the \p entry and \p n arguments
  * twice.
  *
  * \param entry	A pointer to #smat_entry_t.
@@ -1518,7 +1958,7 @@ struct _rb_tree_s {
  * This macro verifies that a given pointer actually does point to a
  * red-black tree.
  *
- * \warning This macro may evaluate the \c tree argument twice.
+ * \warning This macro evaluates the \p tree argument twice.
  *
  * \param tree	A pointer to a #rb_tree_t.
  *
@@ -1665,7 +2105,7 @@ struct _rb_node_s {
  * This macro verifies that a given pointer actually does point to a
  * red-black tree node.
  *
- * \warning This macro may evaluate the \c node argument twice.
+ * \warning This macro evaluates the \p node argument twice.
  *
  * \param node	A pointer to a #rb_node_t.
  *
@@ -1678,12 +2118,12 @@ struct _rb_node_s {
 /** \ingroup dbprim_rbtree
  * \brief Red-black tree node color.
  *
- * This macro retrieves the color of the \c node.
+ * This macro retrieves the color of the \p node.
  *
  * \param node	A pointer to a #rb_node_t.
  *
  * \return	A #rb_color_t value expressing the color of the
- *		\c node.
+ *		\p node.
  */
 #define rn_color(node)		((node)->rn_color)
 
@@ -1707,7 +2147,7 @@ struct _rb_node_s {
  * \param node	A pointer to a #rb_node_t.
  *
  * \return	A pointer to a #rb_node_t representing the parent
- *		of the given \c node.
+ *		of the given \p node.
  */
 #define rn_parent(node)		((node)->rn_parent)
 
@@ -1719,7 +2159,7 @@ struct _rb_node_s {
  * \param node	A pointer to a #rb_node_t.
  *
  * \return	A pointer to a #rb_node_t representing the left
- *		node of the given \c node.
+ *		node of the given \p node.
  */
 #define rn_left(node)		((node)->rn_left)
 
@@ -1731,7 +2171,7 @@ struct _rb_node_s {
  * \param node	A pointer to a #rb_node_t.
  *
  * \return	A pointer to a #rb_node_t representing the right
- *		node of the given \c node.
+ *		node of the given \p node.
  */
 #define rn_right(node)		((node)->rn_right)
 
@@ -1767,7 +2207,7 @@ struct _rb_node_s {
  * This macro safely tests whether a given red-black tree node is
  * black.
  *
- * \warning This macro may evaluate the \c node argument twice.
+ * \warning This macro evaluates the \p node argument twice.
  *
  * \param node	A pointer to a #rb_node_t.
  *
@@ -1781,7 +2221,7 @@ struct _rb_node_s {
  * This macro safely tests whether a given red-black tree node is
  * red.
  *
- * \warning This macro may evaluate the \c node argument twice.
+ * \warning This macro evaluates the \p node argument twice.
  *
  * \param node	A pointer to a #rb_node_t.
  *
@@ -1795,7 +2235,7 @@ struct _rb_node_s {
  * This macro safely tests whether a given red-black tree node is
  * the left node of its parent.
  *
- * \warning This macro may evaluate the \c node argument three
+ * \warning This macro evaluates the \p node argument three
  * times.
  *
  * \param node	A pointer to a #rb_node_t.
@@ -1812,7 +2252,7 @@ struct _rb_node_s {
  * This macro safely tests whether a given red-black tree node is
  * the right node of its parent.
  *
- * \warning This macro may evaluate the \c node argument three
+ * \warning This macro evaluates the \p node argument three
  * times.
  *
  * \param node	A pointer to a #rb_node_t.
@@ -1825,8 +2265,6 @@ struct _rb_node_s {
 
 unsigned long rn_init(rb_node_t *node, void *value);
 
-#ifdef __cplusplus
-}
-#endif
+DBPRIM_END_C_DECLS
 
 #endif /* __include_dbprim_h__ */

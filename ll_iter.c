@@ -18,34 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of ll_iter().
+ *
+ * This file contains the implementation of the ll_iter() function,
+ * used to iterate over every element in a linked list.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_link
- * \brief Iterate over each entry in a linked list.
- *
- * This function iterates over a linked list, executing the given \p
- * iter_func for each entry.
- *
- * \param list	A pointer to a #link_head_t.
- * \param start	A pointer to a #link_elem_t describing where in the
- *		linked list to start.  If \c NULL is passed, the
- *		beginning of the list will be assumed.
- * \param iter_func
- *		A pointer to a callback function used to perform
- *		user-specified actions on an element in a linked
- *		list.  \c NULL is an invalid value.  See the
- *		documentation for #link_iter_t for more information.
- * \param extra	A \c void pointer that will be passed to \p
- *		iter_func.
- * \param flags	If #DB_FLAG_REVERSE is given, iteration will be done
- *		from the end of the list backwards towards the head.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_WRONGTABLE	\p start is not in this linked list.
- */
 unsigned long
 ll_iter(link_head_t *list, link_elem_t *start,
 	link_iter_t iter_func, void *extra, unsigned long flags)

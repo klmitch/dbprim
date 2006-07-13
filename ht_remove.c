@@ -18,28 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of ht_remove().
+ *
+ * This file contains the implementation of the ht_remove() function,
+ * used to remove an entry from a hash table.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_hash
- * \brief Remove an element from a hash table.
- *
- * This function removes the given element from the specified hash
- * table.
- *
- * \param table	A pointer to a #hash_table_t.
- * \param entry	A pointer to a #hash_entry_t to be removed from the
- *		table.
- *
- * \retval DB_ERR_BADARGS	An invalid argument was given.
- * \retval DB_ERR_UNUSED	Entry is not in a hash table.
- * \retval DB_ERR_WRONGTABLE	Entry is not in this hash table.
- * \retval DB_ERR_FROZEN	Hash table is frozen.
- * \retval DB_ERR_UNRECOVERABLE	An unrecoverable error occurred while
- *				resizing the table.
- */
 unsigned long
 ht_remove(hash_table_t *table, hash_entry_t *entry)
 {

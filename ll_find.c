@@ -18,34 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of ll_find().
+ *
+ * This file contains the implementation of the ll_find() function,
+ * used to locate a specific element within a linked list.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_link
- * \brief Find an element in a linked list.
- *
- * This function iterates through a linked list looking for an element
- * that matches the given \p key.
- *
- * \param list	A pointer to a #link_head_t.
- * \param elem_p
- *		A pointer to a pointer to a #link_elem_t.  This is a
- *		result parameter.  \c NULL is an invalid value.
- * \param comp_func
- *		A pointer to a comparison function used to compare the
- *		key to a particular element.  See the documentation
- *		for #link_comp_t for more information.
- * \param start	A pointer to a #link_elem_t describing where in the
- *		linked list to start.  If \c NULL is passed, the
- *		beginning of the list will be assumed.
- * \param key	A key to search for.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_WRONGTABLE	\p start is not in this linked list.
- * \retval DB_ERR_NOENTRY	No matching entry was found.
- */
 unsigned long
 ll_find(link_head_t *list, link_elem_t **elem_p, link_comp_t comp_func,
 	link_elem_t *start, db_key_t *key)

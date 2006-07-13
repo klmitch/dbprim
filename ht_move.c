@@ -18,31 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of ht_move().
+ *
+ * This file contains the implementation of the ht_move() function,
+ * used to move a hash table entry to correspond to a new key.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_hash
- * \brief Move an entry in the hash table.
- *
- * This function moves an existing entry in the hash table to
- * correspond to the new key.
- *
- * \param table	A pointer to a #hash_table_t.
- * \param entry	A pointer to a #hash_entry_t to be moved.  It must
- *		already be in the hash table.
- * \param key	A pointer to a #db_key_t describing the new key for
- *		the entry.
- *
- * \retval DB_ERR_BADARGS	An invalid argument was given.
- * \retval DB_ERR_UNUSED	Entry is not in a hash table.
- * \retval DB_ERR_WRONGTABLE	Entry is not in this hash table.
- * \retval DB_ERR_FROZEN	Hash table is frozen.
- * \retval DB_ERR_DUPLICATE	New key is a duplicate of an existing
- *				key.
- * \retval DB_ERR_READDFAILED	Unable to re-add entry to table.
- */
 unsigned long
 ht_move(hash_table_t *table, hash_entry_t *entry, db_key_t *key)
 {

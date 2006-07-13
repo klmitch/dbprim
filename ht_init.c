@@ -18,6 +18,13 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of ht_init().
+ *
+ * This file contains the implementation of the ht_init() function,
+ * used to dynamically initialize a hash table.
+ */
 #include <errno.h>
 #include <stdlib.h>
 
@@ -26,32 +33,6 @@
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_hash
- * \brief Dynamically initialize a hash table.
- *
- * This function dynamically initializes a hash table.
- *
- * \param table	A pointer to a #hash_table_t to be initialized.
- * \param flags	A bit-wise OR of #HASH_FLAG_AUTOGROW and
- *		#HASH_FLAG_AUTOSHRINK.  If neither behavior is
- *		desired, use 0.
- * \param func	A #hash_func_t function pointer for a hash function.
- * \param comp	A #hash_comp_t function pointer for a comparison
- *		function.
- * \param resize
- *		A #hash_resize_t function pointer for determining
- *		whether resizing is permitted and/or for notification
- *		of the resize.
- * \param extra	Extra pointer data that should be associated with the
- *		hash table.
- * \param init_mod
- *		An initial modulus for the table.  This will
- *		presumably be extracted by ht_modulus() in a previous
- *		invocation of the application.  A 0 value is valid.
- *
- * \retval DB_ERR_BADARGS	An invalid argument was given.
- * \retval ENOMEM		Unable to allocate memory.
- */
 unsigned long
 ht_init(hash_table_t *table, unsigned long flags, hash_func_t func,
 	hash_comp_t comp, hash_resize_t resize, void *extra,

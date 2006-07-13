@@ -18,23 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of he_init().
+ *
+ * This file contains the implementation of the he_init() function,
+ * used to dynamically initialize a hash table entry.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_hash
- * \brief Dynamically initialize a hash table entry.
- *
- * This function dynamically initializes a hash table entry.
- *
- * \param entry	A pointer to a #hash_entry_t to be initialized.
- * \param value	A pointer to \c void which will be the value of the
- *		hash table entry.
- *
- * \retval DB_ERR_BADARGS	A \c NULL pointer was passed for \p
- *				entry.
- */
 unsigned long
 he_init(hash_entry_t *entry, void *value)
 {

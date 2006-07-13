@@ -1,3 +1,36 @@
+2006-07-12  Kevin L. Mitchell  <klmitch@mit.edu>
+
+	* tests/test-harness.h: update to most recent version
+
+	* tests/test-harness.c: update to most recent version
+
+	* m4/ac_config_libconfig_in.m4, m4/ac_define_version.m4,
+	m4/com_err-lib.m4, m4/com_err-obj.m4, m4/with-com_err.m4: autoconf
+	macros used by revised build methodology
+
+	* doc/Doxyfile.in: revise for new documentation methodology
+
+	* he_init.c, ht_add.c, ht_find.c, ht_flush.c, ht_free.c,
+	ht_init.c, ht_iter.c, ht_move.c, ht_remove.c, ht_resize.c,
+	le_init.c, ll_add.c, ll_find.c, ll_flush.c, ll_init.c, ll_iter.c,
+	ll_move.c, ll_remove.c: pull documentation comments into dbprim.h
+
+	* dbprim.spec.in: don't re-run doxygen and related stuff
+
+	* dbprim.h: begin revision of documentation; declare
+	DBPRIM_BEGIN_C_DECLS and DBPRIM_END_C_DECLS
+
+	* configure.ac: revise for more recent build methodology
+
+	* autogen.sh: revise for more recent build methodology
+
+	* acinclude.m4: remove acinclude.m4; now using macros in directory
+	m4
+
+	* Makefile.am: revise for more recent build methodology
+
+	* AUTHORS: add an AUTHORS file
+
 2004-10-20  Kevin L Mitchell  <klmitch@mit.edu>
 
 	* configure.ac: bump version number for initial production release

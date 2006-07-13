@@ -18,6 +18,13 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of ht_flush().
+ *
+ * This file contains the implementation of the ht_flush() function,
+ * used to flush all entries from a hash table.
+ */
 #include <stdlib.h>
 
 #include "dbprim.h"
@@ -25,26 +32,6 @@
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_hash
- * \brief Flush a hash table.
- *
- * This function flushes a hash table--that is, it removes each entry
- * from the table.  If a \p flush_func is specified, it will be called
- * on the entry after it has been removed from the table, and may
- * safely call <CODE>free()</CODE>.
- *
- * \param table	A pointer to a #hash_table_t.
- * \param flush_func
- *		A pointer to a callback function used to perform
- *		user-specified actions on an entry after removing it
- *		from the table.  May be \c NULL.  See the
- *		documentation for #hash_iter_t for more information.
- * \param extra	A \c void pointer that will be passed to \p
- *		flush_func.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_FROZEN	The hash table is frozen.
- */
 unsigned long
 ht_flush(hash_table_t *table, hash_iter_t flush_func, void *extra)
 {

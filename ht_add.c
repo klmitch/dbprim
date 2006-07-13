@@ -18,33 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of ht_add().
+ *
+ * This file contains the implementation of the ht_add() function,
+ * used to add an entry to a hash table.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_hash
- * \brief Add an entry to a hash table.
- *
- * This function adds an entry to a hash table.
- *
- * \param table	A pointer to a #hash_table_t.
- * \param entry	A pointer to a #hash_entry_t to be added to the
- *		table.
- * \param key	A pointer to a #db_key_t containing the key for the
- *		entry.
- *
- * \retval DB_ERR_BADARGS	An invalid argument was given.
- * \retval DB_ERR_BUSY		The entry is already in a table.
- * \retval DB_ERR_FROZEN	The table is currently frozen.
- * \retval DB_ERR_NOTABLE	The bucket table has not been
- *				allocated and automatic growth is not
- *				enabled.
- * \retval DB_ERR_DUPLICATE	The entry is a duplicate of an
- *				existing entry.
- * \retval DB_ERR_UNRECOVERABLE	An unrecoverable error occurred while
- *				resizing the table.
- */
 unsigned long
 ht_add(hash_table_t *table, hash_entry_t *entry, db_key_t *key)
 {

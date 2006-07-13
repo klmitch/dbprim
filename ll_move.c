@@ -18,33 +18,19 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of ll_move().
+ *
+ * This file contains the implementation of the ll_move() function,
+ * used to move a linked list element to another location within the
+ * linked list.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_link
- * \brief Move an element within a linked list.
- *
- * This function moves a specified element within the linked list.
- *
- * \param list	A pointer to a #link_head_t.
- * \param new	A pointer to the #link_elem_t describing the element
- *		to be moved.
- * \param loc	A #link_loc_t indicating where the entry should be
- *		moved to.
- * \param elem	A pointer to a #link_elem_t describing another element
- *		in the list if \p loc is #LINK_LOC_BEFORE or
- *		#LINK_LOC_AFTER.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_BUSY		\p new and \p elem are the same
- *				element.
- * \retval DB_ERR_WRONGTABLE	\p new or \p elem are in a different
- *				list.
- * \retval DB_ERR_UNUSED	\p new or \p elem are not in any
- *				list.
- */
 unsigned long
 ll_move(link_head_t *list, link_elem_t *new, link_loc_t loc,
 	link_elem_t *elem)

@@ -18,6 +18,13 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of ht_free().
+ *
+ * This file contains the implementation of the ht_free() function,
+ * used to release memory still in use by an empty hash table.
+ */
 #include <stdlib.h>
 
 #include "dbprim.h"
@@ -25,18 +32,6 @@
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_hash
- * \brief Free memory used by an empty hash table.
- *
- * This function releases the memory used by the bucket table in an
- * empty hash table.
- *
- * \param table	A pointer to a #hash_table_t.
- *
- * \retval DB_ERR_BADARGS	An invalid argument was given.
- * \retval DB_ERR_FROZEN	The table is frozen.
- * \retval DB_ERR_NOTEMPTY	The table is not empty.
- */
 unsigned long
 ht_free(hash_table_t *table)
 {

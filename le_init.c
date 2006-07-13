@@ -18,24 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of le_init().
+ *
+ * This file contains the implementation of the le_init() function,
+ * used to dynamically initialize a linked list element.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_link
- * \brief Dynamically initialize a linked list element.
- *
- * This function dynamically initializes a linked list element.
- *
- * \param elem	A pointer to a #link_elem_t to be initialized.
- * \param object
- *		A pointer to \c void used to represent the object
- *		associated with the element.
- *
- * \retval DB_ERR_BADARGS	A \c NULL pointer was passed for \p
- *				elem or \p object.
- */
 unsigned long
 le_init(link_elem_t *elem, void *object)
 {

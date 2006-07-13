@@ -75,8 +75,12 @@ _th_report(enum _th_status status, const char *test,
   printf("%s/%s:%s\n", codes[status], test, buf);
 }
 
-/* For declaring test programs */
+/* For declaring test programs... */
 #define TEST_PROG(name, desc)
+/* ...test program arguments... */
+#define TEST_ARG(name, arg)
+/* ...and test program dependencies */
+#define TEST_DEP(name, arg)
 
 /* For declaring tests to be extracted by the test data file generator;
  * obviously, no code is emitted.

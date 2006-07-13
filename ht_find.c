@@ -18,27 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of ht_find().
+ *
+ * This file contains the implementation of the ht_find() function,
+ * used to locate a specific entry in a hash table.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_hash
- * \brief Find an entry in a hash table.
- *
- * This function looks up an entry matching the given \p key.
- *
- * \param table	A pointer to a #hash_table_t.
- * \param entry_p
- *		A pointer to a pointer to a #hash_entry_t.  This is a
- *		result parameter.  If \c NULL is passed, the lookup
- *		will be performed and an appropriate error code
- *		returned. 
- * \param key	A pointer to a #db_key_t describing the item to find.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_NOENTRY	No matching entry was found.
- */
 unsigned long
 ht_find(hash_table_t *table, hash_entry_t **entry_p, db_key_t *key)
 {

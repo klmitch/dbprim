@@ -18,24 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of ll_remove().
+ *
+ * This file contains the implementation of the ll_remove() function,
+ * used to remove an element from a linked list.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_link
- * \brief Remove an element from a linked list.
- *
- * This function removes a specified element from a linked list.
- *
- * \param list	A pointer to a #link_head_t.
- * \param elem	A pointer to the #link_elem_t describing the element
- *		to be removed.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- * \retval DB_ERR_UNUSED	\p elem is not in a linked list.
- * \retval DB_ERR_WRONGTABLE	\p elem is not in this linked list.
- */
 unsigned long
 ll_remove(link_head_t *list, link_elem_t *elem)
 {

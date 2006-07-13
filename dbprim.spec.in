@@ -1,6 +1,6 @@
 ## -*- Mode:rpm-spec -*-
 ##
-## Copyright (C) 2002 by Kevin L. Mitchell <klmitch@mit.edu>
+## Copyright (C) 2002, 2006 by Kevin L. Mitchell <klmitch@mit.edu>
 ##
 ## This library is free software; you can redistribute it and/or
 ## modify it under the terms of the GNU Library General Public
@@ -46,11 +46,6 @@ Vendor: Kevin L. Mitchell <klmitch@mit.edu>
 Packager: %{packager}
 Url: http://dbprim.sourceforge.net/
 
-BuildRequires: doxygen
-BuildRequires: tetex-latex
-BuildRequires: tetex-dvips
-BuildRequires: ghostscript
-
 %description
 This library provides a set of database primitives--linked lists,
 autoresizing hash tables, sparse matrices, and red-black trees.
@@ -66,6 +61,9 @@ Primitives Library.  Applications should include dbprim/dbprim.h.
 This package also includes dbprim-config.
 
 %changelog
+* Wed Jul 12 2006 Kevin L. Mitchell <klmitch@mit.edu>
+- Don't re-run doxygen
+
 * Sat Aug 23 2003 Kevin L Mitchell <klmitch@mit.edu>
 - Build documentation, set BuildRequires properly
 - Use @ substitution for Summary
@@ -82,9 +80,6 @@ This package also includes dbprim-config.
 %build
 %configure
 %__make
-%{__rm} -rf doc/html doc/latex doc/man
-doxygen doc/Doxyfile
-(cd doc/latex && %__make refman.ps refman.pdf)
 
 %install
 %clean_build_root
@@ -106,8 +101,7 @@ make DESTDIR=${RPM_BUILD_ROOT} install
 
 %files devel
 %defattr(-, root, root)
-%doc ChangeLog COPYING INSTALL doc/html
-%doc doc/latex/refman.dvi doc/latex/refman.ps doc/latex/refman.pdf
+%doc ChangeLog COPYING INSTALL doc/html doc/latex
 %{_bindir}/dbprim-config
 %{_includedir}/dbprim
 %{_libdir}/lib*.la

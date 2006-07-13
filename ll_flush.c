@@ -18,30 +18,18 @@
 **
 ** @(#)$Id$
 */
+/** \internal
+ * \file
+ * \brief Implementation of ll_flush().
+ *
+ * This file contains the implementation of the ll_flush() function,
+ * used to remove every element from a linked list.
+ */
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-/** \ingroup dbprim_link
- * \brief Flush a linked list.
- *
- * This function flushes a linked list--that is, it removes each
- * element from the list.  If a \p flush_func is specified, it will be
- * called on the entry after it has been removed from the list, and
- * may safely call <CODE>free()</CODE>.
- *
- * \param list	A pointer to a #link_head_t.
- * \param flush_func
- *		A pointer to a callback function used to perform
- *		user-specified actions on an element after removing it
- *		from the list.  May be \c NULL.  See the documentation
- *		for #link_iter_t for more information.
- * \param extra	A \c void pointer that will be passed to \p
- *		flush_func.
- *
- * \retval DB_ERR_BADARGS	An argument was invalid.
- */
 unsigned long
 ll_flush(link_head_t *list, link_iter_t flush_func, void *extra)
 {

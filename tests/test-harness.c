@@ -713,13 +713,18 @@ read_test(struct test_prog *tp)
     waitpid(tp->tp_pid, &stat, 0); /* wait for child */
     if (WIFEXITED(stat)) {
       sprintf(buf, "Test program exited with status %d", WEXITSTATUS(stat));
+      if (WEXITSTATUS(stat)) /* if non-zero exit status, log it */
+	fprintf(glob_data.log_fp, "WARNING: %s: %s\n", tp->tp_name, buf);
       mark_all(tp, WEXITSTATUS(stat) ? TR_UNRESOLVED : TR_UNTESTED, buf);
       tp->tp_status = WEXITSTATUS(stat) ? TP_FAILED : TP_COMPLETE;
     } else if (WIFSIGNALED(stat)) {
       sprintf(buf, "Test program terminated by signal %d", WTERMSIG(stat));
+      fprintf(glob_data.log_fp, "WARNING: %s: %s\n", tp->tp_name, buf);
       mark_all(tp, TR_UNRESOLVED, buf);
       tp->tp_status = TP_FAILED;
     } else {
+      fprintf(glob_data.log_fp, "WARNING: %s: Test program exited with "
+	      "unknown code\n", tp->tp_name);
       mark_all(tp, TR_UNRESOLVED, "Test program exited with unknown code");
       tp->tp_status = TP_FAILED;
     }
@@ -959,7 +964,7 @@ static void
 read_conf(char *filename)
 {
   enum {
-    s_space, s_comment, s_string
+    s_space, s_comment, s_slash, s_star, s_ccomment, s_string
   } state = s_space, save = s_space;
   char *buf = 0, **args = 0, filebuf[BUFSIZE], *file, file2buf[BUFSIZE];
   char *file2, *s;
@@ -986,11 +991,37 @@ read_conf(char *filename)
     c = getc(fp); /* get a character */
     flags &= ~(QUOTED | EOS | EOD); /* reset quoted and end-of-* flags */
 
-    if (state == s_comment) {
-      if (c != '\n' && c != EOF)
+    if (state == s_slash) { /* process second character of comment intro */
+      switch (c) {
+      case '*': /* C-style comment */
+	state = s_ccomment;
+	break;
+      case '/': /* C++-style comment */
+	state = s_comment;
+	break;
+      default:
+	fprintf(stderr, "%s: Invalid comment introducer \"/%c\" while "
+		"parsing config file %s\n", glob_data.prog_name, c, file);
+	exit(1);
+	break;
+      }
+      continue; /* skip comment characters */
+    }
+
+    if (state == s_comment || state == s_ccomment || state == s_star) {
+      if (c == EOF || (state == s_comment && c == '\n') ||
+	  (state == s_star && c == '/')) {
+	state = save; /* restore to pre-comment state */
+	if (c == '/')
+	  c = ' '; /* but pretend C-style comment was a big space */
+	/* process the character */
+      } else {
+	if (state == s_star && c != '*')
+	  state = s_ccomment; /* * not followed by /; not a comment ender */
+	if (state == s_ccomment && c == '*')
+	  state = s_star; /* found a *; remember that... */
 	continue; /* skip comment... */
-      else
-	state = save; /* but preserve ending character and process */
+      }
     }
 
     if (flags & SAVE_QUOTE)
@@ -1054,9 +1085,9 @@ read_conf(char *filename)
       }
     }
 
-    if (!(flags & QUOTED) && c == '#') { /* found beginning of a comment */
+    if (!(flags & QUOTED) && (c == '#' || c == '/')) { /* start of comment? */
       save = state; /* save current state--we'll restore to here */
-      state = s_comment; /* switch to comment state */
+      state = c == '#' ? s_comment : s_slash; /* switch to appropriate state */
       continue; /* skip all characters in the comment */
     }
 
@@ -1082,7 +1113,10 @@ read_conf(char *filename)
 	  continue; /* move on to next character */
 	break;
 
-      case s_comment: /* should never be in this state here */
+      case s_comment: /* should never be in these states here */
+      case s_slash:
+      case s_star:
+      case s_ccomment:
 	break;
 
       case s_string: /* part of a string */

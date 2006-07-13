@@ -1,6 +1,6 @@
 ## Prefered emacs editing mode: -*- Makefile -*-
 ##
-## Copyright (C) 2002 by Kevin L. Mitchell <klmitch@mit.edu>
+## Copyright (C) 2002, 2006 by Kevin L. Mitchell <klmitch@mit.edu>
 ##
 ## This library is free software; you can redistribute it and/or
 ## modify it under the terms of the GNU Library General Public
@@ -22,6 +22,7 @@
 ## Process this file with automake to generate Makefile.in
 
 AUTOMAKE_OPTIONS = foreign
+ACLOCAL_AMFLAGS = -I m4
 
 # The . here forces prefix ordering, so make check rebuilds the
 # library first if necessary
@@ -54,6 +55,8 @@ libdbprim_la_LDFLAGS = -version-info 2:0:0
 pkginclude_HEADERS = dbprim.h dbprim_err.h dbprim_version.h
 
 bin_SCRIPTS = dbprim-config
+
+EXTRA_CSTATUS = dbprim_version.c dbprim_version.h
 
 BUILT_SOURCES = dbprim_err.h
 
@@ -213,26 +216,26 @@ man_MANS = $(docmandir)/dbprim_hash.3 \
 	   $(docmandir)/st_size.3 \
 	   $(docmandir)/st_verify.3
 
-EXTRA_DIST = dbprim_err.et dbprim.spec dbprim.spec.in \
-	     autogen.sh comp_et-sh.in COPYING INSTALL \
+EXTRA_DIST = dbprim_err.et dbprim.spec dbprim.spec.in m4 \
+	     autogen.sh comp_et-sh.in COPYING INSTALL AUTHORS \
 	     doc/Doxyfile doc/Doxyfile.in doc/html doc/latex doc/man
 
 SUFFIXES = .et .h
 
-CLEANFILES = dbprim_version.c dbprim_version.h \
+CLEANFILES = $(EXTRA_CSTATUS) \
 	     dbprim_err.c dbprim_err.h
 
 DISTCLEANFILES = dbprim-config.in
 
-DISTHOOKCLEANFILES = dbprim_err.c \
-		     dbprim_err.h \
-		     dbprim_version.c \
-		     dbprim_version.h
+DISTHOOKCLEANFILES = $(CLEANFILES)
 
 .et.c .et.h: comp_et-sh
 	$(SHELL) comp_et-sh --com_err=@COM_ERR@ --dir=$(top_builddir) $<
 
 dbprim_err.c dbprim_err.h: dbprim_err.et
+
+$(EXTRA_CSTATUS): $(top_srcdir)/configure config.status
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 dist-hook:
 	for file in $(DISTHOOKCLEANFILES) ; do \
