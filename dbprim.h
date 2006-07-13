@@ -768,11 +768,11 @@ unsigned long ll_add(link_head_t *list, link_elem_t *new, link_loc_t loc,
  * This function moves a specified element within the linked list.
  *
  * \param[in]		list	A pointer to a #link_head_t.
- * \param[in]		new	A pointer to the #link_elem_t
+ * \param[in]		elem	A pointer to the #link_elem_t
  *				describing the element to be moved.
  * \param[in]		loc	A #link_loc_t indicating where the
  *				entry should be moved to.
- * \param[in]		elem	A pointer to a #link_elem_t describing
+ * \param[in]		elem2	A pointer to a #link_elem_t describing
  *				another element in the list if \p loc
  *				is #LINK_LOC_BEFORE or
  *				#LINK_LOC_AFTER.
@@ -2323,7 +2323,7 @@ unsigned long sh_iter(smat_head_t *head, smat_entry_t *start,
  * removed from the row or column, and may safely call
  * <CODE>free()</CODE>.
  *
- * \param[in]		list	A pointer to a #smat_head_t.
+ * \param[in]		head	A pointer to a #smat_head_t.
  * \param[in]		flush_func
  *				A pointer to a callback function used
  *				to perform user-specifed actions on an

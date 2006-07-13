@@ -1,5 +1,9 @@
 2006-07-13  Kevin L. Mitchell  <klmitch@mit.edu>
 
+	* doc/Doxyfile.in (PREDEFINED): correct a missing \
+
+	* dbprim.h: correct a couple of documentation snafus
+
 	* doc/Doxyfile.in: turn off man page generation
 
 	* st_init.c (st_init): use hash_fnv1a() instead of custom

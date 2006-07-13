@@ -1009,7 +1009,7 @@ INCLUDE_FILE_PATTERNS  =
 
 PREDEFINED             = DBPRIM_BEGIN_C_DECLS= \
                          DBPRIM_END_C_DECLS= \
-                         DBPRIM_DOXYGEN=1
+                         DBPRIM_DOXYGEN=1 \
                          __attribute__(a)= \
                          RCSTAG(a)= \
                          TEST_PROG(name,desc)= \
