@@ -1,7 +1,3 @@
 base referer
-rect $group__dbprim__hash.html#ga13 125,5 187,29
-rect $group__dbprim__hash.html#ga16 119,104 193,128
-rect $group__dbprim__link.html#ga6 265,55 321,79
-rect $group__dbprim__hash.html#ga19 244,103 343,127
-rect $group__dbprim__link.html#ga5 268,151 319,175
-rect $group__dbprim__link.html#ga8 255,199 332,223
+rect $group__dbprim__hash.html#ga20 114,6 212,30
+rect $group__dbprim__link.html#ga5 138,54 188,78

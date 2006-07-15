@@ -15,9 +15,9 @@ The \hyperlink{group__dbprim__smat_ga0}{smat\_\-table\_\-t} contains the hash ta
 
 The \hyperlink{group__dbprim__smat_ga1}{smat\_\-head\_\-t} contains the linked list. There are actually two kinds of these structures--one is \hyperlink{group__dbprim__smat_gga70a137}{SMAT\_\-LOC\_\-FIRST}, which could be regarded as a ``row,'' and the other is \hyperlink{group__dbprim__smat_gga70a138}{SMAT\_\-LOC\_\-SECOND}, which could be regarded as a ``column.'' Which one is used for which type of data is irrelevant, as long as consistency is maintained. For the above example, a \hyperlink{group__dbprim__smat_ga1}{smat\_\-head\_\-t} for a manager may be \hyperlink{group__dbprim__smat_gga70a137}{SMAT\_\-LOC\_\-FIRST}, and one for an employee must then be \hyperlink{group__dbprim__smat_gga70a138}{SMAT\_\-LOC\_\-SECOND}. (These values are set when initializing the \hyperlink{group__dbprim__smat_ga1}{smat\_\-head\_\-t} structure.)
 
-An association may be created with the \hyperlink{group__dbprim__smat_ga13}{st\_\-add()} function, which allows an arbitrary ordering in the associated linked lists by the same mechanism as for the linked list component of the library. An association may be removed with \hyperlink{group__dbprim__smat_ga14}{st\_\-remove()}, or looked up with \hyperlink{group__dbprim__smat_ga15}{st\_\-find()}. If iteration over all associations is desired, use the \hyperlink{group__dbprim__smat_ga16}{st\_\-iter()} function. Removing all associations from a table may be performed with \hyperlink{group__dbprim__smat_ga17}{st\_\-flush()}, which optionally calls a user-defined clean-up function. The associated hash table may be resized with \hyperlink{group__dbprim__smat_ga18}{st\_\-resize()}, and the bucket table may be released with \hyperlink{group__dbprim__smat_ga19}{st\_\-free()}.
+An association may be created with the \hyperlink{group__dbprim__smat_ga11}{st\_\-add()} function, which allows an arbitrary ordering in the associated linked lists by the same mechanism as for the linked list component of the library. An association may be removed with \hyperlink{group__dbprim__smat_ga12}{st\_\-remove()}, or looked up with \hyperlink{group__dbprim__smat_ga13}{st\_\-find()}. If iteration over all associations is desired, use the \hyperlink{group__dbprim__smat_ga14}{st\_\-iter()} function. Removing all associations from a table may be performed with \hyperlink{group__dbprim__smat_ga15}{st\_\-flush()}, which optionally calls a user-defined clean-up function. The associated hash table may be resized with \hyperlink{group__dbprim__smat_ga16}{st\_\-resize()}, and the bucket table may be released with \hyperlink{group__dbprim__smat_ga17}{st\_\-free()}.
 
-An association may also be reordered within the linked lists using the \hyperlink{group__dbprim__smat_ga21}{sh\_\-move()} function. If a particular entry is desired, use the \hyperlink{group__dbprim__smat_ga22}{sh\_\-find()} function with a user-defined comparison function to locate it. Iteration may be performed with the \hyperlink{group__dbprim__smat_ga23}{sh\_\-iter()} function, and all entries in a given linked list may be removed with the \hyperlink{dbprim_8h_a178}{sh\_\-flush()} function, which again may optionally call a user-defined clean-up function.
+An association may also be reordered within the linked lists using the \hyperlink{group__dbprim__smat_ga19}{sh\_\-move()} function. If a particular entry is desired, use the \hyperlink{group__dbprim__smat_ga20}{sh\_\-find()} function with a user-defined comparison function to locate it. Iteration may be performed with the \hyperlink{group__dbprim__smat_ga21}{sh\_\-iter()} function, and all entries in a given linked list may be removed with the \hyperlink{group__dbprim__smat_ga22}{sh\_\-flush()} function, which again may optionally call a user-defined clean-up function.
 
 \subsection*{Data Structures}
 \begin{CompactItemize}
@@ -148,40 +148,40 @@ unsigned long \hyperlink{group__dbprim__smat_ga8}{smat\_\-cleanup} (void)
 \begin{CompactList}\small\item\em Clean up the smat free list. \item\end{CompactList}\item 
 unsigned long \hyperlink{group__dbprim__smat_ga9}{smat\_\-freemem} (void)
 \begin{CompactList}\small\item\em Report how much memory is used by the free list. \item\end{CompactList}\item 
-unsigned long \hyperlink{group__dbprim__smat_ga10}{\_\-smat\_\-comp} (\hyperlink{struct__hash__table__s}{hash\_\-table\_\-t} $\ast$table, \hyperlink{struct__db__key__s}{db\_\-key\_\-t} $\ast$key1, \hyperlink{struct__db__key__s}{db\_\-key\_\-t} $\ast$key2)
-\begin{CompactList}\small\item\em Sparse matrix comparison function. \item\end{CompactList}\item 
-unsigned long \hyperlink{group__dbprim__smat_ga11}{\_\-smat\_\-resize} (\hyperlink{struct__hash__table__s}{hash\_\-table\_\-t} $\ast$table, unsigned long new\_\-mod)
-\begin{CompactList}\small\item\em Sparse matrix resize function. \item\end{CompactList}\item 
-unsigned long \hyperlink{group__dbprim__smat_ga12}{st\_\-init} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table, unsigned long flags, \hyperlink{group__dbprim__smat_ga3}{smat\_\-resize\_\-t} resize, void $\ast$extra, unsigned long init\_\-mod)
+unsigned long \hyperlink{group__dbprim__smat_ga10}{st\_\-init} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table, unsigned long flags, \hyperlink{group__dbprim__smat_ga3}{smat\_\-resize\_\-t} resize, void $\ast$extra, unsigned long init\_\-mod)
 \begin{CompactList}\small\item\em Dynamically initialize a sparse matrix table. \item\end{CompactList}\item 
-unsigned long \hyperlink{group__dbprim__smat_ga13}{st\_\-add} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$$\ast$entry\_\-p, \hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head1, \hyperlink{group__dbprim__link_ga4}{link\_\-loc\_\-t} loc1, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$ent1, \hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head2, \hyperlink{group__dbprim__link_ga4}{link\_\-loc\_\-t} loc2, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$ent2)
+unsigned long \hyperlink{group__dbprim__smat_ga11}{st\_\-add} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$$\ast$entry\_\-p, \hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head1, \hyperlink{group__dbprim__link_ga4}{link\_\-loc\_\-t} loc1, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$ent1, \hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head2, \hyperlink{group__dbprim__link_ga4}{link\_\-loc\_\-t} loc2, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$ent2)
 \begin{CompactList}\small\item\em Add an entry to a sparse matrix. \item\end{CompactList}\item 
-unsigned long \hyperlink{group__dbprim__smat_ga14}{st\_\-remove} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$entry)
+unsigned long \hyperlink{group__dbprim__smat_ga12}{st\_\-remove} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$entry)
 \begin{CompactList}\small\item\em Remove an entry from a sparse matrix. \item\end{CompactList}\item 
-unsigned long \hyperlink{group__dbprim__smat_ga15}{st\_\-find} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$$\ast$entry\_\-p, \hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head1, \hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head2)
+unsigned long \hyperlink{group__dbprim__smat_ga13}{st\_\-find} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$$\ast$entry\_\-p, \hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head1, \hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head2)
 \begin{CompactList}\small\item\em Find an entry in a sparse matrix. \item\end{CompactList}\item 
-unsigned long \hyperlink{group__dbprim__smat_ga16}{st\_\-iter} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table, \hyperlink{group__dbprim__smat_ga4}{smat\_\-iter\_\-t} iter\_\-func, void $\ast$extra)
+unsigned long \hyperlink{group__dbprim__smat_ga14}{st\_\-iter} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table, \hyperlink{group__dbprim__smat_ga4}{smat\_\-iter\_\-t} iter\_\-func, void $\ast$extra)
 \begin{CompactList}\small\item\em Iterate over each entry in a sparse matrix. \item\end{CompactList}\item 
-unsigned long \hyperlink{group__dbprim__smat_ga17}{st\_\-flush} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table, \hyperlink{group__dbprim__smat_ga4}{smat\_\-iter\_\-t} flush\_\-func, void $\ast$extra)
+unsigned long \hyperlink{group__dbprim__smat_ga15}{st\_\-flush} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table, \hyperlink{group__dbprim__smat_ga4}{smat\_\-iter\_\-t} flush\_\-func, void $\ast$extra)
 \begin{CompactList}\small\item\em Flush a sparse matrix. \item\end{CompactList}\item 
-unsigned long \hyperlink{group__dbprim__smat_ga18}{st\_\-resize} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table, unsigned long new\_\-size)
+unsigned long \hyperlink{group__dbprim__smat_ga16}{st\_\-resize} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table, unsigned long new\_\-size)
 \begin{CompactList}\small\item\em Resize a sparse matrix table. \item\end{CompactList}\item 
-unsigned long \hyperlink{group__dbprim__smat_ga19}{st\_\-free} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table)
+unsigned long \hyperlink{group__dbprim__smat_ga17}{st\_\-free} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table)
 \begin{CompactList}\small\item\em Free memory used by an empty sparse matrix table. \item\end{CompactList}\item 
-unsigned long \hyperlink{group__dbprim__smat_ga20}{sh\_\-init} (\hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head, \hyperlink{group__dbprim__smat_ga6}{smat\_\-loc\_\-t} elem, void $\ast$object)
+unsigned long \hyperlink{group__dbprim__smat_ga18}{sh\_\-init} (\hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head, \hyperlink{group__dbprim__smat_ga6}{smat\_\-loc\_\-t} elem, void $\ast$object)
 \begin{CompactList}\small\item\em Dynamically initialize a sparse matrix row or column head. \item\end{CompactList}\item 
-unsigned long \hyperlink{group__dbprim__smat_ga21}{sh\_\-move} (\hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$elem, \hyperlink{group__dbprim__link_ga4}{link\_\-loc\_\-t} loc, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$elem2)
+unsigned long \hyperlink{group__dbprim__smat_ga19}{sh\_\-move} (\hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$elem, \hyperlink{group__dbprim__link_ga4}{link\_\-loc\_\-t} loc, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$elem2)
 \begin{CompactList}\small\item\em Move an entry within a row or column list. \item\end{CompactList}\item 
-unsigned long \hyperlink{group__dbprim__smat_ga22}{sh\_\-find} (\hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$$\ast$elem\_\-p, \hyperlink{group__dbprim__smat_ga5}{smat\_\-comp\_\-t} comp\_\-func, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$start, \hyperlink{struct__db__key__s}{db\_\-key\_\-t} $\ast$key)
+unsigned long \hyperlink{group__dbprim__smat_ga20}{sh\_\-find} (\hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$$\ast$elem\_\-p, \hyperlink{group__dbprim__smat_ga5}{smat\_\-comp\_\-t} comp\_\-func, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$start, \hyperlink{struct__db__key__s}{db\_\-key\_\-t} $\ast$key)
 \begin{CompactList}\small\item\em Find an entry in a row or column of a sparse matrix. \item\end{CompactList}\item 
-unsigned long \hyperlink{group__dbprim__smat_ga23}{sh\_\-iter} (\hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$start, \hyperlink{group__dbprim__smat_ga4}{smat\_\-iter\_\-t} iter\_\-func, void $\ast$extra, unsigned long flags)
+unsigned long \hyperlink{group__dbprim__smat_ga21}{sh\_\-iter} (\hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$start, \hyperlink{group__dbprim__smat_ga4}{smat\_\-iter\_\-t} iter\_\-func, void $\ast$extra, unsigned long flags)
 \begin{CompactList}\small\item\em Iterate over each entry in a row or column of a sparse matrix. \item\end{CompactList}\item 
-unsigned long \hyperlink{group__dbprim__smat_ga24}{\_\-st\_\-remove} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$entry, unsigned int remflag)
+unsigned long \hyperlink{group__dbprim__smat_ga22}{sh\_\-flush} (\hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$head, \hyperlink{group__dbprim__smat_ga4}{smat\_\-iter\_\-t} flush\_\-func, void $\ast$extra)
+\begin{CompactList}\small\item\em Flush a row or column of a sparse matrix. \item\end{CompactList}\item 
+unsigned long \hyperlink{group__dbprim__smat_ga23}{\_\-st\_\-remove} (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$table, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$entry, unsigned int remflag)
 \begin{CompactList}\small\item\em Remove an entry from a sparse matrix (internal). \item\end{CompactList}\item 
-\hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$ \hyperlink{group__dbprim__smat_ga25}{\_\-smat\_\-alloc} (void)
+\hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$ \hyperlink{group__dbprim__smat_ga24}{\_\-smat\_\-alloc} (void)
 \begin{CompactList}\small\item\em Allocate a sparse matrix entry. \item\end{CompactList}\item 
-void \hyperlink{group__dbprim__smat_ga26}{\_\-smat\_\-free} (\hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$entry)
+void \hyperlink{group__dbprim__smat_ga25}{\_\-smat\_\-free} (\hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$entry)
 \begin{CompactList}\small\item\em Release a sparse matrix entry. \item\end{CompactList}\item 
+unsigned long \hyperlink{group__dbprim__smat_ga26}{\_\-smat\_\-resize} (\hyperlink{struct__hash__table__s}{hash\_\-table\_\-t} $\ast$table, unsigned long new\_\-mod)
+\begin{CompactList}\small\item\em Sparse matrix resize function. \item\end{CompactList}\item 
 static unsigned long \hyperlink{group__dbprim__smat_ga27}{\_\-sh\_\-find\_\-comp} (\hyperlink{struct__db__key__s}{db\_\-key\_\-t} $\ast$key, void $\ast$data)
 \begin{CompactList}\small\item\em Sparse matrix linked list comparision function. \item\end{CompactList}\item 
 static unsigned long \hyperlink{group__dbprim__smat_ga28}{\_\-sh\_\-flush\_\-iter} (\hyperlink{struct__link__head__s}{link\_\-head\_\-t} $\ast$head, \hyperlink{struct__link__elem__s}{link\_\-elem\_\-t} $\ast$elem, void $\ast$extra)
@@ -221,7 +221,7 @@ This macro provides access to the linked list element buried in the sparse matri
 \end{Desc}
 
 
-Definition at line 2403 of file dbprim.h.
+Definition at line 2383 of file dbprim.h.
 
 Referenced by \_\-smat\_\-free().\hypertarget{group__dbprim__smat_ga60}{
 \index{dbprim_smat@{dbprim\_\-smat}!_se_next@{\_\-se\_\-next}}
@@ -244,7 +244,7 @@ This helper macro is used to directly access the next linked list element in a s
 \end{Desc}
 
 
-Definition at line 2447 of file dbprim.h.\hypertarget{group__dbprim__smat_ga62}{
+Definition at line 2427 of file dbprim.h.\hypertarget{group__dbprim__smat_ga62}{
 \index{dbprim_smat@{dbprim\_\-smat}!_se_prev@{\_\-se\_\-prev}}
 \index{_se_prev@{\_\-se\_\-prev}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[\_\-se\_\-prev]{\setlength{\rightskip}{0pt plus 5cm}\#define \_\-se\_\-prev(entry, n)}}
@@ -265,7 +265,7 @@ This helper macro is used to directly access the previous linked list element in
 \end{Desc}
 
 
-Definition at line 2483 of file dbprim.h.\hypertarget{group__dbprim__smat_ga48}{
+Definition at line 2463 of file dbprim.h.\hypertarget{group__dbprim__smat_ga48}{
 \index{dbprim_smat@{dbprim\_\-smat}!_sh_first@{\_\-sh\_\-first}}
 \index{_sh_first@{\_\-sh\_\-first}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[\_\-sh\_\-first]{\setlength{\rightskip}{0pt plus 5cm}\#define \_\-sh\_\-first(head)}}
@@ -286,7 +286,7 @@ This helper macro is used to directly access the first linked list element of a 
 \end{Desc}
 
 
-Definition at line 2135 of file dbprim.h.\hypertarget{group__dbprim__smat_ga50}{
+Definition at line 2115 of file dbprim.h.\hypertarget{group__dbprim__smat_ga50}{
 \index{dbprim_smat@{dbprim\_\-smat}!_sh_last@{\_\-sh\_\-last}}
 \index{_sh_last@{\_\-sh\_\-last}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[\_\-sh\_\-last]{\setlength{\rightskip}{0pt plus 5cm}\#define \_\-sh\_\-last(head)}}
@@ -307,7 +307,7 @@ This helper macro is used to directly access the last linked list element of a \
 \end{Desc}
 
 
-Definition at line 2163 of file dbprim.h.\hypertarget{group__dbprim__smat_ga32}{
+Definition at line 2143 of file dbprim.h.\hypertarget{group__dbprim__smat_ga32}{
 \index{dbprim_smat@{dbprim\_\-smat}!_smat_ent@{\_\-smat\_\-ent}}
 \index{_smat_ent@{\_\-smat\_\-ent}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[\_\-smat\_\-ent]{\setlength{\rightskip}{0pt plus 5cm}\#define \_\-smat\_\-ent(ent)}}
@@ -328,7 +328,7 @@ This simple macro simply retrieves a pointer to the sparse matrix entry from a l
 \end{Desc}
 
 
-Definition at line 1642 of file dbprim.h.\hypertarget{group__dbprim__smat_ga58}{
+Definition at line 1656 of file dbprim.h.\hypertarget{group__dbprim__smat_ga58}{
 \index{dbprim_smat@{dbprim\_\-smat}!se_flags@{se\_\-flags}}
 \index{se_flags@{se\_\-flags}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[se\_\-flags]{\setlength{\rightskip}{0pt plus 5cm}\#define se\_\-flags(entry)}}
@@ -346,7 +346,7 @@ This macro retrieves a set of user-defined flags associated with the entry. It m
 \item[Returns:]An {\tt unsigned long} containing the flags associated with the entry.\end{Desc}
 
 
-Definition at line 2416 of file dbprim.h.\hypertarget{group__dbprim__smat_ga59}{
+Definition at line 2396 of file dbprim.h.\hypertarget{group__dbprim__smat_ga59}{
 \index{dbprim_smat@{dbprim\_\-smat}!se_hash@{se\_\-hash}}
 \index{se_hash@{se\_\-hash}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[se\_\-hash]{\setlength{\rightskip}{0pt plus 5cm}\#define se\_\-hash(entry)}}
@@ -364,7 +364,7 @@ This macro retrieves the hash value of the given sparse matrix entry. If the spa
 \item[Returns:]An {\tt unsigned long} containing the hash code for the entry.\end{Desc}
 
 
-Definition at line 2430 of file dbprim.h.\hypertarget{group__dbprim__smat_ga64}{
+Definition at line 2410 of file dbprim.h.\hypertarget{group__dbprim__smat_ga64}{
 \index{dbprim_smat@{dbprim\_\-smat}!se_lflags@{se\_\-lflags}}
 \index{se_lflags@{se\_\-lflags}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[se\_\-lflags]{\setlength{\rightskip}{0pt plus 5cm}\#define se\_\-lflags(entry, n)}}
@@ -382,7 +382,7 @@ This macro retrieves a set of user-defined flags associated with the entry in a 
 \item[Returns:]An {\tt unsigned long} containing the flags associated with the entry.\end{Desc}
 
 
-Definition at line 2519 of file dbprim.h.\hypertarget{group__dbprim__smat_ga61}{
+Definition at line 2499 of file dbprim.h.\hypertarget{group__dbprim__smat_ga61}{
 \index{dbprim_smat@{dbprim\_\-smat}!se_next@{se\_\-next}}
 \index{se_next@{se\_\-next}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[se\_\-next]{\setlength{\rightskip}{0pt plus 5cm}\#define se\_\-next(entry, n)}}
@@ -402,7 +402,7 @@ This macro retrieves a pointer to the \hyperlink{group__dbprim__link_ga1}{link\_
 \item[Returns:]A pointer to \hyperlink{group__dbprim__smat_ga2}{smat\_\-entry\_\-t}.\end{Desc}
 
 
-Definition at line 2465 of file dbprim.h.\hypertarget{group__dbprim__smat_ga65}{
+Definition at line 2445 of file dbprim.h.\hypertarget{group__dbprim__smat_ga65}{
 \index{dbprim_smat@{dbprim\_\-smat}!se_object@{se\_\-object}}
 \index{se_object@{se\_\-object}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[se\_\-object]{\setlength{\rightskip}{0pt plus 5cm}\#define se\_\-object(entry, n)}}
@@ -420,9 +420,7 @@ This macro retrieves a pointer to one of the objects represented by the entry. I
 \item[Returns:]A pointer to {\tt void} representing the object.\end{Desc}
 
 
-Definition at line 2535 of file dbprim.h.
-
-Referenced by main().\hypertarget{group__dbprim__smat_ga63}{
+Definition at line 2515 of file dbprim.h.\hypertarget{group__dbprim__smat_ga63}{
 \index{dbprim_smat@{dbprim\_\-smat}!se_prev@{se\_\-prev}}
 \index{se_prev@{se\_\-prev}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[se\_\-prev]{\setlength{\rightskip}{0pt plus 5cm}\#define se\_\-prev(entry, n)}}
@@ -442,7 +440,7 @@ This macro retrieves a pointer to the \hyperlink{group__dbprim__link_ga1}{link\_
 \item[Returns:]A pointer to \hyperlink{group__dbprim__smat_ga2}{smat\_\-entry\_\-t}.\end{Desc}
 
 
-Definition at line 2501 of file dbprim.h.\hypertarget{group__dbprim__smat_ga56}{
+Definition at line 2481 of file dbprim.h.\hypertarget{group__dbprim__smat_ga56}{
 \index{dbprim_smat@{dbprim\_\-smat}!se_table@{se\_\-table}}
 \index{se_table@{se\_\-table}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[se\_\-table]{\setlength{\rightskip}{0pt plus 5cm}\#define se\_\-table(entry)}}
@@ -460,7 +458,7 @@ This macro retrieves a pointer to the table that the sparse matrix entry is in.
 \item[Returns:]A pointer to a \hyperlink{group__dbprim__smat_ga0}{smat\_\-table\_\-t}.\end{Desc}
 
 
-Definition at line 2390 of file dbprim.h.\hypertarget{group__dbprim__smat_ga55}{
+Definition at line 2370 of file dbprim.h.\hypertarget{group__dbprim__smat_ga55}{
 \index{dbprim_smat@{dbprim\_\-smat}!se_verify@{se\_\-verify}}
 \index{se_verify@{se\_\-verify}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[se\_\-verify]{\setlength{\rightskip}{0pt plus 5cm}\#define se\_\-verify(entry)}}
@@ -480,7 +478,7 @@ This macro verifies that a given pointer actually does point to a sparse matrix 
 \item[Returns:]Boolean {\tt true} if {\tt entry} is a valid sparse matrix entry or {\tt false} otherwise.\end{Desc}
 
 
-Definition at line 2377 of file dbprim.h.
+Definition at line 2357 of file dbprim.h.
 
 Referenced by sh\_\-find(), sh\_\-iter(), sh\_\-move(), st\_\-add(), and st\_\-remove().\hypertarget{group__dbprim__smat_ga47}{
 \index{dbprim_smat@{dbprim\_\-smat}!sh_count@{sh\_\-count}}
@@ -500,7 +498,7 @@ This macro retrieves the number of elements in the sparse matrix list rooted at 
 \item[Returns:]An {\tt unsigned long} containing a count of the number of elements in the sparse matrix list.\end{Desc}
 
 
-Definition at line 2121 of file dbprim.h.\hypertarget{group__dbprim__smat_ga44}{
+Definition at line 2101 of file dbprim.h.\hypertarget{group__dbprim__smat_ga44}{
 \index{dbprim_smat@{dbprim\_\-smat}!sh_elem@{sh\_\-elem}}
 \index{sh_elem@{sh\_\-elem}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[sh\_\-elem]{\setlength{\rightskip}{0pt plus 5cm}\#define sh\_\-elem(head)}}
@@ -518,7 +516,7 @@ This macro retrieves the position indicator for the sparse matrix head. It will 
 \item[Returns:]An \hyperlink{group__dbprim__smat_ga6}{smat\_\-loc\_\-t}.\end{Desc}
 
 
-Definition at line 2082 of file dbprim.h.\hypertarget{group__dbprim__smat_ga49}{
+Definition at line 2062 of file dbprim.h.\hypertarget{group__dbprim__smat_ga49}{
 \index{dbprim_smat@{dbprim\_\-smat}!sh_first@{sh\_\-first}}
 \index{sh_first@{sh\_\-first}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[sh\_\-first]{\setlength{\rightskip}{0pt plus 5cm}\#define sh\_\-first(head)}}
@@ -538,7 +536,7 @@ This macro retrieves a pointer to the \hyperlink{group__dbprim__smat_ga2}{smat\_
 \item[Returns:]A pointer to \hyperlink{group__dbprim__smat_ga2}{smat\_\-entry\_\-t}.\end{Desc}
 
 
-Definition at line 2149 of file dbprim.h.\hypertarget{group__dbprim__smat_ga46}{
+Definition at line 2129 of file dbprim.h.\hypertarget{group__dbprim__smat_ga46}{
 \index{dbprim_smat@{dbprim\_\-smat}!sh_frozen@{sh\_\-frozen}}
 \index{sh_frozen@{sh\_\-frozen}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[sh\_\-frozen]{\setlength{\rightskip}{0pt plus 5cm}\#define sh\_\-frozen(head)}}
@@ -556,7 +554,7 @@ This macro returns a non-zero value if the matrix is currently frozen. The spars
 \item[Returns:]A zero value if the matrix is not frozen or a non-zero value if the matrix is frozen.\end{Desc}
 
 
-Definition at line 2108 of file dbprim.h.\hypertarget{group__dbprim__smat_ga51}{
+Definition at line 2088 of file dbprim.h.\hypertarget{group__dbprim__smat_ga51}{
 \index{dbprim_smat@{dbprim\_\-smat}!sh_last@{sh\_\-last}}
 \index{sh_last@{sh\_\-last}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[sh\_\-last]{\setlength{\rightskip}{0pt plus 5cm}\#define sh\_\-last(head)}}
@@ -576,7 +574,7 @@ This macro retrieves a pointer to the \hyperlink{group__dbprim__smat_ga2}{smat\_
 \item[Returns:]A pointer to \hyperlink{group__dbprim__smat_ga2}{smat\_\-entry\_\-t}.\end{Desc}
 
 
-Definition at line 2177 of file dbprim.h.\hypertarget{group__dbprim__smat_ga52}{
+Definition at line 2157 of file dbprim.h.\hypertarget{group__dbprim__smat_ga52}{
 \index{dbprim_smat@{dbprim\_\-smat}!sh_object@{sh\_\-object}}
 \index{sh_object@{sh\_\-object}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[sh\_\-object]{\setlength{\rightskip}{0pt plus 5cm}\#define sh\_\-object(head)}}
@@ -594,7 +592,7 @@ This macro retrieves a pointer to the object referenced by the sparse matrix lis
 \item[Returns:]A pointer to {\tt void}.\end{Desc}
 
 
-Definition at line 2189 of file dbprim.h.
+Definition at line 2169 of file dbprim.h.
 
 Referenced by st\_\-add(), and st\_\-find().\hypertarget{group__dbprim__smat_ga53}{
 \index{dbprim_smat@{dbprim\_\-smat}!sh_size@{sh\_\-size}}
@@ -616,7 +614,7 @@ This macro returns the physical size of the memory allocated by the library for 
 \item[Returns:]A {\tt size\_\-t}.\end{Desc}
 
 
-Definition at line 2205 of file dbprim.h.\hypertarget{group__dbprim__smat_ga45}{
+Definition at line 2185 of file dbprim.h.\hypertarget{group__dbprim__smat_ga45}{
 \index{dbprim_smat@{dbprim\_\-smat}!sh_table@{sh\_\-table}}
 \index{sh_table@{sh\_\-table}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[sh\_\-table]{\setlength{\rightskip}{0pt plus 5cm}\#define sh\_\-table(head)}}
@@ -634,7 +632,7 @@ If there are any elements in this sparse matrix list head, this macro will retri
 \item[Returns:]A pointer to \hyperlink{group__dbprim__smat_ga0}{smat\_\-table\_\-t}.\end{Desc}
 
 
-Definition at line 2094 of file dbprim.h.\hypertarget{group__dbprim__smat_ga43}{
+Definition at line 2074 of file dbprim.h.\hypertarget{group__dbprim__smat_ga43}{
 \index{dbprim_smat@{dbprim\_\-smat}!sh_verify@{sh\_\-verify}}
 \index{sh_verify@{sh\_\-verify}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[sh\_\-verify]{\setlength{\rightskip}{0pt plus 5cm}\#define sh\_\-verify(head)}}
@@ -654,7 +652,7 @@ This macro verifies that a given pointer actually does point to a sparse matrix 
 \item[Returns:]Boolean {\tt true} if {\tt head} is a valid sparse matrix head or {\tt false} otherwise.\end{Desc}
 
 
-Definition at line 2069 of file dbprim.h.
+Definition at line 2049 of file dbprim.h.
 
 Referenced by sh\_\-find(), sh\_\-flush(), sh\_\-iter(), sh\_\-move(), st\_\-add(), and st\_\-find().\hypertarget{group__dbprim__smat_ga54}{
 \index{dbprim_smat@{dbprim\_\-smat}!SMAT_ENTRY_MAGIC@{SMAT\_\-ENTRY\_\-MAGIC}}
@@ -668,7 +666,7 @@ Referenced by sh\_\-find(), sh\_\-flush(), sh\_\-iter(), sh\_\-move(), st\_\-add
 This is the magic number used for the sparse matrix entry structure.\end{Desc}
 
 
-Definition at line 2362 of file dbprim.h.
+Definition at line 2342 of file dbprim.h.
 
 Referenced by \_\-smat\_\-alloc().\hypertarget{group__dbprim__smat_ga42}{
 \index{dbprim_smat@{dbprim\_\-smat}!SMAT_HEAD_INIT@{SMAT\_\-HEAD\_\-INIT}}
@@ -686,7 +684,7 @@ This macro statically initializes a \hyperlink{group__dbprim__smat_ga1}{smat\_\-
 \end{Desc}
 
 
-Definition at line 2053 of file dbprim.h.\hypertarget{group__dbprim__smat_ga41}{
+Definition at line 2033 of file dbprim.h.\hypertarget{group__dbprim__smat_ga41}{
 \index{dbprim_smat@{dbprim\_\-smat}!SMAT_HEAD_MAGIC@{SMAT\_\-HEAD\_\-MAGIC}}
 \index{SMAT_HEAD_MAGIC@{SMAT\_\-HEAD\_\-MAGIC}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[SMAT\_\-HEAD\_\-MAGIC]{\setlength{\rightskip}{0pt plus 5cm}\#define SMAT\_\-HEAD\_\-MAGIC}}
@@ -698,7 +696,7 @@ Definition at line 2053 of file dbprim.h.\hypertarget{group__dbprim__smat_ga41}{
 This is the magic number used for the sparse matrix list head structure.\end{Desc}
 
 
-Definition at line 2039 of file dbprim.h.
+Definition at line 2019 of file dbprim.h.
 
 Referenced by sh\_\-init().\hypertarget{group__dbprim__smat_ga33}{
 \index{dbprim_smat@{dbprim\_\-smat}!SMAT_TABLE_MAGIC@{SMAT\_\-TABLE\_\-MAGIC}}
@@ -712,7 +710,7 @@ Referenced by sh\_\-init().\hypertarget{group__dbprim__smat_ga33}{
 This is the magic number used for the sparse matrix table structure.\end{Desc}
 
 
-Definition at line 1664 of file dbprim.h.
+Definition at line 1678 of file dbprim.h.
 
 Referenced by st\_\-init().\hypertarget{group__dbprim__smat_ga38}{
 \index{dbprim_smat@{dbprim\_\-smat}!st_count@{st\_\-count}}
@@ -732,9 +730,7 @@ This macro retrieves the total number of items actually in the sparse matrix tab
 \item[Returns:]An {\tt unsigned long} containing a count of the number of items in the sparse matrix table.\end{Desc}
 
 
-Definition at line 1738 of file dbprim.h.
-
-Referenced by main().\hypertarget{group__dbprim__smat_ga39}{
+Definition at line 1752 of file dbprim.h.\hypertarget{group__dbprim__smat_ga39}{
 \index{dbprim_smat@{dbprim\_\-smat}!st_extra@{st\_\-extra}}
 \index{st_extra@{st\_\-extra}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[st\_\-extra]{\setlength{\rightskip}{0pt plus 5cm}\#define st\_\-extra(table)}}
@@ -752,14 +748,14 @@ This macro retrieves the extra pointer data associated with a particular sparse 
 \item[Returns:]A pointer to {\tt void}.\end{Desc}
 
 
-Definition at line 1761 of file dbprim.h.\hypertarget{group__dbprim__smat_ga35}{
+Definition at line 1775 of file dbprim.h.\hypertarget{group__dbprim__smat_ga35}{
 \index{dbprim_smat@{dbprim\_\-smat}!st_flags@{st\_\-flags}}
 \index{st_flags@{st\_\-flags}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[st\_\-flags]{\setlength{\rightskip}{0pt plus 5cm}\#define st\_\-flags(table)}}
 \label{group__dbprim__smat_ga35}
 
 
-This macro retrieves the flags associated with the sparse matrix table. Only \hyperlink{group__dbprim__hash_ga22}{HASH\_\-FLAG\_\-AUTOGROW} and \hyperlink{group__dbprim__hash_ga23}{HASH\_\-FLAG\_\-AUTOSHRINK} have any meaning to the application; all other bits are reserved for use in the library. This macro may be used as an lvalue, but care must be taken to avoid modifying the library-specific bits.
+This macro retrieves the flags associated with the sparse matrix table. Only \hyperlink{group__dbprim__hash_ga23}{HASH\_\-FLAG\_\-AUTOGROW} and \hyperlink{group__dbprim__hash_ga24}{HASH\_\-FLAG\_\-AUTOSHRINK} have any meaning to the application; all other bits are reserved for use in the library. This macro may be used as an lvalue, but care must be taken to avoid modifying the library-specific bits.
 
 \begin{Desc}
 \item[Parameters:]
@@ -770,7 +766,7 @@ This macro retrieves the flags associated with the sparse matrix table. Only \hy
 \item[Returns:]An {\tt unsigned long} containing the flags for the sparse matrix table.\end{Desc}
 
 
-Definition at line 1696 of file dbprim.h.\hypertarget{group__dbprim__smat_ga36}{
+Definition at line 1710 of file dbprim.h.\hypertarget{group__dbprim__smat_ga36}{
 \index{dbprim_smat@{dbprim\_\-smat}!st_frozen@{st\_\-frozen}}
 \index{st_frozen@{st\_\-frozen}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[st\_\-frozen]{\setlength{\rightskip}{0pt plus 5cm}\#define st\_\-frozen(table)}}
@@ -788,7 +784,7 @@ This macro returns a non-zero value if the matrix is currently frozen. The spars
 \item[Returns:]A zero value if the matrix is not frozen or a non-zero value if the matrix is frozen.\end{Desc}
 
 
-Definition at line 1710 of file dbprim.h.\hypertarget{group__dbprim__smat_ga37}{
+Definition at line 1724 of file dbprim.h.\hypertarget{group__dbprim__smat_ga37}{
 \index{dbprim_smat@{dbprim\_\-smat}!st_modulus@{st\_\-modulus}}
 \index{st_modulus@{st\_\-modulus}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[st\_\-modulus]{\setlength{\rightskip}{0pt plus 5cm}\#define st\_\-modulus(table)}}
@@ -806,9 +802,7 @@ This macro retrieves the number of buckets allocated for the sparse matrix table
 \item[Returns:]An {\tt unsigned long} containing the number of buckets allocated for the sparse matrix table.\end{Desc}
 
 
-Definition at line 1725 of file dbprim.h.
-
-Referenced by main().\hypertarget{group__dbprim__smat_ga66}{
+Definition at line 1739 of file dbprim.h.\hypertarget{group__dbprim__smat_ga66}{
 \index{dbprim_smat@{dbprim\_\-smat}!ST_REM_FIRST@{ST\_\-REM\_\-FIRST}}
 \index{ST_REM_FIRST@{ST\_\-REM\_\-FIRST}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[ST\_\-REM\_\-FIRST]{\setlength{\rightskip}{0pt plus 5cm}\#define ST\_\-REM\_\-FIRST}}
@@ -817,7 +811,7 @@ Referenced by main().\hypertarget{group__dbprim__smat_ga66}{
 
 \begin{Desc}
 \item[For internal use only.]
-This flag may be passed to \hyperlink{group__dbprim__smat_ga24}{\_\-st\_\-remove()} to request that a sparse matrix entry should be removed from the \hyperlink{group__dbprim__smat_gga70a137}{SMAT\_\-LOC\_\-FIRST} linked list.\end{Desc}
+This flag may be passed to \hyperlink{group__dbprim__smat_ga23}{\_\-st\_\-remove()} to request that a sparse matrix entry should be removed from the \hyperlink{group__dbprim__smat_gga70a137}{SMAT\_\-LOC\_\-FIRST} linked list.\end{Desc}
 
 
 Definition at line 165 of file dbprim\_\-int.h.
@@ -831,7 +825,7 @@ Referenced by \_\-sh\_\-flush\_\-iter(), \_\-st\_\-flush\_\-iter(), \_\-st\_\-re
 
 \begin{Desc}
 \item[For internal use only.]
-This flag may be passed to \hyperlink{group__dbprim__smat_ga24}{\_\-st\_\-remove()} to request that a sparse matrix entry be passed to \hyperlink{group__dbprim__smat_ga26}{\_\-smat\_\-free()}.\end{Desc}
+This flag may be passed to \hyperlink{group__dbprim__smat_ga23}{\_\-st\_\-remove()} to request that a sparse matrix entry be passed to \hyperlink{group__dbprim__smat_ga25}{\_\-smat\_\-free()}.\end{Desc}
 
 
 Definition at line 193 of file dbprim\_\-int.h.
@@ -845,7 +839,7 @@ Referenced by \_\-st\_\-remove(), st\_\-add(), and st\_\-remove().\hypertarget{g
 
 \begin{Desc}
 \item[For internal use only.]
-This flag may be passed to \hyperlink{group__dbprim__smat_ga24}{\_\-st\_\-remove()} to request that a sparse matrix entry should be removed from the hash table.\end{Desc}
+This flag may be passed to \hyperlink{group__dbprim__smat_ga23}{\_\-st\_\-remove()} to request that a sparse matrix entry should be removed from the hash table.\end{Desc}
 
 
 Definition at line 184 of file dbprim\_\-int.h.
@@ -859,7 +853,7 @@ Referenced by \_\-sh\_\-flush\_\-iter(), \_\-st\_\-remove(), st\_\-add(), and st
 
 \begin{Desc}
 \item[For internal use only.]
-This flag may be passed to \hyperlink{group__dbprim__smat_ga24}{\_\-st\_\-remove()} to request that a sparse matrix entry should be removed from the \hyperlink{group__dbprim__smat_gga70a138}{SMAT\_\-LOC\_\-SECOND} linked list.\end{Desc}
+This flag may be passed to \hyperlink{group__dbprim__smat_ga23}{\_\-st\_\-remove()} to request that a sparse matrix entry should be removed from the \hyperlink{group__dbprim__smat_gga70a138}{SMAT\_\-LOC\_\-SECOND} linked list.\end{Desc}
 
 
 Definition at line 175 of file dbprim\_\-int.h.
@@ -884,7 +878,7 @@ This macro returns the physical size of the memory allocated by the library for 
 \item[Returns:]A {\tt size\_\-t}.\end{Desc}
 
 
-Definition at line 1777 of file dbprim.h.\hypertarget{group__dbprim__smat_ga34}{
+Definition at line 1791 of file dbprim.h.\hypertarget{group__dbprim__smat_ga34}{
 \index{dbprim_smat@{dbprim\_\-smat}!st_verify@{st\_\-verify}}
 \index{st_verify@{st\_\-verify}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[st\_\-verify]{\setlength{\rightskip}{0pt plus 5cm}\#define st\_\-verify(table)}}
@@ -904,7 +898,7 @@ This macro verifies that a given pointer actually does point to a sparse matrix 
 \item[Returns:]Boolean {\tt true} if {\tt table} is a valid sparse matrix table or {\tt false} otherwise.\end{Desc}
 
 
-Definition at line 1679 of file dbprim.h.
+Definition at line 1693 of file dbprim.h.
 
 Referenced by st\_\-add(), st\_\-find(), st\_\-flush(), st\_\-free(), st\_\-iter(), st\_\-remove(), and st\_\-resize().
 
@@ -916,7 +910,7 @@ Referenced by st\_\-add(), st\_\-find(), st\_\-flush(), st\_\-free(), st\_\-iter
 \label{group__dbprim__smat_ga5}
 
 
-This function pointer references a callback used by \hyperlink{group__dbprim__smat_ga22}{sh\_\-find()}. It should return 0 if the sparse matrix entry represented by the second argument matches the key passed as the first argument.
+This function pointer references a callback used by \hyperlink{group__dbprim__smat_ga20}{sh\_\-find()}. It should return 0 if the sparse matrix entry represented by the second argument matches the key passed as the first argument.
 
 \begin{Desc}
 \item[Parameters:]
@@ -952,12 +946,12 @@ Definition at line 300 of file dbprim.h.\hypertarget{group__dbprim__smat_ga4}{
 \label{group__dbprim__smat_ga4}
 
 
-This function pointer references a callback used by \hyperlink{group__dbprim__smat_ga16}{st\_\-iter()}, \hyperlink{group__dbprim__smat_ga17}{st\_\-flush()}, \hyperlink{group__dbprim__smat_ga23}{sh\_\-iter()}, and \hyperlink{dbprim_8h_a178}{sh\_\-flush()}. It should return 0 for success. A non-zero return value will terminate the operation and will become the return value of the call.
+This function pointer references a callback used by \hyperlink{group__dbprim__smat_ga14}{st\_\-iter()}, \hyperlink{group__dbprim__smat_ga15}{st\_\-flush()}, \hyperlink{group__dbprim__smat_ga21}{sh\_\-iter()}, and \hyperlink{group__dbprim__smat_ga22}{sh\_\-flush()}. It should return 0 for success. A non-zero return value will terminate the operation and will become the return value of the call.
 
 \begin{Desc}
 \item[Parameters:]
 \begin{description}
-\item[\mbox{$\leftarrow$} {\em table}]A pointer to a \hyperlink{group__dbprim__smat_ga0}{smat\_\-table\_\-t}. \item[\mbox{$\leftarrow$} {\em ent}]A pointer to the \hyperlink{group__dbprim__smat_ga2}{smat\_\-entry\_\-t} being considered. \item[\mbox{$\leftarrow$} {\em extra}]A {\tt void} pointer passed to \hyperlink{group__dbprim__smat_ga16}{st\_\-iter()}, \hyperlink{group__dbprim__smat_ga17}{st\_\-flush()}, \hyperlink{group__dbprim__smat_ga23}{sh\_\-iter()}, or \hyperlink{dbprim_8h_a178}{sh\_\-flush()}.\end{description}
+\item[\mbox{$\leftarrow$} {\em table}]A pointer to a \hyperlink{group__dbprim__smat_ga0}{smat\_\-table\_\-t}. \item[\mbox{$\leftarrow$} {\em ent}]A pointer to the \hyperlink{group__dbprim__smat_ga2}{smat\_\-entry\_\-t} being considered. \item[\mbox{$\leftarrow$} {\em extra}]A {\tt void} pointer passed to \hyperlink{group__dbprim__smat_ga14}{st\_\-iter()}, \hyperlink{group__dbprim__smat_ga15}{st\_\-flush()}, \hyperlink{group__dbprim__smat_ga21}{sh\_\-iter()}, or \hyperlink{group__dbprim__smat_ga22}{sh\_\-flush()}.\end{description}
 \end{Desc}
 \begin{Desc}
 \item[Returns:]Zero for success, or non-zero to terminate the iteration.\end{Desc}
@@ -1037,7 +1031,7 @@ Definition at line 546 of file dbprim.h.
 
 \begin{Desc}
 \item[For internal use only.]
-This function is a \hyperlink{group__dbprim__link_ga3}{link\_\-comp\_\-t} comparison callback that is used as a shim between the \hyperlink{group__dbprim__smat_ga22}{sh\_\-find()} function and the ll\_\-find function, which it uses internally.
+This function is a \hyperlink{group__dbprim__link_ga3}{link\_\-comp\_\-t} comparison callback that is used as a shim between the \hyperlink{group__dbprim__smat_ga20}{sh\_\-find()} function and the ll\_\-find function, which it uses internally.
 
 \begin{Desc}
 \item[Parameters:]
@@ -1062,7 +1056,7 @@ Referenced by sh\_\-find().\hypertarget{group__dbprim__smat_ga28}{
 
 \begin{Desc}
 \item[For internal use only.]
-This function is a \hyperlink{group__dbprim__link_ga2}{link\_\-iter\_\-t} iteration callback that is used as a shim between the \hyperlink{dbprim_8h_a178}{sh\_\-flush()} function and the \hyperlink{group__dbprim__link_ga11}{ll\_\-flush()} function, which it uses internally.
+This function is a \hyperlink{group__dbprim__link_ga2}{link\_\-iter\_\-t} iteration callback that is used as a shim between the \hyperlink{group__dbprim__smat_ga22}{sh\_\-flush()} function and the \hyperlink{group__dbprim__link_ga11}{ll\_\-flush()} function, which it uses internally.
 
 \begin{Desc}
 \item[Parameters:]
@@ -1095,7 +1089,7 @@ Here is the call graph for this function:\begin{figure}[H]
 
 \begin{Desc}
 \item[For internal use only.]
-This function is a \hyperlink{group__dbprim__link_ga2}{link\_\-iter\_\-t} iteration callback that is used as a shim between the \hyperlink{group__dbprim__smat_ga16}{st\_\-iter()} function and the \hyperlink{group__dbprim__link_ga10}{ll\_\-iter()} function, which it uses internally.
+This function is a \hyperlink{group__dbprim__link_ga2}{link\_\-iter\_\-t} iteration callback that is used as a shim between the \hyperlink{group__dbprim__smat_ga14}{st\_\-iter()} function and the \hyperlink{group__dbprim__link_ga10}{ll\_\-iter()} function, which it uses internally.
 
 \begin{Desc}
 \item[Parameters:]
@@ -1111,16 +1105,16 @@ Definition at line 66 of file sh\_\-iter.c.
 
 References le\_\-object, \_\-sh\_\-iter\_\-s::si\_\-extra, \_\-sh\_\-iter\_\-s::si\_\-iter, and \_\-sh\_\-iter\_\-s::si\_\-table.
 
-Referenced by sh\_\-iter().\hypertarget{group__dbprim__smat_ga25}{
+Referenced by sh\_\-iter().\hypertarget{group__dbprim__smat_ga24}{
 \index{dbprim_smat@{dbprim\_\-smat}!_smat_alloc@{\_\-smat\_\-alloc}}
 \index{_smat_alloc@{\_\-smat\_\-alloc}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[\_\-smat\_\-alloc]{\setlength{\rightskip}{0pt plus 5cm}\hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t}$\ast$ \_\-smat\_\-alloc (void)}}
-\label{group__dbprim__smat_ga25}
+\label{group__dbprim__smat_ga24}
 
 
 \begin{Desc}
 \item[For internal use only.]
-This function is used to allocate a sparse matrix entry. In cooperation with \hyperlink{group__dbprim__smat_ga26}{\_\-smat\_\-free()}, it maintains a freelist in order to reduce memory fragmentation. If a sparse matrix entry cannot be allocated from the freelist, a new one will be allocated with malloc().
+This function is used to allocate a sparse matrix entry. In cooperation with \hyperlink{group__dbprim__smat_ga25}{\_\-smat\_\-free()}, it maintains a freelist in order to reduce memory fragmentation. If a sparse matrix entry cannot be allocated from the freelist, a new one will be allocated with malloc().
 
 \begin{Desc}
 \item[Returns:]A pointer to an initialized sparse matrix entry.\end{Desc}
@@ -1136,44 +1130,19 @@ Referenced by st\_\-add().
 Here is the call graph for this function:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=146pt]{group__dbprim__smat_ga25_cgraph}
+\includegraphics[width=146pt]{group__dbprim__smat_ga24_cgraph}
 \end{center}
 \end{figure}
-\hypertarget{group__dbprim__smat_ga10}{
-\index{dbprim_smat@{dbprim\_\-smat}!_smat_comp@{\_\-smat\_\-comp}}
-\index{_smat_comp@{\_\-smat\_\-comp}!dbprim_smat@{dbprim\_\-smat}}
-\subsubsection[\_\-smat\_\-comp]{\setlength{\rightskip}{0pt plus 5cm}unsigned long \_\-smat\_\-comp (\hyperlink{struct__hash__table__s}{hash\_\-table\_\-t} $\ast$ {\em table}, \hyperlink{struct__db__key__s}{db\_\-key\_\-t} $\ast$ {\em key1}, \hyperlink{struct__db__key__s}{db\_\-key\_\-t} $\ast$ {\em key2})}}
-\label{group__dbprim__smat_ga10}
-
-
-\begin{Desc}
-\item[For internal use only.]
-This function is a hash table-compatible comparison function for use by sparse matrices.
-
-\begin{Desc}
-\item[Parameters:]
-\begin{description}
-\item[\mbox{$\leftarrow$} {\em table}]The hash table for which the comparison is being performed. \item[\mbox{$\leftarrow$} {\em key1}]The first database key being compared. \item[\mbox{$\leftarrow$} {\em key2}]The second database key being compared.\end{description}
-\end{Desc}
-\begin{Desc}
-\item[Returns:]Zero if the database keys are identical, non-zero otherwise.\end{Desc}
-\end{Desc}
-
-
-Definition at line 34 of file \_\-smat\_\-comp.c.
-
-References dk\_\-key, SMAT\_\-LOC\_\-FIRST, and SMAT\_\-LOC\_\-SECOND.
-
-Referenced by st\_\-init().\hypertarget{group__dbprim__smat_ga26}{
+\hypertarget{group__dbprim__smat_ga25}{
 \index{dbprim_smat@{dbprim\_\-smat}!_smat_free@{\_\-smat\_\-free}}
 \index{_smat_free@{\_\-smat\_\-free}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[\_\-smat\_\-free]{\setlength{\rightskip}{0pt plus 5cm}void \_\-smat\_\-free (\hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$ {\em entry})}}
-\label{group__dbprim__smat_ga26}
+\label{group__dbprim__smat_ga25}
 
 
 \begin{Desc}
 \item[For internal use only.]
-This function is used to release a sparse matrix entry. In cooperatio with \hyperlink{group__dbprim__smat_ga25}{\_\-smat\_\-alloc()}, it maintains a freelist in order to reduce memory fragmentation. Sparse matrix entries passed to this function will generally be added to the free list.
+This function is used to release a sparse matrix entry. In cooperatio with \hyperlink{group__dbprim__smat_ga24}{\_\-smat\_\-alloc()}, it maintains a freelist in order to reduce memory fragmentation. Sparse matrix entries passed to this function will generally be added to the free list.
 
 \begin{Desc}
 \item[Parameters:]
@@ -1192,14 +1161,14 @@ Referenced by \_\-sh\_\-flush\_\-iter(), \_\-st\_\-flush\_\-iter(), \_\-st\_\-re
 Here is the call graph for this function:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=96pt]{group__dbprim__smat_ga26_cgraph}
+\includegraphics[width=96pt]{group__dbprim__smat_ga25_cgraph}
 \end{center}
 \end{figure}
-\hypertarget{group__dbprim__smat_ga11}{
+\hypertarget{group__dbprim__smat_ga26}{
 \index{dbprim_smat@{dbprim\_\-smat}!_smat_resize@{\_\-smat\_\-resize}}
 \index{_smat_resize@{\_\-smat\_\-resize}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[\_\-smat\_\-resize]{\setlength{\rightskip}{0pt plus 5cm}unsigned long \_\-smat\_\-resize (\hyperlink{struct__hash__table__s}{hash\_\-table\_\-t} $\ast$ {\em table}, unsigned long {\em new\_\-mod})}}
-\label{group__dbprim__smat_ga11}
+\label{group__dbprim__smat_ga26}
 
 
 \begin{Desc}
@@ -1229,7 +1198,7 @@ Referenced by st\_\-init().\hypertarget{group__dbprim__smat_ga30}{
 
 \begin{Desc}
 \item[For internal use only.]
-This function is a \hyperlink{group__dbprim__hash_ga3}{hash\_\-iter\_\-t} iteration callback that is used as a shim between the \hyperlink{group__dbprim__smat_ga17}{st\_\-flush()} function and the \hyperlink{group__dbprim__hash_ga15}{ht\_\-flush()} function, which it uses internally.
+This function is a \hyperlink{group__dbprim__hash_ga3}{hash\_\-iter\_\-t} iteration callback that is used as a shim between the \hyperlink{group__dbprim__smat_ga15}{st\_\-flush()} function and the \hyperlink{group__dbprim__hash_ga16}{ht\_\-flush()} function, which it uses internally.
 
 \begin{Desc}
 \item[Parameters:]
@@ -1262,7 +1231,7 @@ Here is the call graph for this function:\begin{figure}[H]
 
 \begin{Desc}
 \item[For internal use only.]
-This function is a \hyperlink{group__dbprim__hash_ga3}{hash\_\-iter\_\-t} iteration callback that is used as a shim between the \hyperlink{group__dbprim__smat_ga16}{st\_\-iter()} function and the \hyperlink{group__dbprim__hash_ga14}{ht\_\-iter()} function, which it uses internally.
+This function is a \hyperlink{group__dbprim__hash_ga3}{hash\_\-iter\_\-t} iteration callback that is used as a shim between the \hyperlink{group__dbprim__smat_ga14}{st\_\-iter()} function and the \hyperlink{group__dbprim__hash_ga15}{ht\_\-iter()} function, which it uses internally.
 
 \begin{Desc}
 \item[Parameters:]
@@ -1278,11 +1247,11 @@ Definition at line 66 of file st\_\-iter.c.
 
 References he\_\-value, \_\-st\_\-iter\_\-s::si\_\-extra, \_\-st\_\-iter\_\-s::si\_\-iter, and \_\-st\_\-iter\_\-s::si\_\-table.
 
-Referenced by st\_\-iter().\hypertarget{group__dbprim__smat_ga24}{
+Referenced by st\_\-iter().\hypertarget{group__dbprim__smat_ga23}{
 \index{dbprim_smat@{dbprim\_\-smat}!_st_remove@{\_\-st\_\-remove}}
 \index{_st_remove@{\_\-st\_\-remove}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[\_\-st\_\-remove]{\setlength{\rightskip}{0pt plus 5cm}unsigned long \_\-st\_\-remove (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$ {\em table}, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$ {\em entry}, unsigned int {\em remflag})}}
-\label{group__dbprim__smat_ga24}
+\label{group__dbprim__smat_ga23}
 
 
 \begin{Desc}
@@ -1308,14 +1277,14 @@ Referenced by \_\-sh\_\-flush\_\-iter(), \_\-st\_\-flush\_\-iter(), and st\_\-re
 Here is the call graph for this function:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=215pt]{group__dbprim__smat_ga24_cgraph}
+\includegraphics[width=215pt]{group__dbprim__smat_ga23_cgraph}
 \end{center}
 \end{figure}
-\hypertarget{group__dbprim__smat_ga22}{
+\hypertarget{group__dbprim__smat_ga20}{
 \index{dbprim_smat@{dbprim\_\-smat}!sh_find@{sh\_\-find}}
 \index{sh_find@{sh\_\-find}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[sh\_\-find]{\setlength{\rightskip}{0pt plus 5cm}unsigned long sh\_\-find (\hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$ {\em head}, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$$\ast$ {\em elem\_\-p}, \hyperlink{group__dbprim__smat_ga5}{smat\_\-comp\_\-t} {\em comp\_\-func}, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$ {\em start}, \hyperlink{struct__db__key__s}{db\_\-key\_\-t} $\ast$ {\em key})}}
-\label{group__dbprim__smat_ga22}
+\label{group__dbprim__smat_ga20}
 
 
 This function iterates through the given row or column of a sparse matrix looking for an element that matches the given {\tt key}.
@@ -1339,14 +1308,45 @@ References \_\-sh\_\-find\_\-comp(), dk\_\-key, le\_\-object, ll\_\-find(), \_\-
 Here is the call graph for this function:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=108pt]{group__dbprim__smat_ga22_cgraph}
+\includegraphics[width=108pt]{group__dbprim__smat_ga20_cgraph}
 \end{center}
 \end{figure}
-\hypertarget{group__dbprim__smat_ga20}{
+\hypertarget{group__dbprim__smat_ga22}{
+\index{dbprim_smat@{dbprim\_\-smat}!sh_flush@{sh\_\-flush}}
+\index{sh_flush@{sh\_\-flush}!dbprim_smat@{dbprim\_\-smat}}
+\subsubsection[sh\_\-flush]{\setlength{\rightskip}{0pt plus 5cm}unsigned long sh\_\-flush (\hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$ {\em head}, \hyperlink{group__dbprim__smat_ga4}{smat\_\-iter\_\-t} {\em flush\_\-func}, void $\ast$ {\em extra})}}
+\label{group__dbprim__smat_ga22}
+
+
+This function flushes a sparse matrix row or column--that is, it removes each element from that row or column. If a {\tt flush\_\-func} is specified, it will be called on the entry after it has been removed from the row or column, and may safely call {\tt free()}.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em head}]A pointer to a \hyperlink{group__dbprim__smat_ga1}{smat\_\-head\_\-t}. \item[\mbox{$\leftarrow$} {\em flush\_\-func}]A pointer to a callback function used to perform user-specifed actions on an entry after removing it from the row or column. May be {\tt NULL}. See the documentation for \hyperlink{group__dbprim__smat_ga4}{smat\_\-iter\_\-t} for more information. \item[\mbox{$\leftarrow$} {\em extra}]A {\tt void} pointer that will be passed to {\tt flush\_\-func}.\end{description}
+\end{Desc}
+\begin{Desc}
+\item[Return values:]
+\begin{description}
+\item[{\em DB\_\-ERR\_\-BADARGS}]An argument was invalid.\end{description}
+\end{Desc}
+
+
+Definition at line 90 of file sh\_\-flush.c.
+
+References \_\-sh\_\-flush\_\-iter(), ll\_\-flush(), \_\-sh\_\-flush\_\-s::sf\_\-elem, \_\-sh\_\-flush\_\-s::sf\_\-extra, \_\-sh\_\-flush\_\-s::sf\_\-flush, \_\-sh\_\-flush\_\-s::sf\_\-table, \_\-smat\_\-head\_\-s::sh\_\-elem, \_\-smat\_\-head\_\-s::sh\_\-head, \_\-smat\_\-head\_\-s::sh\_\-table, and sh\_\-verify.
+
+Here is the call graph for this function:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=315pt]{group__dbprim__smat_ga22_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{group__dbprim__smat_ga18}{
 \index{dbprim_smat@{dbprim\_\-smat}!sh_init@{sh\_\-init}}
 \index{sh_init@{sh\_\-init}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[sh\_\-init]{\setlength{\rightskip}{0pt plus 5cm}unsigned long sh\_\-init (\hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$ {\em head}, \hyperlink{group__dbprim__smat_ga6}{smat\_\-loc\_\-t} {\em elem}, void $\ast$ {\em object})}}
-\label{group__dbprim__smat_ga20}
+\label{group__dbprim__smat_ga18}
 
 
 This function dynamically initializes a sparse matrix row or column linked list head. The {\tt elem} argument specifies whether the object is to be associated with a \hyperlink{group__dbprim__smat_gga70a137}{SMAT\_\-LOC\_\-FIRST} list or a \hyperlink{group__dbprim__smat_gga70a138}{SMAT\_\-LOC\_\-SECOND} list.
@@ -1367,19 +1367,17 @@ Definition at line 34 of file sh\_\-init.c.
 
 References ll\_\-init(), \_\-smat\_\-head\_\-s::sh\_\-elem, \_\-smat\_\-head\_\-s::sh\_\-head, \_\-smat\_\-head\_\-s::sh\_\-magic, \_\-smat\_\-head\_\-s::sh\_\-table, SMAT\_\-HEAD\_\-MAGIC, SMAT\_\-LOC\_\-FIRST, and SMAT\_\-LOC\_\-SECOND.
 
-Referenced by main().
-
 Here is the call graph for this function:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=83pt]{group__dbprim__smat_ga20_cgraph}
+\includegraphics[width=83pt]{group__dbprim__smat_ga18_cgraph}
 \end{center}
 \end{figure}
-\hypertarget{group__dbprim__smat_ga23}{
+\hypertarget{group__dbprim__smat_ga21}{
 \index{dbprim_smat@{dbprim\_\-smat}!sh_iter@{sh\_\-iter}}
 \index{sh_iter@{sh\_\-iter}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[sh\_\-iter]{\setlength{\rightskip}{0pt plus 5cm}unsigned long sh\_\-iter (\hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$ {\em head}, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$ {\em start}, \hyperlink{group__dbprim__smat_ga4}{smat\_\-iter\_\-t} {\em iter\_\-func}, void $\ast$ {\em extra}, unsigned long {\em flags})}}
-\label{group__dbprim__smat_ga23}
+\label{group__dbprim__smat_ga21}
 
 
 This function iterates over a row or column of a sparse matrix, executing the given {\tt iter\_\-func} for each entry.
@@ -1403,14 +1401,14 @@ References \_\-sh\_\-iter\_\-iter(), ll\_\-iter(), \_\-smat\_\-entry\_\-s::se\_\
 Here is the call graph for this function:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=99pt]{group__dbprim__smat_ga23_cgraph}
+\includegraphics[width=99pt]{group__dbprim__smat_ga21_cgraph}
 \end{center}
 \end{figure}
-\hypertarget{group__dbprim__smat_ga21}{
+\hypertarget{group__dbprim__smat_ga19}{
 \index{dbprim_smat@{dbprim\_\-smat}!sh_move@{sh\_\-move}}
 \index{sh_move@{sh\_\-move}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[sh\_\-move]{\setlength{\rightskip}{0pt plus 5cm}unsigned long sh\_\-move (\hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$ {\em head}, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$ {\em elem}, \hyperlink{group__dbprim__link_ga4}{link\_\-loc\_\-t} {\em loc}, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$ {\em elem2})}}
-\label{group__dbprim__smat_ga21}
+\label{group__dbprim__smat_ga19}
 
 
 This function allows the specified entry to be shifted within the linked list describing the row or column. It is very similar to the \hyperlink{group__dbprim__link_ga7}{ll\_\-move()} function.
@@ -1434,7 +1432,7 @@ References ll\_\-move(), \_\-smat\_\-entry\_\-s::se\_\-link, se\_\-verify, \_\-s
 Here is the call graph for this function:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=94pt]{group__dbprim__smat_ga21_cgraph}
+\includegraphics[width=94pt]{group__dbprim__smat_ga19_cgraph}
 \end{center}
 \end{figure}
 \hypertarget{group__dbprim__smat_ga8}{
@@ -1475,11 +1473,11 @@ This function returns the amount of memory being used by the internal free list 
 
 Definition at line 106 of file smat\_\-freelist.c.
 
-References ll\_\-count.\hypertarget{group__dbprim__smat_ga13}{
+References ll\_\-count.\hypertarget{group__dbprim__smat_ga11}{
 \index{dbprim_smat@{dbprim\_\-smat}!st_add@{st\_\-add}}
 \index{st_add@{st\_\-add}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[st\_\-add]{\setlength{\rightskip}{0pt plus 5cm}unsigned long st\_\-add (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$ {\em table}, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$$\ast$ {\em entry\_\-p}, \hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$ {\em head1}, \hyperlink{group__dbprim__link_ga4}{link\_\-loc\_\-t} {\em loc1}, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$ {\em ent1}, \hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$ {\em head2}, \hyperlink{group__dbprim__link_ga4}{link\_\-loc\_\-t} {\em loc2}, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$ {\em ent2})}}
-\label{group__dbprim__smat_ga13}
+\label{group__dbprim__smat_ga11}
 
 
 This function adds an entry to a sparse matrix. The entry is referenced in three different places, thus the complex set of arguments. This function will allocate a \hyperlink{group__dbprim__smat_ga2}{smat\_\-entry\_\-t} and return it through the {\tt entry\_\-p} result parameter.
@@ -1500,19 +1498,17 @@ Definition at line 36 of file st\_\-add.c.
 
 References \_\-smat\_\-alloc(), \_\-smat\_\-free(), dk\_\-key, dk\_\-len, ht\_\-add(), ht\_\-remove(), LINK\_\-LOC\_\-AFTER, LINK\_\-LOC\_\-BEFORE, ll\_\-add(), ll\_\-remove(), \_\-smat\_\-entry\_\-s::se\_\-hash, \_\-smat\_\-entry\_\-s::se\_\-link, \_\-smat\_\-entry\_\-s::se\_\-object, \_\-smat\_\-entry\_\-s::se\_\-table, se\_\-verify, \_\-smat\_\-head\_\-s::sh\_\-elem, \_\-smat\_\-head\_\-s::sh\_\-head, sh\_\-object, \_\-smat\_\-head\_\-s::sh\_\-table, sh\_\-verify, SMAT\_\-LOC\_\-FIRST, SMAT\_\-LOC\_\-SECOND, ST\_\-REM\_\-FIRST, ST\_\-REM\_\-FREE, ST\_\-REM\_\-HASH, \_\-smat\_\-table\_\-s::st\_\-table, and st\_\-verify.
 
-Referenced by main().
-
 Here is the call graph for this function:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=208pt]{group__dbprim__smat_ga13_cgraph}
+\includegraphics[width=208pt]{group__dbprim__smat_ga11_cgraph}
 \end{center}
 \end{figure}
-\hypertarget{group__dbprim__smat_ga15}{
+\hypertarget{group__dbprim__smat_ga13}{
 \index{dbprim_smat@{dbprim\_\-smat}!st_find@{st\_\-find}}
 \index{st_find@{st\_\-find}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[st\_\-find]{\setlength{\rightskip}{0pt plus 5cm}unsigned long st\_\-find (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$ {\em table}, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$$\ast$ {\em entry\_\-p}, \hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$ {\em head1}, \hyperlink{struct__smat__head__s}{smat\_\-head\_\-t} $\ast$ {\em head2})}}
-\label{group__dbprim__smat_ga15}
+\label{group__dbprim__smat_ga13}
 
 
 This function looks up the entry matching the given {\tt head1} and {\tt head2}.
@@ -1533,19 +1529,17 @@ Definition at line 36 of file st\_\-find.c.
 
 References dk\_\-key, dk\_\-len, he\_\-value, ht\_\-find(), \_\-link\_\-head\_\-s::lh\_\-count, \_\-smat\_\-head\_\-s::sh\_\-elem, \_\-smat\_\-head\_\-s::sh\_\-head, sh\_\-object, \_\-smat\_\-head\_\-s::sh\_\-table, sh\_\-verify, SMAT\_\-LOC\_\-FIRST, SMAT\_\-LOC\_\-SECOND, \_\-smat\_\-table\_\-s::st\_\-table, and st\_\-verify.
 
-Referenced by main().
-
 Here is the call graph for this function:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=87pt]{group__dbprim__smat_ga15_cgraph}
+\includegraphics[width=87pt]{group__dbprim__smat_ga13_cgraph}
 \end{center}
 \end{figure}
-\hypertarget{group__dbprim__smat_ga17}{
+\hypertarget{group__dbprim__smat_ga15}{
 \index{dbprim_smat@{dbprim\_\-smat}!st_flush@{st\_\-flush}}
 \index{st_flush@{st\_\-flush}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[st\_\-flush]{\setlength{\rightskip}{0pt plus 5cm}unsigned long st\_\-flush (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$ {\em table}, \hyperlink{group__dbprim__smat_ga4}{smat\_\-iter\_\-t} {\em flush\_\-func}, void $\ast$ {\em extra})}}
-\label{group__dbprim__smat_ga17}
+\label{group__dbprim__smat_ga15}
 
 
 This function flushes a sparse matrix--that is, it removes each entry from the matrix. If a {\tt flush\_\-func} is specified, it will be called on the entry after it has been removed from the table, and may safely call {\tt free()}.
@@ -1569,14 +1563,14 @@ References \_\-st\_\-flush\_\-iter(), ht\_\-flush(), \_\-st\_\-flush\_\-s::sf\_\
 Here is the call graph for this function:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=313pt]{group__dbprim__smat_ga17_cgraph}
+\includegraphics[width=313pt]{group__dbprim__smat_ga15_cgraph}
 \end{center}
 \end{figure}
-\hypertarget{group__dbprim__smat_ga19}{
+\hypertarget{group__dbprim__smat_ga17}{
 \index{dbprim_smat@{dbprim\_\-smat}!st_free@{st\_\-free}}
 \index{st_free@{st\_\-free}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[st\_\-free]{\setlength{\rightskip}{0pt plus 5cm}unsigned long st\_\-free (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$ {\em table})}}
-\label{group__dbprim__smat_ga19}
+\label{group__dbprim__smat_ga17}
 
 
 This function releases the memory used by the bucket table of the empty hash table associated with a sparse matrix.
@@ -1600,14 +1594,14 @@ References ht\_\-free(), \_\-smat\_\-table\_\-s::st\_\-table, and st\_\-verify.
 Here is the call graph for this function:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=88pt]{group__dbprim__smat_ga19_cgraph}
+\includegraphics[width=88pt]{group__dbprim__smat_ga17_cgraph}
 \end{center}
 \end{figure}
-\hypertarget{group__dbprim__smat_ga12}{
+\hypertarget{group__dbprim__smat_ga10}{
 \index{dbprim_smat@{dbprim\_\-smat}!st_init@{st\_\-init}}
 \index{st_init@{st\_\-init}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[st\_\-init]{\setlength{\rightskip}{0pt plus 5cm}unsigned long st\_\-init (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$ {\em table}, unsigned long {\em flags}, \hyperlink{group__dbprim__smat_ga3}{smat\_\-resize\_\-t} {\em resize}, void $\ast$ {\em extra}, unsigned long {\em init\_\-mod})}}
-\label{group__dbprim__smat_ga12}
+\label{group__dbprim__smat_ga10}
 
 
 This function initializes a sparse matrix table.
@@ -1615,7 +1609,7 @@ This function initializes a sparse matrix table.
 \begin{Desc}
 \item[Parameters:]
 \begin{description}
-\item[\mbox{$\leftarrow$} {\em table}]A pointer to a \hyperlink{group__dbprim__smat_ga0}{smat\_\-table\_\-t} to be initialized. \item[\mbox{$\leftarrow$} {\em flags}]A bit-wise OR of \hyperlink{group__dbprim__hash_ga22}{HASH\_\-FLAG\_\-AUTOGROW} and \hyperlink{group__dbprim__hash_ga23}{HASH\_\-FLAG\_\-AUTOSHRINK}. If neither behavior is desired, use 0. \item[\mbox{$\leftarrow$} {\em resize}]A \hyperlink{group__dbprim__hash_ga6}{hash\_\-resize\_\-t} function pointer for determining whether resizing is permitted and/or for notification of the resize. \item[\mbox{$\leftarrow$} {\em extra}]Extra pointer data that should be associated with the sparse matrix table. \item[\mbox{$\leftarrow$} {\em init\_\-mod}]An initial modulus for the table. This will presumably be extracted by \hyperlink{group__dbprim__smat_ga37}{st\_\-modulus()} in a previous invocation of the application. A 0 value is valid.\end{description}
+\item[\mbox{$\leftarrow$} {\em table}]A pointer to a \hyperlink{group__dbprim__smat_ga0}{smat\_\-table\_\-t} to be initialized. \item[\mbox{$\leftarrow$} {\em flags}]A bit-wise OR of \hyperlink{group__dbprim__hash_ga23}{HASH\_\-FLAG\_\-AUTOGROW} and \hyperlink{group__dbprim__hash_ga24}{HASH\_\-FLAG\_\-AUTOSHRINK}. If neither behavior is desired, use 0. \item[\mbox{$\leftarrow$} {\em resize}]A \hyperlink{group__dbprim__hash_ga6}{hash\_\-resize\_\-t} function pointer for determining whether resizing is permitted and/or for notification of the resize. \item[\mbox{$\leftarrow$} {\em extra}]Extra pointer data that should be associated with the sparse matrix table. \item[\mbox{$\leftarrow$} {\em init\_\-mod}]An initial modulus for the table. This will presumably be extracted by \hyperlink{group__dbprim__smat_ga37}{st\_\-modulus()} in a previous invocation of the application. A 0 value is valid.\end{description}
 \end{Desc}
 \begin{Desc}
 \item[Return values:]
@@ -1626,21 +1620,19 @@ This function initializes a sparse matrix table.
 
 Definition at line 34 of file st\_\-init.c.
 
-References \_\-smat\_\-comp(), \_\-smat\_\-resize(), hash\_\-fnv1a(), ht\_\-init(), SMAT\_\-TABLE\_\-MAGIC, \_\-smat\_\-table\_\-s::st\_\-extra, \_\-smat\_\-table\_\-s::st\_\-magic, \_\-smat\_\-table\_\-s::st\_\-resize, and \_\-smat\_\-table\_\-s::st\_\-table.
-
-Referenced by main().
+References \_\-smat\_\-resize(), hash\_\-comp(), hash\_\-fnv1a(), ht\_\-init(), SMAT\_\-TABLE\_\-MAGIC, \_\-smat\_\-table\_\-s::st\_\-extra, \_\-smat\_\-table\_\-s::st\_\-magic, \_\-smat\_\-table\_\-s::st\_\-resize, and \_\-smat\_\-table\_\-s::st\_\-table.
 
 Here is the call graph for this function:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=157pt]{group__dbprim__smat_ga12_cgraph}
+\includegraphics[width=157pt]{group__dbprim__smat_ga10_cgraph}
 \end{center}
 \end{figure}
-\hypertarget{group__dbprim__smat_ga16}{
+\hypertarget{group__dbprim__smat_ga14}{
 \index{dbprim_smat@{dbprim\_\-smat}!st_iter@{st\_\-iter}}
 \index{st_iter@{st\_\-iter}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[st\_\-iter]{\setlength{\rightskip}{0pt plus 5cm}unsigned long st\_\-iter (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$ {\em table}, \hyperlink{group__dbprim__smat_ga4}{smat\_\-iter\_\-t} {\em iter\_\-func}, void $\ast$ {\em extra})}}
-\label{group__dbprim__smat_ga16}
+\label{group__dbprim__smat_ga14}
 
 
 This function iterates over every entry in a sparse matrix (in an unspecified order), executing the given {\tt iter\_\-func} on each entry.
@@ -1664,14 +1656,14 @@ References \_\-st\_\-iter\_\-iter(), ht\_\-iter(), \_\-st\_\-iter\_\-s::si\_\-ex
 Here is the call graph for this function:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=97pt]{group__dbprim__smat_ga16_cgraph}
+\includegraphics[width=97pt]{group__dbprim__smat_ga14_cgraph}
 \end{center}
 \end{figure}
-\hypertarget{group__dbprim__smat_ga14}{
+\hypertarget{group__dbprim__smat_ga12}{
 \index{dbprim_smat@{dbprim\_\-smat}!st_remove@{st\_\-remove}}
 \index{st_remove@{st\_\-remove}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[st\_\-remove]{\setlength{\rightskip}{0pt plus 5cm}unsigned long st\_\-remove (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$ {\em table}, \hyperlink{struct__smat__entry__s}{smat\_\-entry\_\-t} $\ast$ {\em entry})}}
-\label{group__dbprim__smat_ga14}
+\label{group__dbprim__smat_ga12}
 
 
 This function removes the given entry from the specified sparse matrix.
@@ -1692,22 +1684,20 @@ Definition at line 63 of file st\_\-remove.c.
 
 References \_\-st\_\-remove(), \_\-smat\_\-entry\_\-s::se\_\-table, se\_\-verify, ST\_\-REM\_\-FIRST, ST\_\-REM\_\-FREE, ST\_\-REM\_\-HASH, ST\_\-REM\_\-SECOND, and st\_\-verify.
 
-Referenced by main().
-
 Here is the call graph for this function:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=265pt]{group__dbprim__smat_ga14_cgraph}
+\includegraphics[width=265pt]{group__dbprim__smat_ga12_cgraph}
 \end{center}
 \end{figure}
-\hypertarget{group__dbprim__smat_ga18}{
+\hypertarget{group__dbprim__smat_ga16}{
 \index{dbprim_smat@{dbprim\_\-smat}!st_resize@{st\_\-resize}}
 \index{st_resize@{st\_\-resize}!dbprim_smat@{dbprim\_\-smat}}
 \subsubsection[st\_\-resize]{\setlength{\rightskip}{0pt plus 5cm}unsigned long st\_\-resize (\hyperlink{struct__smat__table__s}{smat\_\-table\_\-t} $\ast$ {\em table}, unsigned long {\em new\_\-size})}}
-\label{group__dbprim__smat_ga18}
+\label{group__dbprim__smat_ga16}
 
 
-This function resizes the hash table associated with a sparse matrix based on the {\tt new\_\-size} parameter. See the documentation for \hyperlink{group__dbprim__hash_ga16}{ht\_\-resize()} for more information.
+This function resizes the hash table associated with a sparse matrix based on the {\tt new\_\-size} parameter. See the documentation for \hyperlink{group__dbprim__hash_ga17}{ht\_\-resize()} for more information.
 
 \begin{Desc}
 \item[Parameters:]
@@ -1728,7 +1718,7 @@ References ht\_\-resize(), \_\-smat\_\-table\_\-s::st\_\-table, and st\_\-verify
 Here is the call graph for this function:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=154pt]{group__dbprim__smat_ga18_cgraph}
+\includegraphics[width=154pt]{group__dbprim__smat_ga16_cgraph}
 \end{center}
 \end{figure}
 

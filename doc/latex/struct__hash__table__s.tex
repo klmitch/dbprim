@@ -20,7 +20,7 @@ This is the implementation of the \hyperlink{group__dbprim__hash_ga1}{hash\_\-ta
 
 
 
-Definition at line 1057 of file dbprim.h.\subsection*{Data Fields}
+Definition at line 1071 of file dbprim.h.\subsection*{Data Fields}
 \begin{CompactItemize}
 \item 
 unsigned long \hyperlink{struct__hash__table__s_o0}{ht\_\-magic}
@@ -57,7 +57,7 @@ void $\ast$ \hyperlink{struct__hash__table__s_o10}{ht\_\-extra}
 
 Function for comparing hash keys. 
 
-Definition at line 1067 of file dbprim.h.
+Definition at line 1081 of file dbprim.h.
 
 Referenced by ht\_\-find(), and ht\_\-init().\hypertarget{struct__hash__table__s_o3}{
 \index{_hash_table_s@{\_\-hash\_\-table\_\-s}!ht_count@{ht\_\-count}}
@@ -68,7 +68,7 @@ Referenced by ht\_\-find(), and ht\_\-init().\hypertarget{struct__hash__table__s
 
 Number of elements in the table. 
 
-Definition at line 1062 of file dbprim.h.
+Definition at line 1076 of file dbprim.h.
 
 Referenced by ht\_\-add(), ht\_\-find(), ht\_\-flush(), ht\_\-free(), ht\_\-init(), ht\_\-move(), ht\_\-remove(), and ht\_\-resize().\hypertarget{struct__hash__table__s_o10}{
 \index{_hash_table_s@{\_\-hash\_\-table\_\-s}!ht_extra@{ht\_\-extra}}
@@ -79,7 +79,7 @@ Referenced by ht\_\-add(), ht\_\-find(), ht\_\-flush(), ht\_\-free(), ht\_\-init
 
 Extra data associated with the table. 
 
-Definition at line 1069 of file dbprim.h.
+Definition at line 1083 of file dbprim.h.
 
 Referenced by ht\_\-init().\hypertarget{struct__hash__table__s_o1}{
 \index{_hash_table_s@{\_\-hash\_\-table\_\-s}!ht_flags@{ht\_\-flags}}
@@ -90,7 +90,7 @@ Referenced by ht\_\-init().\hypertarget{struct__hash__table__s_o1}{
 
 Flags associated with the table. 
 
-Definition at line 1059 of file dbprim.h.
+Definition at line 1073 of file dbprim.h.
 
 Referenced by ht\_\-add(), ht\_\-flush(), ht\_\-free(), ht\_\-init(), ht\_\-iter(), ht\_\-move(), ht\_\-remove(), and ht\_\-resize().\hypertarget{struct__hash__table__s_o7}{
 \index{_hash_table_s@{\_\-hash\_\-table\_\-s}!ht_func@{ht\_\-func}}
@@ -101,7 +101,7 @@ Referenced by ht\_\-add(), ht\_\-flush(), ht\_\-free(), ht\_\-init(), ht\_\-iter
 
 Function for computing the hash. 
 
-Definition at line 1066 of file dbprim.h.
+Definition at line 1080 of file dbprim.h.
 
 Referenced by ht\_\-add(), ht\_\-find(), ht\_\-init(), ht\_\-move(), and ht\_\-resize().\hypertarget{struct__hash__table__s_o0}{
 \index{_hash_table_s@{\_\-hash\_\-table\_\-s}!ht_magic@{ht\_\-magic}}
@@ -112,7 +112,7 @@ Referenced by ht\_\-add(), ht\_\-find(), ht\_\-init(), ht\_\-move(), and ht\_\-r
 
 Magic number. 
 
-Definition at line 1058 of file dbprim.h.
+Definition at line 1072 of file dbprim.h.
 
 Referenced by ht\_\-init().\hypertarget{struct__hash__table__s_o2}{
 \index{_hash_table_s@{\_\-hash\_\-table\_\-s}!ht_modulus@{ht\_\-modulus}}
@@ -123,7 +123,7 @@ Referenced by ht\_\-init().\hypertarget{struct__hash__table__s_o2}{
 
 Size (modulus) of the hash table--must be prime. 
 
-Definition at line 1060 of file dbprim.h.
+Definition at line 1074 of file dbprim.h.
 
 Referenced by ht\_\-add(), ht\_\-find(), ht\_\-free(), ht\_\-init(), ht\_\-move(), and ht\_\-resize().\hypertarget{struct__hash__table__s_o9}{
 \index{_hash_table_s@{\_\-hash\_\-table\_\-s}!ht_resize@{ht\_\-resize}}
@@ -134,7 +134,7 @@ Referenced by ht\_\-add(), ht\_\-find(), ht\_\-free(), ht\_\-init(), ht\_\-move(
 
 Function for resize notify/inhibit. 
 
-Definition at line 1068 of file dbprim.h.
+Definition at line 1082 of file dbprim.h.
 
 Referenced by ht\_\-init(), and ht\_\-resize().\hypertarget{struct__hash__table__s_o4}{
 \index{_hash_table_s@{\_\-hash\_\-table\_\-s}!ht_rollover@{ht\_\-rollover}}
@@ -145,7 +145,7 @@ Referenced by ht\_\-init(), and ht\_\-resize().\hypertarget{struct__hash__table_
 
 Size at which the table grows. 
 
-Definition at line 1063 of file dbprim.h.
+Definition at line 1077 of file dbprim.h.
 
 Referenced by ht\_\-add(), ht\_\-free(), ht\_\-init(), and ht\_\-resize().\hypertarget{struct__hash__table__s_o5}{
 \index{_hash_table_s@{\_\-hash\_\-table\_\-s}!ht_rollunder@{ht\_\-rollunder}}
@@ -156,7 +156,7 @@ Referenced by ht\_\-add(), ht\_\-free(), ht\_\-init(), and ht\_\-resize().\hyper
 
 Size at which the table shrinks. 
 
-Definition at line 1064 of file dbprim.h.
+Definition at line 1078 of file dbprim.h.
 
 Referenced by ht\_\-free(), ht\_\-init(), ht\_\-remove(), and ht\_\-resize().\hypertarget{struct__hash__table__s_o6}{
 \index{_hash_table_s@{\_\-hash\_\-table\_\-s}!ht_table@{ht\_\-table}}
@@ -167,6 +167,6 @@ Referenced by ht\_\-free(), ht\_\-init(), ht\_\-remove(), and ht\_\-resize().\hy
 
 Actual table entries. 
 
-Definition at line 1065 of file dbprim.h.
+Definition at line 1079 of file dbprim.h.
 
-Referenced by ht\_\-add(), ht\_\-find(), ht\_\-flush(), ht\_\-free(), ht\_\-init(), ht\_\-iter(), ht\_\-move(), ht\_\-remove(), ht\_\-resize(), and main().
+Referenced by ht\_\-add(), ht\_\-find(), ht\_\-flush(), ht\_\-free(), ht\_\-init(), ht\_\-iter(), ht\_\-move(), ht\_\-remove(), and ht\_\-resize().

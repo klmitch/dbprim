@@ -169,7 +169,7 @@ This macro retrieves a pointer to the object represented by the element. It may 
 
 Definition at line 977 of file dbprim.h.
 
-Referenced by \_\-sh\_\-flush\_\-iter(), \_\-sh\_\-iter\_\-iter(), \_\-smat\_\-alloc(), \_\-smat\_\-free(), ht\_\-add(), ht\_\-find(), ht\_\-flush(), ht\_\-iter(), ht\_\-resize(), sh\_\-find(), smat\_\-cleanup(), and t\_\-iter().\hypertarget{group__dbprim__link_ga24}{
+Referenced by \_\-sh\_\-flush\_\-iter(), \_\-sh\_\-iter\_\-iter(), \_\-smat\_\-alloc(), \_\-smat\_\-free(), ht\_\-add(), ht\_\-find(), ht\_\-flush(), ht\_\-iter(), ht\_\-resize(), sh\_\-find(), and smat\_\-cleanup().\hypertarget{group__dbprim__link_ga24}{
 \index{dbprim_link@{dbprim\_\-link}!le_prev@{le\_\-prev}}
 \index{le_prev@{le\_\-prev}!dbprim_link@{dbprim\_\-link}}
 \subsubsection[le\_\-prev]{\setlength{\rightskip}{0pt plus 5cm}\#define le\_\-prev(elem)}}
@@ -495,7 +495,7 @@ Definition at line 34 of file le\_\-init.c.
 
 References \_\-link\_\-elem\_\-s::le\_\-flags, \_\-link\_\-elem\_\-s::le\_\-head, \_\-link\_\-elem\_\-s::le\_\-magic, \_\-link\_\-elem\_\-s::le\_\-next, \_\-link\_\-elem\_\-s::le\_\-object, \_\-link\_\-elem\_\-s::le\_\-prev, and LINK\_\-ELEM\_\-MAGIC.
 
-Referenced by \_\-smat\_\-alloc(), he\_\-init(), and main().\hypertarget{group__dbprim__link_ga6}{
+Referenced by \_\-smat\_\-alloc(), and he\_\-init().\hypertarget{group__dbprim__link_ga6}{
 \index{dbprim_link@{dbprim\_\-link}!ll_add@{ll\_\-add}}
 \index{ll_add@{ll\_\-add}!dbprim_link@{dbprim\_\-link}}
 \subsubsection[ll\_\-add]{\setlength{\rightskip}{0pt plus 5cm}unsigned long ll\_\-add (\hyperlink{struct__link__head__s}{link\_\-head\_\-t} $\ast$ {\em list}, \hyperlink{struct__link__elem__s}{link\_\-elem\_\-t} $\ast$ {\em new}, \hyperlink{group__dbprim__link_ga4}{link\_\-loc\_\-t} {\em loc}, \hyperlink{struct__link__elem__s}{link\_\-elem\_\-t} $\ast$ {\em elem})}}
@@ -520,7 +520,7 @@ Definition at line 34 of file ll\_\-add.c.
 
 References \_\-link\_\-elem\_\-s::le\_\-head, \_\-link\_\-elem\_\-s::le\_\-next, \_\-link\_\-elem\_\-s::le\_\-prev, le\_\-verify, \_\-link\_\-head\_\-s::lh\_\-count, \_\-link\_\-head\_\-s::lh\_\-first, \_\-link\_\-head\_\-s::lh\_\-last, LINK\_\-LOC\_\-AFTER, LINK\_\-LOC\_\-BEFORE, LINK\_\-LOC\_\-HEAD, LINK\_\-LOC\_\-TAIL, and ll\_\-verify.
 
-Referenced by \_\-smat\_\-free(), ht\_\-add(), ht\_\-move(), ht\_\-resize(), main(), and st\_\-add().\hypertarget{group__dbprim__link_ga9}{
+Referenced by \_\-smat\_\-free(), ht\_\-add(), ht\_\-move(), ht\_\-resize(), and st\_\-add().\hypertarget{group__dbprim__link_ga9}{
 \index{dbprim_link@{dbprim\_\-link}!ll_find@{ll\_\-find}}
 \index{ll_find@{ll\_\-find}!dbprim_link@{dbprim\_\-link}}
 \subsubsection[ll\_\-find]{\setlength{\rightskip}{0pt plus 5cm}unsigned long ll\_\-find (\hyperlink{struct__link__head__s}{link\_\-head\_\-t} $\ast$ {\em list}, \hyperlink{struct__link__elem__s}{link\_\-elem\_\-t} $\ast$$\ast$ {\em elem\_\-p}, \hyperlink{group__dbprim__link_ga3}{link\_\-comp\_\-t} {\em comp\_\-func}, \hyperlink{struct__link__elem__s}{link\_\-elem\_\-t} $\ast$ {\em start}, \hyperlink{struct__db__key__s}{db\_\-key\_\-t} $\ast$ {\em key})}}
@@ -545,7 +545,7 @@ Definition at line 34 of file ll\_\-find.c.
 
 References \_\-link\_\-elem\_\-s::le\_\-head, \_\-link\_\-elem\_\-s::le\_\-next, \_\-link\_\-elem\_\-s::le\_\-object, le\_\-verify, \_\-link\_\-head\_\-s::lh\_\-first, and ll\_\-verify.
 
-Referenced by main(), and sh\_\-find().\hypertarget{group__dbprim__link_ga11}{
+Referenced by sh\_\-find().\hypertarget{group__dbprim__link_ga11}{
 \index{dbprim_link@{dbprim\_\-link}!ll_flush@{ll\_\-flush}}
 \index{ll_flush@{ll\_\-flush}!dbprim_link@{dbprim\_\-link}}
 \subsubsection[ll\_\-flush]{\setlength{\rightskip}{0pt plus 5cm}unsigned long ll\_\-flush (\hyperlink{struct__link__head__s}{link\_\-head\_\-t} $\ast$ {\em list}, \hyperlink{group__dbprim__link_ga2}{link\_\-iter\_\-t} {\em flush\_\-func}, void $\ast$ {\em extra})}}
@@ -570,7 +570,7 @@ Definition at line 34 of file ll\_\-flush.c.
 
 References \_\-link\_\-head\_\-s::lh\_\-count, \_\-link\_\-head\_\-s::lh\_\-first, \_\-link\_\-head\_\-s::lh\_\-last, ll\_\-remove(), and ll\_\-verify.
 
-Referenced by main(), and sh\_\-flush().
+Referenced by sh\_\-flush().
 
 Here is the call graph for this function:\begin{figure}[H]
 \begin{center}
@@ -603,7 +603,7 @@ Definition at line 34 of file ll\_\-init.c.
 
 References \_\-link\_\-head\_\-s::lh\_\-count, \_\-link\_\-head\_\-s::lh\_\-extra, \_\-link\_\-head\_\-s::lh\_\-first, \_\-link\_\-head\_\-s::lh\_\-last, \_\-link\_\-head\_\-s::lh\_\-magic, and LINK\_\-HEAD\_\-MAGIC.
 
-Referenced by ht\_\-init(), ht\_\-resize(), main(), and sh\_\-init().\hypertarget{group__dbprim__link_ga10}{
+Referenced by ht\_\-init(), ht\_\-resize(), and sh\_\-init().\hypertarget{group__dbprim__link_ga10}{
 \index{dbprim_link@{dbprim\_\-link}!ll_iter@{ll\_\-iter}}
 \index{ll_iter@{ll\_\-iter}!dbprim_link@{dbprim\_\-link}}
 \subsubsection[ll\_\-iter]{\setlength{\rightskip}{0pt plus 5cm}unsigned long ll\_\-iter (\hyperlink{struct__link__head__s}{link\_\-head\_\-t} $\ast$ {\em list}, \hyperlink{struct__link__elem__s}{link\_\-elem\_\-t} $\ast$ {\em start}, \hyperlink{group__dbprim__link_ga2}{link\_\-iter\_\-t} {\em iter\_\-func}, void $\ast$ {\em extra}, unsigned long {\em flags})}}
@@ -628,7 +628,7 @@ Definition at line 34 of file ll\_\-iter.c.
 
 References DB\_\-FLAG\_\-REVERSE, \_\-link\_\-elem\_\-s::le\_\-head, \_\-link\_\-elem\_\-s::le\_\-next, \_\-link\_\-elem\_\-s::le\_\-prev, le\_\-verify, \_\-link\_\-head\_\-s::lh\_\-first, \_\-link\_\-head\_\-s::lh\_\-last, and ll\_\-verify.
 
-Referenced by main(), and sh\_\-iter().\hypertarget{group__dbprim__link_ga7}{
+Referenced by sh\_\-iter().\hypertarget{group__dbprim__link_ga7}{
 \index{dbprim_link@{dbprim\_\-link}!ll_move@{ll\_\-move}}
 \index{ll_move@{ll\_\-move}!dbprim_link@{dbprim\_\-link}}
 \subsubsection[ll\_\-move]{\setlength{\rightskip}{0pt plus 5cm}unsigned long ll\_\-move (\hyperlink{struct__link__head__s}{link\_\-head\_\-t} $\ast$ {\em list}, \hyperlink{struct__link__elem__s}{link\_\-elem\_\-t} $\ast$ {\em elem}, \hyperlink{group__dbprim__link_ga4}{link\_\-loc\_\-t} {\em loc}, \hyperlink{struct__link__elem__s}{link\_\-elem\_\-t} $\ast$ {\em elem2})}}
@@ -653,7 +653,7 @@ Definition at line 35 of file ll\_\-move.c.
 
 References \_\-link\_\-elem\_\-s::le\_\-head, \_\-link\_\-elem\_\-s::le\_\-next, \_\-link\_\-elem\_\-s::le\_\-prev, le\_\-verify, \_\-link\_\-head\_\-s::lh\_\-first, \_\-link\_\-head\_\-s::lh\_\-last, LINK\_\-LOC\_\-AFTER, LINK\_\-LOC\_\-BEFORE, LINK\_\-LOC\_\-HEAD, LINK\_\-LOC\_\-TAIL, and ll\_\-verify.
 
-Referenced by main(), and sh\_\-move().\hypertarget{group__dbprim__link_ga8}{
+Referenced by sh\_\-move().\hypertarget{group__dbprim__link_ga8}{
 \index{dbprim_link@{dbprim\_\-link}!ll_remove@{ll\_\-remove}}
 \index{ll_remove@{ll\_\-remove}!dbprim_link@{dbprim\_\-link}}
 \subsubsection[ll\_\-remove]{\setlength{\rightskip}{0pt plus 5cm}unsigned long ll\_\-remove (\hyperlink{struct__link__head__s}{link\_\-head\_\-t} $\ast$ {\em list}, \hyperlink{struct__link__elem__s}{link\_\-elem\_\-t} $\ast$ {\em elem})}}
@@ -678,4 +678,4 @@ Definition at line 34 of file ll\_\-remove.c.
 
 References \_\-link\_\-elem\_\-s::le\_\-head, \_\-link\_\-elem\_\-s::le\_\-next, \_\-link\_\-elem\_\-s::le\_\-prev, le\_\-verify, \_\-link\_\-head\_\-s::lh\_\-count, \_\-link\_\-head\_\-s::lh\_\-first, \_\-link\_\-head\_\-s::lh\_\-last, and ll\_\-verify.
 
-Referenced by \_\-smat\_\-alloc(), \_\-st\_\-remove(), ht\_\-move(), ht\_\-remove(), ht\_\-resize(), ll\_\-flush(), main(), smat\_\-cleanup(), and st\_\-add().
+Referenced by \_\-smat\_\-alloc(), \_\-st\_\-remove(), ht\_\-move(), ht\_\-remove(), ht\_\-resize(), ll\_\-flush(), smat\_\-cleanup(), and st\_\-add().
