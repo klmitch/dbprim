@@ -220,6 +220,21 @@ smat_entry_t *_smat_alloc(void);
 void _smat_free(smat_entry_t *entry);
 
 /** \internal
+ * \ingroup dbprim_smat
+ * \brief Sparse matrix resize function.
+ *
+ * This function is a hash table-compatible resize callback for use by
+ * sparse matrices.
+ *
+ * \param[in]		table	The hash table being resized.
+ * \param[in]		new_mod	The new hash table bucket size.
+ *
+ * \return	Zero if the resize operation should be performed,
+ *		non-zero otherwise.
+ */
+unsigned long _smat_resize(hash_table_t *table, unsigned long new_mod);
+
+/** \internal
  * \ingroup dbprim_rbtree
  * \brief Locate or insert a red-black tree node.
  *

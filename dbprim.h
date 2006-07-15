@@ -1048,6 +1048,20 @@ unsigned long hash_fnv1(hash_table_t *table, db_key_t *key);
  */
 unsigned long hash_fnv1a(hash_table_t *table, db_key_t *key);
 
+/** \ingroup dbprim_hash
+ * \brief Hash comparison function.
+ *
+ * This is a hash comparison function, compatible with #hash_comp_t,
+ * based around memcmp().
+ *
+ * \param[in]		table	A pointer to a #hash_table_t.
+ * \param[in]		key1	The first key being compared.
+ * \param[in]		key2	The second key being compared.
+ *
+ * \return	Zero if the keys match, non-zero otherwise.
+ */
+unsigned long hash_comp(hash_table_t *table, db_key_t *key1, db_key_t *key2);
+
 /** \internal
  * \ingroup dbprim_hash
  * \brief Hash table structure.
@@ -1777,40 +1791,6 @@ struct _smat_table_s {
 #define st_size(table) ((table)->st_table.ht_modulus * sizeof(link_head_t) + \
 			(table)->st_table.ht_count * sizeof(smat_entry_t))
 
-/** \internal
- * \ingroup dbprim_smat
- * \brief Sparse matrix comparison function.
- *
- * This function is a hash table-compatible comparison function for
- * use by sparse matrices.
- *
- * \param[in]		table	The hash table for which the
- *				comparison is being performed.
- * \param[in]		key1	The first database key being
- *				compared.
- * \param[in]		key2	The second database key being
- *				compared.
- *
- * \return	Zero if the database keys are identical, non-zero
- *		otherwise.
- */
-unsigned long _smat_comp(hash_table_t *table, db_key_t *key1, db_key_t *key2);
-
-/** \internal
- * \ingroup dbprim_smat
- * \brief Sparse matrix resize function.
- *
- * This function is a hash table-compatible resize callback for use by
- * sparse matrices.
- *
- * \param[in]		table	The hash table being resized.
- * \param[in]		new_mod	The new hash table bucket size.
- *
- * \return	Zero if the resize operation should be performed,
- *		non-zero otherwise.
- */
-unsigned long _smat_resize(hash_table_t *table, unsigned long new_mod);
-
 /** \ingroup dbprim_smat
  * \brief Dynamically initialize a sparse matrix table.
  *
@@ -2314,7 +2294,7 @@ unsigned long sh_find(smat_head_t *head, smat_entry_t **elem_p,
 unsigned long sh_iter(smat_head_t *head, smat_entry_t *start,
 		      smat_iter_t iter_func, void *extra, unsigned long flags);
 
-/** ingroup dbprim_smat
+/** \ingroup dbprim_smat
  * \brief Flush a row or column of a sparse matrix.
  *
  * This function flushes a sparse matrix row or column--that is, it
@@ -2533,6 +2513,22 @@ struct _smat_entry_s {
  * \return	A pointer to \c void representing the object.
  */
 #define se_object(entry, n) ((entry)->se_object[(n)])
+
+/** \ingroup dbprim_rbtree
+ * \brief Red-black tree comparison function.
+ *
+ * This is a red-black tree comparison function, compatible with
+ * #rb_comp_t, based around memcmp().
+ *
+ * \param[in]		tree	A pointer to a #rb_tree_t.
+ * \param[in]		key1	The first key being compared.
+ * \param[in]		key2	The second key being compared.
+ *
+ * \return	Zero if the keys match, less than zero if the first
+ *		key orders before the second key, or greater than zero
+ *		if the first key orders after the second key.
+ */
+long rbtree_comp(rb_tree_t *tree, db_key_t *key1, db_key_t *key2);
 
 /** \internal
  * \ingroup dbprim_rbtree

@@ -1,3 +1,28 @@
+2006-07-15  Kevin L. Mitchell  <klmitch@mit.edu>
+
+	* _smat_comp.c: remove deprecated _smat_comp() function (internal
+	interface, no one should notice)
+
+	* st_init.c (st_init): utilize hash_comp() instead of deprecated
+	_smat_comp() function
+
+	* rbtree_comp.c (rbtree_comp): memcmp()-based red-black tree
+	comparison function
+
+	* hash_comp.c (hash_comp): memcmp()-based hash comparison function
+
+	* dbprim_int.h: move declaration for _smat_resize() to the
+	internal header
+
+	* dbprim.h: add hash_comp() (based on memcmp()) to complement
+	hash_fnv1() and hash_fnv1a(); remove now-deprecated _smat_comp()
+	(in preference for hash_comp()); move _smat_resize() declaration
+	to dbprim_int.h; fix a minor documentation typo; add
+	rbtree_comp(), similar to hash_comp() but for red-black trees
+
+	* Makefile.am: add hash_comp.c and rbtree_comp.c; versioning
+	info's 'age' field can be 1
+
 2006-07-13  Kevin L. Mitchell  <klmitch@mit.edu>
 
 	* doc/Doxyfile.in (PREDEFINED): correct a missing \

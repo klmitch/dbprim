@@ -1,5 +1,5 @@
 /*
-** Copyright (C) 2002 by Kevin L. Mitchell <klmitch@mit.edu>
+** Copyright (C) 2006 by Kevin L. Mitchell <klmitch@mit.edu>
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -20,36 +20,26 @@
 */
 /** \internal
  * \file
- * \brief Implementation of st_init().
+ * \brief Implementation of hash_comp().
  *
- * This file contains the implementation of the st_init() function,
- * used to dynamically initialize a sparse matrix table.
+ * This file contains the implementation of the hash_comp() function,
+ * a generic hash comparison callback utilizing memcmp().
  */
+#include <string.h>
+
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
 unsigned long
-st_init(smat_table_t *table, unsigned long flags, smat_resize_t resize,
-	void *extra, unsigned long init_mod)
+hash_comp(hash_table_t *table, db_key_t *key1, db_key_t *key2)
 {
-  unsigned long retval;
+  if (!key1 || !dk_len(key1) || !dk_key(key1) || /* invalid keys? */
+      !key2 || !dk_len(key2) || !dk_key(key2))
+    return 1; /* return "no match" */
 
-  initialize_dbpr_error_table(); /* set up error tables */
-
-  if (!table) /* verify arguments */
-    return DB_ERR_BADARGS;
-
-  table->st_extra = extra;
-  table->st_resize = resize;
-
-  /* initialize the hash table */
-  if ((retval = ht_init(&table->st_table, flags, hash_fnv1a, hash_comp,
-			_smat_resize, table, init_mod)))
-    return retval;
-
-  table->st_magic = SMAT_TABLE_MAGIC; /* initialize the rest of the table */
-
-  return 0;
+  /* Compare lengths and keys... */
+  return dk_len(key1) != dk_len(key2) ||
+    memcmp(dk_key(key1), dk_key(key2), dk_len(key1));
 }

@@ -40,6 +40,7 @@ libdbprim_la_SOURCES = \
 	_hash_prime.c \
 	hash_fnv1.c \
 	hash_fnv1a.c \
+	hash_comp.c \
 	he_init.c \
 	ht_add.c \
 	ht_find.c \
@@ -62,6 +63,7 @@ libdbprim_la_SOURCES = \
 	\
 	_rb_locate.c \
 	_rb_rotate.c \
+	rbtree_comp.c \
 	rn_init.c \
 	rt_add.c \
 	rt_find.c \
@@ -77,7 +79,6 @@ libdbprim_la_SOURCES = \
 	sh_init.c \
 	sh_iter.c \
 	sh_move.c \
-	_smat_comp.c \
 	smat_freelist.c \
 	_smat_resize.c \
 	st_add.c \
@@ -90,7 +91,7 @@ libdbprim_la_SOURCES = \
 	st_resize.c
 libdbprim_la_LIBADD = @DBPRIM_ET_OBJS@
 libdbprim_la_DEPENDENCIES = @DBPRIM_ET_OBJS@
-libdbprim_la_LDFLAGS = -version-info 3:0:0
+libdbprim_la_LDFLAGS = -version-info 3:0:1
 
 pkginclude_HEADERS = dbprim.h dbprim_err.h dbprim_version.h
 

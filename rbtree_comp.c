@@ -1,5 +1,5 @@
 /*
-** Copyright (C) 2002 by Kevin L. Mitchell <klmitch@mit.edu>
+** Copyright (C) 2006 by Kevin L. Mitchell <klmitch@mit.edu>
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -20,32 +20,31 @@
 */
 /** \internal
  * \file
- * \brief Implementation of _smat_comp().
+ * \brief Implementation of rbtree_comp().
  *
- * This file contains the implementation of the _smat_comp() function,
- * the comparison callback used by sparse matrices.
+ * This file contains the implementation of the rbtree_comp()
+ * function, a generic red-black tree comparison callback utilizing
+ * memcmp().
  */
+#include <string.h>
+
 #include "dbprim.h"
 #include "dbprim_int.h"
 
 RCSTAG("@(#)$Id$");
 
-unsigned long
-_smat_comp(hash_table_t *table, db_key_t *key1, db_key_t *key2)
+long
+rbtree_comp(rb_tree_t *tree, db_key_t *key1, db_key_t *key2)
 {
-  int i;
-  void **objects1, **objects2;
+  int tmp;
 
-  if (!key1 || !key2 || !dk_key(key1) || !dk_key(key2)) /* if invalid... */
+  if (!key1 || !dk_len(key1) || !dk_key(key1) || /* invalid keys? */
+      !key2 || !dk_len(key2) || !dk_key(key2))
     return 1; /* return "no match" */
 
-  objects1 = dk_key(key1); /* massage these into a useful form */
-  objects2 = dk_key(key2);
+  if ((tmp = memcmp(dk_key(key1), dk_key(key2), dk_len(key1) < dk_len(key2) ?
+		    dk_len(key1) : dk_len(key2))))
+    return tmp;
 
-  /* walk through the elements in the array and compare them */
-  for (i = SMAT_LOC_FIRST; i <= SMAT_LOC_SECOND; i++)
-    if (objects1[i] != objects2[i])
-      return 1; /* they don't match */
-
-  return 0; /* we've got a match */
+  return dk_len(key1) - dk_len(key2);
 }
