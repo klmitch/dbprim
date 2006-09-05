@@ -144,9 +144,9 @@ main(int argc, char **argv)
   /* Can we look them up? */
   TEST_DECL(t_smat, st_find, "Test that st_find() can locate elements in a "
 	    "sparse matrix")
-  for ( \
-    rt = 0, ct = 0, set_ones(&visited); \
-    !check_zeros(&visited) && rt <= SMAT_HEAD_CNT && ct <= SMAT_HEAD_CNT; \
+  for (
+    rt = 0, ct = 0, set_ones(&visited);
+    !check_zeros(&visited) && rt <= SMAT_HEAD_CNT && ct <= SMAT_HEAD_CNT;
     clr_assoc(&visited, rt, ct), rt++ ) {
 
     if ( rt == SMAT_HEAD_CNT ) { rt = 0; ct++; }
