@@ -142,6 +142,25 @@ static int removes[] = { 5, 7, 24, 21, 13, 8, 22 };
 
 #define HASH_REMOVE_CNT	(sizeof(removes) / sizeof(int))
 
+static struct fnv1_s {
+  unsigned long fnv1;
+  unsigned long fnv1a;
+  db_key_t key;
+} hashes[] = {
+  { 1444023680UL,  572056750UL, DB_KEY_INIT("forty-one", 9) },
+  { 1828084722UL, 3950110388UL, DB_KEY_INIT("forty-two", 9) },
+  { 2785089628UL, 1892710214UL, DB_KEY_INIT("forty-three", 11) },
+  {  211736576UL,  494166078UL, DB_KEY_INIT("forty-four", 10) },
+  {  195944716UL, 1993281510UL, DB_KEY_INIT("forty-five", 10) },
+  { 1996993540UL,  545288830UL, DB_KEY_INIT("forty-six", 9) },
+  {  866566787UL, 1643030155UL, DB_KEY_INIT("forty-seven", 11) },
+  {  253309861UL, 1717483017UL, DB_KEY_INIT("forty-eight", 11) },
+  { 2638188604UL, 2609787894UL, DB_KEY_INIT("forty-nine", 10) },
+  {  614582933UL, 3180588513UL, DB_KEY_INIT("fifty", 5) },
+};
+
+#define HASH_CNT (sizeof(hashes) / sizeof(struct fnv1_s))
+
 struct iter_s {
   int elem;
   unsigned long err;
@@ -176,6 +195,7 @@ main(int argc, char **argv)
   int i, tmp;
   unsigned long visited = VISIT_INIT, visit_init = VISIT_INIT;
   unsigned long oldsize = 0, newsize = 0;
+  unsigned long hash;
   struct iter_s iter_tmp = { 0, 88, 0 };
   int resize_successful = 0;
 
@@ -464,6 +484,24 @@ main(int argc, char **argv)
   }
   PASS(TEST_NAME(ht_find_autoshrink), "ht_find() calls successful on "
        "automatically shrunk table");
+
+  /* Oh, do some testing of the FNV hash routines */
+  TEST_DECL(t_hashtab, hash_fnv1, "Test that hash_fnv1() computes the correct "
+	    "hash")
+  TEST_DECL(t_hashtab, hash_fnv1a, "Test that hash_fnv1a() computes the "
+	    "correct hash")
+  for (i = 0; i < HASH_CNT; i++) {
+    if ((hash = hash_fnv1(0, &hashes[i].key)) != hashes[i].fnv1)
+      FAIL(TEST_NAME(hash_fnv1), FATAL(0), "hash_fnv1() computed incorrect "
+	   "hash for key \"%s\"; expected %lu, got %lu",
+	   (char *)dk_key(&hashes[i].key), hashes[i].fnv1, hash);
+    if ((hash = hash_fnv1a(0, &hashes[i].key)) != hashes[i].fnv1a)
+      FAIL(TEST_NAME(hash_fnv1a), FATAL(0), "hash_fnv1a() computed incorrect "
+	   "hash for key \"%s\"; expected %lu, got %lu",
+	   (char *)dk_key(&hashes[i].key), hashes[i].fnv1a, hash);
+  }
+  PASS(TEST_NAME(hash_fnv1), "hash_fnv1() computes correct hash");
+  PASS(TEST_NAME(hash_fnv1a), "hash_fnv1a() computes correct hash");
 
   return 0;
 }

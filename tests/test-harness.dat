@@ -69,6 +69,10 @@ test ht_remove_autoshrink	t_hashtab	PASS	\
 	"Test that ht_remove() automatically shrinks the table"
 test ht_find_autoshrink		t_hashtab	PASS	\
 	"Test that ht_find() can still find entries for autoshrink"
+test hash_fnv1			t_hashtab	PASS	\
+	"Test that hash_fnv1() computes the correct hash"
+test hash_fnv1a			t_hashtab	PASS	\
+	"Test that hash_fnv1a() computes the correct hash"
 
 program t_smat t_smat \
 	"Test sparse matrix functionality"

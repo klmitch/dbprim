@@ -42,9 +42,10 @@ hash_fnv1a(hash_table_t *table, db_key_t *key)
     return 0;
 
   c = (unsigned char *)dk_key(key);
-  for (i = 0; i < dk_len(key); i++) { /* FNV-1a algorithm... */
+  for (i = 0; i < dk_len(key); i++, c++) { /* FNV-1a algorithm... */
     hash ^= *c; /* hash in the data octet */
     hash *= HASH_FNV_PRIME; /* multiply by the prime... */
+    hash &= 0xffffffff; /* reduce to 32-bit */
   }
 
   return hash;
