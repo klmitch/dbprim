@@ -17,5 +17,6 @@ dbprim_version.h
 libdbprim.la
 libtool
 conftest*
+*.o
 *.lo
 *.tar.gz

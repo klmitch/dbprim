@@ -1,7 +1,10 @@
 .deps
 .libs
 Makefile
+t_hashtab
 t_linklists
+t_redblack
+t_smat
 test-harness
 test-harness.log
 *.o
