@@ -6,6 +6,7 @@
 /config.status
 /config.sub
 /configure
+/dbprim.pc
 /dbprim.spec
 /dbprim_version.c
 /dbprim_version.h

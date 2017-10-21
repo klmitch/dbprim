@@ -95,11 +95,14 @@ EXTRA_CSTATUS = dbprim_version.c dbprim_version.h
 
 EXTRA_DIST = dbprim.spec dbprim.spec.in m4 \
 	     autogen.sh COPYING INSTALL AUTHORS \
-	     Doxyfile.in
+	     Doxyfile.in dbprim.pc.in
 
 CLEANFILES = $(EXTRA_CSTATUS)
 
 DISTHOOKCLEANFILES = $(CLEANFILES)
+
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = dbprim.pc
 
 $(EXTRA_CSTATUS): $(top_srcdir)/configure config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $@

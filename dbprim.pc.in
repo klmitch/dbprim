@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: @PACKAGE@
+Description: @PACKAGE_NAME@
+URL: https://github.com/klmitch/dbprim
+Requires:
+Version: @VERSION@
+Libs: -L${libdir} -ldbprim
+Cflags: -I${includedir}

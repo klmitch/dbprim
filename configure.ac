@@ -62,6 +62,6 @@ dnl Checks for library functions.
 
 AC_DEFINE_VERSION([dbprim])
 
-AC_CONFIG_FILES([Makefile tests/Makefile Doxyfile dbprim.spec])
+AC_CONFIG_FILES([Makefile tests/Makefile Doxyfile dbprim.spec dbprim.pc])
 
 AC_OUTPUT

@@ -108,3 +108,4 @@ make DESTDIR=${RPM_BUILD_ROOT} install
 %{_includedir}/dbprim
 %{_libdir}/lib*.la
 %{_libdir}/lib*.a
+%{_libdir}/pkgconfig/dbprim.pc
