@@ -23,6 +23,14 @@
 /Makefile
 /Makefile.in
 /missing
+/tests/Makefile
+/tests/Makefile.in
+/tests/test-harness
+/tests/test-harness.log
+/tests/t_hashtab
+/tests/t_linklists
+/tests/t_redblack
+/tests/t_smat
 .deps
 .dirstamp
 .libs
