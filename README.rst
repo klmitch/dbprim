@@ -2,6 +2,9 @@
 Database Primitives Library
 ===========================
 
+.. image:: https://travis-ci.org/klmitch/dbprim.svg?branch=modernize
+    :target: https://travis-ci.org/klmitch/dbprim
+
 Many programs require some basic in-memory data structures.  In many
 languages, the language or standard library provide these basic data
 structures, but C does not have this.  This library fills the gap by
