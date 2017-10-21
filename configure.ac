@@ -17,10 +17,12 @@ dnl MA 02111-1307, USA
 dnl
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([Database Primitives Library], 2.0.0, [klmitch@mit.edu], [dbprim])
+AC_INIT([Database Primitives Library], 2.0.0, [klmitch@mit.edu], [dbprim],
+	[https://github.com/klmitch/dbprim])
 AC_PREREQ(2.64)
 
-AC_COPYRIGHT([Copyright (C) 2002, 2006, 2017 by Kevin L. Mitchell <klmitch@mit.edu>
+AC_COPYRIGHT([
+Copyright (C) 2002, 2006, 2017 by Kevin L. Mitchell <klmitch@mit.edu>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
