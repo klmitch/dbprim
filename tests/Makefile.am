@@ -1,4 +1,4 @@
-## Copyright (C) 2004 by Kevin L. Mitchell <klmitch@mit.edu>
+## Copyright (C) 2004, 2017 by Kevin L. Mitchell <klmitch@mit.edu>
 ##
 ## This library is free software; you can redistribute it and/or
 ## modify it under the terms of the GNU Library General Public
@@ -15,14 +15,12 @@
 ## Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ## MA 02111-1307, USA
 ##
-## @(#)$Id$
-##
 ## Process this file with automake to generate Makefile.in
 
 AUTOMAKE_OPTIONS = foreign
 
-AM_CPPFLAGS = -D__DBPRIM_LIBRARY__ -I$(top_builddir) -I$(top_srcdir)
-LDADD = $(top_builddir)/libdbprim.la @COM_ERR_LDADD@
+AM_CPPFLAGS = -D__DBPRIM_LIBRARY__ -I$(top_builddir) -I$(top_srcdir)/include
+LDADD = $(top_builddir)/libdbprim.la
 AM_LDFLAGS = -static
 
 check_PROGRAMS = test-harness \

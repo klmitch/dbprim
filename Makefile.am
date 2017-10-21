@@ -21,6 +21,10 @@
 
 AUTOMAKE_OPTIONS = subdir-objects foreign
 
+# The . here forces prefix ordering, so make check rebuilds the
+# library first if necessary
+SUBDIRS = . tests
+
 AM_CPPFLAGS = -D__DBPRIM_LIBRARY__ -Iinclude
 
 lib_LTLIBRARIES = libdbprim.la
