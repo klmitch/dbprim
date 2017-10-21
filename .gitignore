@@ -33,6 +33,7 @@
 /tests/t_linklists
 /tests/t_redblack
 /tests/t_smat
+/travis-build
 .deps
 .dirstamp
 .libs

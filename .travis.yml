@@ -1,0 +1,7 @@
+sudo: false
+addons:
+  apt:
+    packages:
+  - pkg-config
+language: c
+script: ./tools/travis-test.sh
