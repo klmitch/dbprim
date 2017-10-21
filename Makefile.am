@@ -23,7 +23,7 @@
 
 AUTOMAKE_OPTIONS = subdir-objects foreign
 
-AM_CPPFLAGS = -D__DBPRIM_LIBRARY__
+AM_CPPFLAGS = -D__DBPRIM_LIBRARY__ -Iinclude
 
 lib_LTLIBRARIES = libdbprim.la
 libdbprim_la_SOURCES = \
