@@ -94,7 +94,7 @@ pkginclude_HEADERS = include/dbprim.h dbprim_version.h
 EXTRA_CSTATUS = dbprim_version.c dbprim_version.h
 
 EXTRA_DIST = dbprim.spec dbprim.spec.in m4 \
-	     autogen.sh COPYING INSTALL AUTHORS \
+	     autogen.sh COPYING INSTALL AUTHORS README.rst \
 	     Doxyfile.in dbprim.pc.in
 
 CLEANFILES = $(EXTRA_CSTATUS)

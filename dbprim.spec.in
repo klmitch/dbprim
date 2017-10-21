@@ -98,13 +98,13 @@ make DESTDIR=${RPM_BUILD_ROOT} install
 
 %files
 %defattr(-, root, root)
-%doc COPYING INSTALL
+%doc COPYING INSTALL README.rst
 %{_libdir}/lib*.so.*
 %{_libdir}/lib*.so
 
 %files devel
 %defattr(-, root, root)
-%doc COPYING INSTALL docs
+%doc COPYING INSTALL README.rst docs
 %{_includedir}/dbprim
 %{_libdir}/lib*.la
 %{_libdir}/lib*.a
