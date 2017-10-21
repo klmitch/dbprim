@@ -21,103 +21,87 @@
 ##
 ## Process this file with automake to generate Makefile.in
 
-AUTOMAKE_OPTIONS = foreign
-ACLOCAL_AMFLAGS = -I m4
-
-# The . here forces prefix ordering, so make check rebuilds the
-# library first if necessary
-SUBDIRS = . tests
+AUTOMAKE_OPTIONS = subdir-objects foreign
 
 AM_CPPFLAGS = -D__DBPRIM_LIBRARY__
 
 lib_LTLIBRARIES = libdbprim.la
 libdbprim_la_SOURCES = \
-	dbprim.h \
-	dbprim_err.h \
-	dbprim_int.h \
+	include/dbprim.h \
+	include/dbprim_int.h \
+	\
+	src/dbprim_err.c \
 	dbprim_version.c \
 	\
-	_hash_prime.c \
-	hash_fnv1.c \
-	hash_fnv1a.c \
-	hash_comp.c \
-	he_init.c \
-	ht_add.c \
-	ht_find.c \
-	ht_flush.c \
-	ht_free.c \
-	ht_init.c \
-	ht_iter.c \
-	ht_move.c \
-	ht_remove.c \
-	ht_resize.c \
+	src/_hash_prime.c \
+	src/hash_fnv1.c \
+	src/hash_fnv1a.c \
+	src/hash_comp.c \
+	src/he_init.c \
+	src/ht_add.c \
+	src/ht_find.c \
+	src/ht_flush.c \
+	src/ht_free.c \
+	src/ht_init.c \
+	src/ht_iter.c \
+	src/ht_move.c \
+	src/ht_remove.c \
+	src/ht_resize.c \
 	\
-	le_init.c \
-	ll_add.c \
-	ll_find.c \
-	ll_flush.c \
-	ll_init.c \
-	ll_iter.c \
-	ll_move.c \
-	ll_remove.c \
+	src/le_init.c \
+	src/ll_add.c \
+	src/ll_find.c \
+	src/ll_flush.c \
+	src/ll_init.c \
+	src/ll_iter.c \
+	src/ll_move.c \
+	src/ll_remove.c \
 	\
-	_rb_locate.c \
-	_rb_rotate.c \
-	rbtree_comp.c \
-	rn_init.c \
-	rt_add.c \
-	rt_find.c \
-	rt_flush.c \
-	rt_init.c \
-	rt_iter.c \
-	rt_move.c \
-	rt_next.c \
-	rt_remove.c \
+	src/_rb_locate.c \
+	src/_rb_rotate.c \
+	src/rbtree_comp.c \
+	src/rn_init.c \
+	src/rt_add.c \
+	src/rt_find.c \
+	src/rt_flush.c \
+	src/rt_init.c \
+	src/rt_iter.c \
+	src/rt_move.c \
+	src/rt_next.c \
+	src/rt_remove.c \
 	\
-	sh_find.c \
-	sh_flush.c \
-	sh_init.c \
-	sh_iter.c \
-	sh_move.c \
-	smat_freelist.c \
-	_smat_resize.c \
-	st_add.c \
-	st_find.c \
-	st_flush.c \
-	st_free.c \
-	st_init.c \
-	st_iter.c \
-	st_remove.c \
-	st_resize.c
-libdbprim_la_LIBADD = @DBPRIM_ET_OBJS@
-libdbprim_la_DEPENDENCIES = @DBPRIM_ET_OBJS@
-libdbprim_la_LDFLAGS = -version-info 3:0:1
+	src/sh_find.c \
+	src/sh_flush.c \
+	src/sh_init.c \
+	src/sh_iter.c \
+	src/sh_move.c \
+	src/smat_freelist.c \
+	src/_smat_resize.c \
+	src/st_add.c \
+	src/st_find.c \
+	src/st_flush.c \
+	src/st_free.c \
+	src/st_init.c \
+	src/st_iter.c \
+	src/st_remove.c \
+	src/st_resize.c
+libdbprim_la_LDFLAGS = -version-info 4:0:0
 
-pkginclude_HEADERS = dbprim.h dbprim_err.h dbprim_version.h
+pkginclude_HEADERS = include/dbprim.h dbprim_version.h
 
 bin_SCRIPTS = dbprim-config
 
 EXTRA_CSTATUS = dbprim_version.c dbprim_version.h
 
-BUILT_SOURCES = dbprim_err.h
-
-EXTRA_DIST = dbprim_err.et dbprim.spec dbprim.spec.in m4 \
-	     autogen.sh comp_et-sh.in COPYING INSTALL AUTHORS \
+EXTRA_DIST = dbprim.spec dbprim.spec.in m4 \
+	     autogen.sh COPYING INSTALL AUTHORS \
 	     docs/Doxyfile docs/Doxyfile.in docs/html docs/latex
 
-SUFFIXES = .et .h
-
-CLEANFILES = $(EXTRA_CSTATUS) \
-	     dbprim_err.c dbprim_err.h
+CLEANFILES = $(EXTRA_CSTATUS)
 
 DISTCLEANFILES = dbprim-config.in
 
 DISTHOOKCLEANFILES = $(CLEANFILES)
-
-.et.c .et.h: comp_et-sh
-	$(SHELL) comp_et-sh --com_err=@COM_ERR@ --dir=$(top_builddir) $<
-
-dbprim_err.c dbprim_err.h: dbprim_err.et
 
 $(EXTRA_CSTATUS): $(top_srcdir)/configure config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $@
@@ -126,4 +110,4 @@ dist-hook:
 	for file in $(DISTHOOKCLEANFILES) ; do \
 	    rm -f $(distdir)/$$file ; \
 	done ; \
-	find $(distdir) -name CVS -print -prune | xargs rm -rf
+	find $(distdir) -name .git -print -prune | xargs rm -rf
