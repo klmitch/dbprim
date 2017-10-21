@@ -11,7 +11,7 @@ m4_pushdef([CFILE], m4_if([$3], , $1[]_version.c, [$3]))dnl
 
 UPREFIX[]_VERSION_HEADER=HEADER
 UPREFIX[]_VERSION_CFILE=CFILE
-lib_version=[]m4_if([$4], , "$UP[]_VERSION", [$4])
+lib_version=[]m4_if([$4], , "$PACKAGE_VERSION", [$4])
 
 UPREFIX[]_MAJOR_VERSION=`echo "$lib_version" | \
     sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`

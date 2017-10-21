@@ -89,8 +89,6 @@ libdbprim_la_LDFLAGS = -version-info 4:0:0
 
 pkginclude_HEADERS = include/dbprim.h dbprim_version.h
 
-bin_SCRIPTS = dbprim-config
-
 EXTRA_CSTATUS = dbprim_version.c dbprim_version.h
 
 EXTRA_DIST = dbprim.spec dbprim.spec.in m4 \
@@ -98,8 +96,6 @@ EXTRA_DIST = dbprim.spec dbprim.spec.in m4 \
 	     docs/Doxyfile docs/Doxyfile.in docs/html docs/latex
 
 CLEANFILES = $(EXTRA_CSTATUS)
-
-DISTCLEANFILES = dbprim-config.in
 
 DISTHOOKCLEANFILES = $(CLEANFILES)
 
