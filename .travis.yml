@@ -2,6 +2,6 @@ sudo: false
 addons:
   apt:
     packages:
-  - pkg-config
+    - pkg-config
 language: c
 script: ./tools/travis-test.sh
