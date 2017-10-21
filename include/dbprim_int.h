@@ -28,7 +28,6 @@
 #ifndef __include_dbprim_int_h__
 #define __include_dbprim_int_h__
 
-#include "dbprim_err.h"
 #include "dbprim_version.h"
 
 #ifndef DBPRIM_DOXYGEN
