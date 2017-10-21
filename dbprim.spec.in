@@ -32,7 +32,7 @@ Release: %{release}
 
 Source: %{name}-%{version}.tar.gz
 
-Copyright: LGPL
+License: LGPL
 
 Summary: @PACKAGE_NAME@
 Group: System Environment/Libraries
@@ -41,8 +41,10 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Prefix: %{_prefix}
 
 Vendor: Kevin L. Mitchell <klmitch@mit.edu>
-Packager: %{packager}
-Url: http://dbprim.sourceforge.net/
+Url: https://github.com/klmitch/dbprim
+
+BuildRequires: doxygen >= 1.8.13
+BuildRequires: graphviz >= 2.38.0
 
 %description
 This library provides a set of database primitives--linked lists,
@@ -56,9 +58,11 @@ Requires: %{name}
 %description devel
 These are the development files necessary for using the Database
 Primitives Library.  Applications should include dbprim/dbprim.h.
-This package also includes dbprim-config.
 
 %changelog
+* Sat Oct 21 2017 Kevin L. Mitchell <klmitch@mit.edu>
+- Update SPEC for modernized build system
+
 * Wed Jul 12 2006 Kevin L. Mitchell <klmitch@mit.edu>
 - Don't re-run doxygen
 
@@ -73,11 +77,12 @@ This package also includes dbprim-config.
 - Creation of initial spec file
 
 %prep
-%setup
+%setup -q
 
 %build
 %configure
-%__make
+make
+make doxygen-doc
 
 %install
 %clean_build_root
@@ -93,15 +98,13 @@ make DESTDIR=${RPM_BUILD_ROOT} install
 
 %files
 %defattr(-, root, root)
-%doc ChangeLog COPYING INSTALL
+%doc COPYING INSTALL
 %{_libdir}/lib*.so.*
 %{_libdir}/lib*.so
 
 %files devel
 %defattr(-, root, root)
-%doc ChangeLog COPYING INSTALL doc/html doc/latex
-%{_bindir}/dbprim-config
+%doc COPYING INSTALL docs
 %{_includedir}/dbprim
 %{_libdir}/lib*.la
 %{_libdir}/lib*.a
-%{_mandir}/man3/*
