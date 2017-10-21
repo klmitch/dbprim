@@ -1,5 +1,5 @@
 /*
-** Copyright (C) 2002 by Kevin L. Mitchell <klmitch@mit.edu>
+** Copyright (C) 2002, 2017 by Kevin L. Mitchell <klmitch@mit.edu>
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -15,8 +15,6 @@
 ** License along with this library; if not, write to the Free
 ** Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ** MA 02111-1307, USA
-**
-** @(#)$Id$
 */
 /** \internal
  * \file
@@ -28,15 +26,11 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-RCSTAG("@(#)$Id$");
-
 unsigned long
 ll_flush(link_head_t *list, link_iter_t flush_func, void *extra)
 {
   link_elem_t *elem;
   unsigned long retval;
-
-  initialize_dbpr_error_table(); /* initialize error table */
 
   if (!ll_verify(list)) /* Verify arguments */
     return DB_ERR_BADARGS;

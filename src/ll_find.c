@@ -1,5 +1,5 @@
 /*
-** Copyright (C) 2002 by Kevin L. Mitchell <klmitch@mit.edu>
+** Copyright (C) 2002, 2017 by Kevin L. Mitchell <klmitch@mit.edu>
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -15,8 +15,6 @@
 ** License along with this library; if not, write to the Free
 ** Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ** MA 02111-1307, USA
-**
-** @(#)$Id$
 */
 /** \internal
  * \file
@@ -28,15 +26,11 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-RCSTAG("@(#)$Id$");
-
 unsigned long
 ll_find(link_head_t *list, link_elem_t **elem_p, link_comp_t comp_func,
 	link_elem_t *start, db_key_t *key)
 {
   link_elem_t *elem;
-
-  initialize_dbpr_error_table(); /* initialize error table */
 
   /* Verify arguments */
   if (!ll_verify(list) || !elem_p || !comp_func || !key ||

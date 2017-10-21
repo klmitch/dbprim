@@ -1,5 +1,5 @@
 /*
-** Copyright (C) 2002 by Kevin L. Mitchell <klmitch@mit.edu>
+** Copyright (C) 2002, 2017 by Kevin L. Mitchell <klmitch@mit.edu>
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -15,8 +15,6 @@
 ** License along with this library; if not, write to the Free
 ** Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ** MA 02111-1307, USA
-**
-** @(#)$Id$
 */
 /** \internal
  * \file
@@ -27,8 +25,6 @@
  */
 #include "dbprim.h"
 #include "dbprim_int.h"
-
-RCSTAG("@(#)$Id$");
 
 /** \internal
  * \ingroup dbprim_smat
@@ -76,8 +72,6 @@ sh_find(smat_head_t *head, smat_entry_t **elem_p, smat_comp_t comp_func,
   link_elem_t *elem;
   struct _sh_find_s sf;
   db_key_t fkey;
-
-  initialize_dbpr_error_table(); /* initialize error table */
 
   /* verify arguments */
   if (!sh_verify(head) || !elem_p || !comp_func || !key ||

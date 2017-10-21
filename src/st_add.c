@@ -1,5 +1,5 @@
 /*
-** Copyright (C) 2002 by Kevin L. Mitchell <klmitch@mit.edu>
+** Copyright (C) 2002, 2017 by Kevin L. Mitchell <klmitch@mit.edu>
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -15,8 +15,6 @@
 ** License along with this library; if not, write to the Free
 ** Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ** MA 02111-1307, USA
-**
-** @(#)$Id$
 */
 /** \internal
  * \file
@@ -30,8 +28,6 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-RCSTAG("@(#)$Id$");
-
 unsigned long
 st_add(smat_table_t *table, smat_entry_t **entry_p,
        smat_head_t *head1, link_loc_t loc1, smat_entry_t *ent1,
@@ -41,8 +37,6 @@ st_add(smat_table_t *table, smat_entry_t **entry_p,
   unsigned long retval = 0;
   unsigned int freeflags = 0;
   db_key_t key;
-
-  initialize_dbpr_error_table(); /* initialize error table */
 
   /* Verify arguments--like ll_add(), but has to account for two seperate
    * linked lists

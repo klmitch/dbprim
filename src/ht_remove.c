@@ -1,5 +1,5 @@
 /*
-** Copyright (C) 2002 by Kevin L. Mitchell <klmitch@mit.edu>
+** Copyright (C) 2002, 2017 by Kevin L. Mitchell <klmitch@mit.edu>
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -15,8 +15,6 @@
 ** License along with this library; if not, write to the Free
 ** Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ** MA 02111-1307, USA
-**
-** @(#)$Id$
 */
 /** \internal
  * \file
@@ -28,14 +26,10 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-RCSTAG("@(#)$Id$");
-
 unsigned long
 ht_remove(hash_table_t *table, hash_entry_t *entry)
 {
   unsigned long retval = 0;
-
-  initialize_dbpr_error_table(); /* initialize error table */
 
   if (!ht_verify(table) || !he_verify(entry)) /* verify arguments */
     return DB_ERR_BADARGS;
