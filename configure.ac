@@ -45,6 +45,13 @@ dnl Checks for programs.
 AC_PROG_CC_C99
 AC_PROG_LIBTOOL
 
+DX_DOXYGEN_FEATURE(ON)
+DX_DOT_FEATURE(ON)
+DX_HTML_FEATURE(ON)
+DX_PDF_FEATURE(OFF)
+DX_PS_FEATURE(OFF)
+DX_INIT_DOXYGEN(dbprim, Doxyfile, docs)
+
 dnl Checks for libraries.
 
 dnl Checks for header files.
@@ -55,6 +62,6 @@ dnl Checks for library functions.
 
 AC_DEFINE_VERSION([dbprim])
 
-AC_CONFIG_FILES([Makefile tests/Makefile docs/Doxyfile dbprim.spec])
+AC_CONFIG_FILES([Makefile tests/Makefile Doxyfile dbprim.spec])
 
 AC_OUTPUT

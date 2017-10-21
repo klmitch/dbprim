@@ -10,7 +10,8 @@
 /dbprim_version.c
 /dbprim_version.h
 /depcomp
-/docs/Doxyfile
+/docs
+/Doxyfile
 /install-sh
 /libdbprim.la
 /libtool
@@ -36,3 +37,4 @@
 .libs
 *.lo
 *.o
+*.tar.gz

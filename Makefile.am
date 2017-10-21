@@ -25,7 +25,7 @@ AUTOMAKE_OPTIONS = subdir-objects foreign
 # library first if necessary
 SUBDIRS = . tests
 
-AM_CPPFLAGS = -D__DBPRIM_LIBRARY__ -Iinclude
+AM_CPPFLAGS = -D__DBPRIM_LIBRARY__ -I$(top_builddir) -I$(top_srcdir)/include
 
 lib_LTLIBRARIES = libdbprim.la
 libdbprim_la_SOURCES = \
@@ -95,7 +95,7 @@ EXTRA_CSTATUS = dbprim_version.c dbprim_version.h
 
 EXTRA_DIST = dbprim.spec dbprim.spec.in m4 \
 	     autogen.sh COPYING INSTALL AUTHORS \
-	     docs/Doxyfile docs/Doxyfile.in docs/html docs/latex
+	     Doxyfile.in
 
 CLEANFILES = $(EXTRA_CSTATUS)
 
@@ -103,6 +103,8 @@ DISTHOOKCLEANFILES = $(CLEANFILES)
 
 $(EXTRA_CSTATUS): $(top_srcdir)/configure config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+
+@DX_RULES@
 
 dist-hook:
 	for file in $(DISTHOOKCLEANFILES) ; do \
