@@ -103,7 +103,7 @@ BUILT_SOURCES = dbprim_err.h
 
 EXTRA_DIST = dbprim_err.et dbprim.spec dbprim.spec.in m4 \
 	     autogen.sh comp_et-sh.in COPYING INSTALL AUTHORS \
-	     doc/Doxyfile doc/Doxyfile.in doc/html doc/latex
+	     docs/Doxyfile docs/Doxyfile.in docs/html docs/latex
 
 SUFFIXES = .et .h
 
