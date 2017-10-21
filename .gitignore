@@ -12,6 +12,7 @@
 /depcomp
 /docs/Doxyfile
 /install-sh
+/libdbprim.la
 /libtool
 /ltmain.sh
 /m4/libtool.m4
@@ -23,3 +24,7 @@
 /Makefile.in
 /missing
 .deps
+.dirstamp
+.libs
+*.lo
+*.o
