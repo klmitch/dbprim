@@ -17,6 +17,7 @@
 ** MA 02111-1307, USA
 */
 #include <assert.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -42,7 +43,7 @@ static void
 _make_pre(rb_node_t *node, int *order, int *idx, int reverse,
 	  unsigned long *visited)
 {
-  order[(*idx)++] = (int)rn_value(node); /* store node... */
+  order[(*idx)++] = (intptr_t)rn_value(node); /* store node... */
   if (reverse && rn_right(node)) /* recurse down the right if reversed */
     _make_pre(rn_right(node), order, idx, reverse, visited);
   if (rn_left(node)) /* recurse down the left */
@@ -50,7 +51,7 @@ _make_pre(rb_node_t *node, int *order, int *idx, int reverse,
   if (!reverse && rn_right(node)) /* recurse down the right if not reversed */
     _make_pre(rn_right(node), order, idx, reverse, visited);
 
-  *visited &= ~(0x01ul << (int)rn_value(node));
+  *visited &= ~(0x01ul << (intptr_t)rn_value(node));
 }
 
 /* recursive routine for obtaining in-order list... */
@@ -61,11 +62,11 @@ _make_in(rb_node_t *node, int *order, int *idx, int reverse,
 #define selnode(n, rev)	((rev) ? rn_right(n) : rn_left(n))
   if (selnode(node, reverse)) /* recurse down one subtree... */
     _make_in(selnode(node, reverse), order, idx, reverse, visited);
-  order[(*idx)++] = (int)rn_value(node); /* store node... */
+  order[(*idx)++] = (intptr_t)rn_value(node); /* store node... */
   if (selnode(node, !reverse)) /* recurse down other subtree... */
     _make_in(selnode(node, !reverse), order, idx, reverse, visited);
 
-  *visited &= ~(0x01ul << (int)rn_value(node));
+  *visited &= ~(0x01ul << (intptr_t)rn_value(node));
 }
 
 /* recursive routine for obtaining post-order list... */
@@ -79,9 +80,9 @@ _make_post(rb_node_t *node, int *order, int *idx, int reverse,
     _make_post(rn_left(node), order, idx, reverse, visited);
   if (!reverse && rn_right(node)) /* recurse down the right if not reversed */
     _make_post(rn_right(node), order, idx, reverse, visited);
-  order[(*idx)++] = (int)rn_value(node); /* store node... */
+  order[(*idx)++] = (intptr_t)rn_value(node); /* store node... */
 
-  *visited &= ~(0x01ul << (int)rn_value(node));
+  *visited &= ~(0x01ul << (intptr_t)rn_value(node));
 }
 
 /* calculate the order of nodes in the traversal of an redblack tree */
@@ -309,7 +310,7 @@ main(int argc, char **argv)
   /* Now try some rn_init()s... */
   TEST_DECL(t_redblack, rn_init, "Test that rn_init() may be called")
   for (i = 0; i < RBT_ELEM_CNT; i++)
-    if ((err = rn_init(&nodes[i], (void *)i)))
+    if ((err = rn_init(&nodes[i], (void *)((intptr_t)i))))
       FAIL(TEST_NAME(rn_init), FATAL(0), "rn_init() failed with error %lu",
 	   err);
   PASS(TEST_NAME(rn_init), "rn_init() calls successful");
@@ -335,7 +336,7 @@ main(int argc, char **argv)
 	   err);
     else if (n != &nodes[dk_len(&key)])
       FAIL(TEST_NAME(rt_find), FATAL(0), "rt_find() found wrong entry; "
-	   "expected %d returned %d", dk_len(&key), n ? -1 : n - nodes);
+	   "expected %d returned %ld", dk_len(&key), n ? -1 : n - nodes);
   }
   PASS(TEST_NAME(rt_find), "rt_find() calls successful");
 

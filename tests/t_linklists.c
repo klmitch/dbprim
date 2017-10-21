@@ -16,6 +16,7 @@
 ** Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ** MA 02111-1307, USA
 */
+#include <stdint.h>
 #include <stdio.h>
 
 #include "test-harness.h"
@@ -65,7 +66,7 @@ int order_remove[] = { 5, 1, 4, -1 };
 static unsigned long
 t_comp(db_key_t *key, void *comp)
 {
-  return dk_len(key) != (int)comp;
+  return dk_len(key) != (intptr_t)comp;
 }
 
 struct iter_desc {
@@ -82,10 +83,11 @@ t_iter(link_head_t *head, link_elem_t *elem, void *extra)
 {
   struct iter_desc *desc = (struct iter_desc *)extra;
 
-  desc->visited |= 1 << (int)le_object(elem); /* mark that we visited node */
+  /* mark that we visited node */
+  desc->visited |= 1 << (intptr_t)le_object(elem);
 
   /* return the error we want for testing... */
-  return ((int)le_object(elem) == desc->elem) ? desc->err : 0;
+  return ((intptr_t)le_object(elem) == desc->elem) ? desc->err : 0;
 }
 
 struct iter_desc desc_iter[] = {
@@ -120,7 +122,7 @@ do {									      \
     if (_le != &elems[*_order]) {					      \
       _err++;								      \
       fprintf(stderr, "%s ordering error: Expected %d, got %d\n", _name,      \
-	      *_order, _le - elems);					      \
+	      *_order, (int)(_le - elems));				      \
     }									      \
   if (_err) {								      \
     FAIL(_name, (fatal), "Ordering failure: %d errors", _err);		      \
@@ -150,7 +152,7 @@ main(int argc, char **argv)
   /* Now, check le_init()... */
   TEST_DECL(t_linklists, le_init, "Test that le_init() may be called")
   for (i = 0; i < LINK_ELEM_CNT; i++)
-    if ((err = le_init(&elems[i], (void *)i)))
+    if ((err = le_init(&elems[i], (void *)((intptr_t)i))))
       FAIL(TEST_NAME(le_init), FATAL(0), "le_init() failed with error %lu",
 	   err);
   PASS(TEST_NAME(le_init), "le_init() calls successful");
@@ -195,8 +197,8 @@ main(int argc, char **argv)
 		       &tkey)) == DB_ERR_NOENTRY &&
 	le == &elems[dk_len(&tkey)]), 0,
        ("ll_find() call successful"),
-       ("ll_find() call failed or failed to find key; error %lu, elem %d (%d)",
-	err, le ? (le - elems) : -1, dk_len(&tkey)));
+       ("ll_find() call failed or failed to find key; error %lu, elem %ld "
+	"(%d)", err, le ? (le - elems) : -1, dk_len(&tkey)));
 
   /* Now test ll_iter()... */
   TEST_DECL(t_linklists, ll_iter, "Test that ll_iter() works properly")

@@ -16,6 +16,7 @@
 ** Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ** MA 02111-1307, USA
 */
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -168,7 +169,8 @@ struct iter_s {
 static unsigned long
 t_iter(hash_table_t *tab, hash_entry_t *ent, struct iter_s *iter)
 {
-  if (iter->elem == (int)he_value(ent)) /* If this is the one we error on... */
+  /* If this is the one we error on... */
+  if (iter->elem == (intptr_t)he_value(ent))
     return iter->err; /* then error out, dude! */
 
   /* must be after the error return because the element we're looking at
@@ -176,7 +178,7 @@ t_iter(hash_table_t *tab, hash_entry_t *ent, struct iter_s *iter)
    * bit, iter->visited would be zero, and the test would unexpectedly
    * fail.
    */
-  iter->visited &= ~(1 << (int)he_value(ent));
+  iter->visited &= ~(1 << (intptr_t)he_value(ent));
 
   return 0;
 }
@@ -208,7 +210,7 @@ main(int argc, char **argv)
   /* Now let's try some he_init()s... */
   TEST_DECL(t_hashtab, he_init, "Test that he_init() may be called")
   for (i = 0; i < HASH_ENT_CNT; i++)
-    if ((err = he_init(&ents[i], (void *)i)))
+    if ((err = he_init(&ents[i], (void *)((intptr_t)i))))
       FAIL(TEST_NAME(he_init), FATAL(0), "he_init() failed with error %lu",
 	   err);
   PASS(TEST_NAME(he_init), "he_init() calls successful");
@@ -231,7 +233,7 @@ main(int argc, char **argv)
 	   err);
     else if (he != &ents[tmp])
       FAIL(TEST_NAME(ht_find), FATAL(0), "ht_find() found wrong entry; "
-	   "expected %d returned %d", tmp, he ? -1 : he - ents);
+	   "expected %d returned %ld", tmp, he ? -1 : he - ents);
   }
   PASS(TEST_NAME(ht_find), "ht_find() calls successful");
 
@@ -407,7 +409,7 @@ main(int argc, char **argv)
 	   "error %lu", err);
     else if (he != &ents[tmp])
       FAIL(TEST_NAME(ht_find_autogrow), FATAL(0), "ht_find() found wrong "
-	   "entry; returned %d expected %d", he ? -1 : he - ents, tmp);
+	   "entry; returned %ld expected %d", he ? -1 : he - ents, tmp);
   }
   PASS(TEST_NAME(ht_find_autogrow), "ht_find() calls successful on "
        "automatically grown table");
@@ -476,7 +478,7 @@ main(int argc, char **argv)
 	   "error %lu", err);
     else if (he != &ents[tmp])
       FAIL(TEST_NAME(ht_find_autoshrink), FATAL(0), "ht_find() found wrong "
-	   "entry; returned %d expected %d", he ? -1 : he - ents, tmp);
+	   "entry; returned %ld expected %d", he ? -1 : he - ents, tmp);
   }
   PASS(TEST_NAME(ht_find_autoshrink), "ht_find() calls successful on "
        "automatically shrunk table");

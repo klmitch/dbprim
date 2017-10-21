@@ -16,6 +16,7 @@
 ** Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ** MA 02111-1307, USA
 */
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -106,8 +107,8 @@ main(int argc, char **argv)
   /* Now try some sh_inits... */
   TEST_DECL(t_smat, sh_init, "Test that sh_init() may be called")
   for (i = 0; i < SMAT_HEAD_CNT; i++)
-    if ((err = sh_init(&rows[i], SMAT_LOC_FIRST, (void *)i)) ||
-	(err = sh_init(&columns[i], SMAT_LOC_SECOND, (void *)i)))
+    if ((err = sh_init(&rows[i], SMAT_LOC_FIRST, (void *)((intptr_t)i))) ||
+	(err = sh_init(&columns[i], SMAT_LOC_SECOND, (void *)((intptr_t)i))))
       FAIL(TEST_NAME(sh_init), FATAL(0), "sh_init() failed with error %lu",
 	   err);
   PASS(TEST_NAME(sh_init), "sh_init() calls successful");
@@ -156,12 +157,12 @@ main(int argc, char **argv)
     if (err != (chk_assoc(&associations, rt, ct) ? 0 : DB_ERR_NOENTRY))
       FAIL(TEST_NAME(st_find), FATAL(0), "st_find() failed with error %lu",
 	   err);
-    if (!err && ((int)se_object(se, SMAT_LOC_FIRST) != rt ||
-		 (int)se_object(se, SMAT_LOC_SECOND) != ct))
+    if (!err && ((intptr_t)se_object(se, SMAT_LOC_FIRST) != rt ||
+		 (intptr_t)se_object(se, SMAT_LOC_SECOND) != ct))
       FAIL(TEST_NAME(st_find), FATAL(0), "st_find() found wrong entry; "
-	   "expected %d/%d, found %d/%d", rt, ct,
-	   (int)se_object(se, SMAT_LOC_FIRST),
-	   (int)se_object(se, SMAT_LOC_SECOND));
+	   "expected %d/%d, found %ld/%ld", rt, ct,
+	   (intptr_t)se_object(se, SMAT_LOC_FIRST),
+	   (intptr_t)se_object(se, SMAT_LOC_SECOND));
 
     fprintf(stderr, err ? "No such association\n" : "Found association\n");
   }
