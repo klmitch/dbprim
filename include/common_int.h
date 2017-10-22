@@ -29,14 +29,4 @@
 
 #include "common.h"
 
-#ifndef DBPRIM_DOXYGEN
-# ifdef __GNUC__
-#  if (__GNUC__ < 2) || (__GNUC__ == 2 && __GNUC_MINOR__ < 7)
-#   define __attribute__(A)
-#  endif
-# else
-#  define __attribute__(A)
-# endif
-#endif /* DBPRIM_DOXYGEN */
-
 #endif /* included_dbprim_common_int_h__ */
