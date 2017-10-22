@@ -62,6 +62,17 @@
 DBPRIM_BEGIN_C_DECLS
 
 /** \ingroup dbprim_hash
+ * \brief State for FNV-1 hash functions.
+ *
+ * Although convenience functions exist for using the FNV-1 hashes,
+ * some consumers may wish to produce a hash from multiple
+ * components.  This type provides a storage location for the hash
+ * state for the hash_fnv_init(), hash_fnv1_accum(),
+ * hash_fnv1a_accum(), and hash_fnv_final() functions.
+ */
+typedef uint32_t hash_fnv_state_t;
+
+/** \ingroup dbprim_hash
  * \brief Hash value.
  *
  * This type is used for hash values, and for values related to hash
@@ -150,6 +161,61 @@ typedef int (*hash_comp_t)(hash_table_t *table, db_key_t *key1,
  * \return	Zero to permit the table resize, non-zero otherwise.
  */
 typedef db_err_t (*hash_resize_t)(hash_table_t *table, hash_t new_mod);
+
+/** \ingroup dbprim_hash
+ * \brief Initialize FNV state.
+ *
+ * Initialize the state for the FNV-1 and FNV-1a hash algorithms.
+ *
+ * \param[in]		state	A pointer to a #hash_fnv_state_t.
+ *
+ * \retval DB_ERR_BADARGS	An invalid argument was given.
+ */
+db_err_t hash_fnv_init(hash_fnv_state_t *state);
+
+/** \ingroup dbprim_hash
+ * \brief Accumulate data for an FNV-1 hash.
+ *
+ * Update the FNV hash state with the given data, utilizing the FNV-1
+ * algorithm.  Note that the result of mixing calls to
+ * hash_fnv1_accum() and hash_fnv1a_accum() on the same state is
+ * undefined.
+ *
+ * \param[in]		state	A pointer to a #hash_fnv_state_t.
+ * \param[in]		data	The data to accumulate.
+ * \param[in]		len	The size of the data to accumulate.
+ *
+ * \retval DB_ERR_BADARGS	An invalid argument was given.
+ */
+db_err_t hash_fnv1_accum(hash_fnv_state_t *state, void *data, size_t len);
+
+/** \ingroup dbprim_hash
+ * \brief Accumulate data for an FNV-1a hash.
+ *
+ * Update the FNV hash state with the given data, utilizing the FNV-1a
+ * algorithm.  Note that the result of mixing calls to
+ * hash_fnv1_accum() and hash_fnv1a_accum() on the same state is
+ * undefined.
+ *
+ * \param[in]		state	A pointer to a #hash_fnv_state_t.
+ * \param[in]		data	The data to accumulate.
+ * \param[in]		len	The size of the data to accumulate.
+ *
+ * \retval DB_ERR_BADARGS	An invalid argument was given.
+ */
+db_err_t hash_fnv1a_accum(hash_fnv_state_t *state, void *data, size_t len);
+
+/** \ingroup dbprim_hash
+ * \brief Finalize the FNV state.
+ *
+ * Finalizes the hash state and returns the final hash value.
+ *
+ * \param[in]		state	A pointer to a #hash_fnv_state_t.
+ *
+ * \return	A 32-bit hash value derived from the state.  If the
+ *		state is invalid, 0 will be returned.
+ */
+hash_t hash_fnv_final(hash_fnv_state_t *state);
 
 /** \ingroup dbprim_hash
  * \brief FNV-1 hash function.

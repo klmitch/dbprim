@@ -1,5 +1,5 @@
 /*
-** Copyright (C) 2006, 2017 by Kevin L. Mitchell <klmitch@mit.edu>
+** Copyright (C) 2017 by Kevin L. Mitchell <klmitch@mit.edu>
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -18,23 +18,19 @@
 */
 /** \internal
  * \file
- * \brief Implementation of hash_fnv1().
+ * \brief Implementation of hash_fnv_final().
  *
- * This file contains the implementation of the hash_fnv1() function,
- * a generic hash function callback implementing the FNV-1 hash
- * algorithm.
+ * This file contains the implementation of the hash_fnv_final()
+ * function, which returns the hash value computed by calls to
+ * hash_fnv1_accum() or hash_fnv1a_accum().
  */
 #include "hashtab_int.h"
 
 hash_t
-hash_fnv1(hash_table_t *table, db_key_t *key)
+hash_fnv_final(hash_fnv_state_t *state)
 {
-  hash_fnv_state_t state;
-
-  if (!key || !dk_len(key) || !dk_key(key)) /* invalid key?  return 0 */
+  if (!state) /* If the state's invalid, return 0 */
     return 0;
 
-  hash_fnv_init(&state);
-  hash_fnv1_accum(&state, dk_key(key), dk_len(key));
-  return hash_fnv_final(&state);
+  return *state;
 }

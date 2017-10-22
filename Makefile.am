@@ -45,9 +45,13 @@ libdbprim_la_SOURCES = \
 	dbprim_version.c \
 	\
 	src/_hash_prime.c \
-	src/hash_fnv1.c \
-	src/hash_fnv1a.c \
 	src/hash_comp.c \
+	src/hash_fnv1.c \
+	src/hash_fnv1_accum.c \
+	src/hash_fnv1a.c \
+	src/hash_fnv1a_accum.c \
+	src/hash_fnv_final.c \
+	src/hash_fnv_init.c \
 	src/he_init.c \
 	src/ht_add.c \
 	src/ht_find.c \
@@ -81,13 +85,13 @@ libdbprim_la_SOURCES = \
 	src/rt_next.c \
 	src/rt_remove.c \
 	\
+	src/_smat_resize.c \
 	src/sh_find.c \
 	src/sh_flush.c \
 	src/sh_init.c \
 	src/sh_iter.c \
 	src/sh_move.c \
 	src/smat_freelist.c \
-	src/_smat_resize.c \
 	src/st_add.c \
 	src/st_find.c \
 	src/st_flush.c \

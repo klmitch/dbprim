@@ -29,19 +29,12 @@
 hash_t
 hash_fnv1a(hash_table_t *table, db_key_t *key)
 {
-  int i;
-  hash_t hash = HASH_FNV_OFFSET;
-  unsigned char *c;
+  hash_fnv_state_t state;
 
   if (!key || !dk_len(key) || !dk_key(key)) /* invalid key?  return 0 */
     return 0;
 
-  c = (unsigned char *)dk_key(key);
-  for (i = 0; i < dk_len(key); i++, c++) { /* FNV-1a algorithm... */
-    hash ^= *c; /* hash in the data octet */
-    hash *= HASH_FNV_PRIME; /* multiply by the prime... */
-    hash &= 0xffffffff; /* reduce to 32-bit */
-  }
-
-  return hash;
+  hash_fnv_init(&state);
+  hash_fnv1a_accum(&state, dk_key(key), dk_len(key));
+  return hash_fnv_final(&state);
 }
