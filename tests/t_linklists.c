@@ -63,7 +63,7 @@ int tremove[] = { 2, 0, 3 };
 
 int order_remove[] = { 5, 1, 4, -1 };
 
-static unsigned long
+static int
 t_comp(db_key_t *key, void *comp)
 {
   return dk_len(key) != (intptr_t)comp;

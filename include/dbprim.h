@@ -396,7 +396,7 @@ typedef db_err_t (*link_iter_t)(link_head_t *list, link_elem_t *elem,
  *
  * \return	Zero if \p key matches \p obj, non-zero otherwise.
  */
-typedef unsigned long (*link_comp_t)(db_key_t *key, void *obj);
+typedef int (*link_comp_t)(db_key_t *key, void *obj);
 
 /** \ingroup dbprim_hash
  * \brief Hash table iteration callback.
@@ -447,8 +447,8 @@ typedef hash_t (*hash_func_t)(hash_table_t *table, db_key_t *key);
  *
  * \return	Zero if the keys match, non-zero otherwise.
  */
-typedef unsigned long (*hash_comp_t)(hash_table_t *table, db_key_t *key1,
-				     db_key_t *key2);
+typedef int (*hash_comp_t)(hash_table_t *table, db_key_t *key1,
+			   db_key_t *key2);
 
 /** \ingroup dbprim_hash
  * \brief Hash table resize callback.
@@ -513,7 +513,7 @@ typedef db_err_t (*smat_iter_t)(smat_table_t *table, smat_entry_t *ent,
  *
  * \return	Zero if \p key matches \p ent, non-zero otherwise.
  */
-typedef unsigned long (*smat_comp_t)(db_key_t *key, smat_entry_t *ent);
+typedef int (*smat_comp_t)(db_key_t *key, smat_entry_t *ent);
 
 /** \ingroup dbprim_rbtree
  * \brief Red-black tree iteration callback.
@@ -550,7 +550,7 @@ typedef db_err_t (*rb_iter_t)(rb_tree_t *tree, rb_node_t *node, void *extra);
  *		key orders before the second key, or greater than zero
  *		if the first key orders after the second key.
  */
-typedef long (*rb_comp_t)(rb_tree_t *tree, db_key_t *key1, db_key_t *key2);
+typedef int (*rb_comp_t)(rb_tree_t *tree, db_key_t *key1, db_key_t *key2);
 
 /** \ingroup dbprim_link
  * \brief Linked list location.
@@ -1203,7 +1203,7 @@ hash_t hash_fnv1a(hash_table_t *table, db_key_t *key);
  *
  * \return	Zero if the keys match, non-zero otherwise.
  */
-unsigned long hash_comp(hash_table_t *table, db_key_t *key1, db_key_t *key2);
+int hash_comp(hash_table_t *table, db_key_t *key1, db_key_t *key2);
 
 /** \internal
  * \ingroup dbprim_hash

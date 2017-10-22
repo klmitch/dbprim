@@ -53,7 +53,7 @@ struct _sh_find_s {
  * \return	Zero if the sparse matrix linked list entry matches
  *		the \p key, non-zero otherwise.
  */
-static unsigned long
+static int
 _sh_find_comp(db_key_t *key, void *data)
 {
   struct _sh_find_s *sf;

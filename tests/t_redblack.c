@@ -221,7 +221,7 @@ treecheck(rb_node_t *node, rb_node_t *parent, int bh, int *tbhp)
 }
 
 /* simple comparison function for testing... */
-static long
+static int
 t_comp(rb_tree_t *tree, db_key_t *key1, db_key_t *key2)
 {
   return dk_len(key1) - dk_len(key2); /* difference of the lengths */

@@ -61,7 +61,7 @@ t_hash(hash_table_t *tab, db_key_t *key)
 }
 
 /* simple hash comparison function for testing... */
-static unsigned long
+static int
 t_comp(hash_table_t *tab, db_key_t *key1, db_key_t *key2)
 {
   if (dk_len(key1) < 0) /* first, fix up the lengths... */

@@ -28,7 +28,7 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+int
 hash_comp(hash_table_t *table, db_key_t *key1, db_key_t *key2)
 {
   if (!key1 || !dk_len(key1) || !dk_key(key1) || /* invalid keys? */
