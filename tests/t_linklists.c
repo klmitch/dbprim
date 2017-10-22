@@ -198,7 +198,7 @@ main(int argc, char **argv)
 	le == &elems[dk_len(&tkey)]), 0,
        ("ll_find() call successful"),
        ("ll_find() call failed or failed to find key; error %lu, elem %ld "
-	"(%d)", err, le ? (le - elems) : -1, dk_len(&tkey)));
+	"(%zu)", err, le ? (le - elems) : -1, dk_len(&tkey)));
 
   /* Now test ll_iter()... */
   TEST_DECL(t_linklists, ll_iter, "Test that ll_iter() works properly")

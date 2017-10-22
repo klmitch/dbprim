@@ -238,6 +238,7 @@
 DBPRIM_BEGIN_C_DECLS
 
 #include <stdint.h>
+#include <stdlib.h>	/* for size_t */
 
 #ifndef __DBPRIM_LIBRARY__
 #include <dbprim/dbprim_version.h>
@@ -584,8 +585,8 @@ typedef enum _rb_color_e rb_color_t;
  * This is the implementation of the #db_key_t type.
  */
 struct _db_key_s {
-  void *dk_key;		/**< Pointer to the key. */
-  int   dk_len;		/**< Length of the key, if that has any meaning. */
+  void	       *dk_key;	/**< Pointer to the key. */
+  size_t	dk_len;	/**< Length of the key, if that has any meaning. */
 };
 
 /** \ingroup dbprim
@@ -619,7 +620,7 @@ struct _db_key_s {
  *
  * \param[in]		key	A pointer to a #db_key_t.
  *
- * \return	An \c int describing the length of the key.
+ * \return	A \c size_t describing the length of the key.
  */
 #define dk_len(key)	((key)->dk_len)
 

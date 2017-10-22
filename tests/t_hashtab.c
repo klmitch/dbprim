@@ -53,9 +53,6 @@ t_hash(hash_table_t *tab, db_key_t *key)
   unsigned char *kv = dk_key(key);
   int i;
 
-  if (dk_len(key) < 0) /* if no length... */
-    dk_len(key) = strlen((char *)dk_key(key)); /* set one! */
-
   for (i = dk_len(key); i; i--) /* hash the string */
     hash += hash * 257 + kv[i];
 
@@ -98,21 +95,21 @@ t_resize(hash_table_t *tab, unsigned long new)
 }
 
 static db_key_t keys[] = {
-  DB_KEY_INIT("one", -1),	   DB_KEY_INIT("two", -1),
-  DB_KEY_INIT("three", -1),	   DB_KEY_INIT("four", -1),
-  DB_KEY_INIT("five", -1),	   DB_KEY_INIT("six", -1),
-  DB_KEY_INIT("seven", -1),	   DB_KEY_INIT("eight", -1),
-  DB_KEY_INIT("nine", -1),	   DB_KEY_INIT("ten", -1),
-  DB_KEY_INIT("eleven", -1),	   DB_KEY_INIT("twelve", -1),
-  DB_KEY_INIT("thirteen", -1),	   DB_KEY_INIT("fourteen", -1),
-  DB_KEY_INIT("fifteen", -1),	   DB_KEY_INIT("sixteen", -1),
-  DB_KEY_INIT("seventeen", -1),    DB_KEY_INIT("eighteen", -1),
-  DB_KEY_INIT("nineteen", -1),	   DB_KEY_INIT("twenty", -1),
-  DB_KEY_INIT("twenty-one", -1),   DB_KEY_INIT("twenty-two", -1),
-  DB_KEY_INIT("twenty-three", -1), DB_KEY_INIT("twenty-four", -1),
-  DB_KEY_INIT("twenty-five", -1),  DB_KEY_INIT("twenty-six", -1),
-  DB_KEY_INIT("twenty-seven", -1), DB_KEY_INIT("twenty-eight", -1),
-  DB_KEY_INIT("twenty-nine", -1),  DB_KEY_INIT("thirty", -1)
+  DB_KEY_INIT("one", 3),	   DB_KEY_INIT("two", 3),
+  DB_KEY_INIT("three", 5),	   DB_KEY_INIT("four", 4),
+  DB_KEY_INIT("five", 4),	   DB_KEY_INIT("six", 3),
+  DB_KEY_INIT("seven", 5),	   DB_KEY_INIT("eight", 5),
+  DB_KEY_INIT("nine", 4),	   DB_KEY_INIT("ten", 3),
+  DB_KEY_INIT("eleven", 6),	   DB_KEY_INIT("twelve", 6),
+  DB_KEY_INIT("thirteen", 8),	   DB_KEY_INIT("fourteen", 8),
+  DB_KEY_INIT("fifteen", 7),	   DB_KEY_INIT("sixteen", 7),
+  DB_KEY_INIT("seventeen", 9),	   DB_KEY_INIT("eighteen", 8),
+  DB_KEY_INIT("nineteen", 8),	   DB_KEY_INIT("twenty", 6),
+  DB_KEY_INIT("twenty-one", 10),   DB_KEY_INIT("twenty-two", 10),
+  DB_KEY_INIT("twenty-three", 12), DB_KEY_INIT("twenty-four", 11),
+  DB_KEY_INIT("twenty-five", 11),  DB_KEY_INIT("twenty-six", 10),
+  DB_KEY_INIT("twenty-seven", 12), DB_KEY_INIT("twenty-eight", 12),
+  DB_KEY_INIT("twenty-nine", 11),  DB_KEY_INIT("thirty", 6)
 };
 
 #define HASH_ENT_CNT	(sizeof(keys) / sizeof(db_key_t))
@@ -121,16 +118,16 @@ static struct moves_s {
   int elem;
   db_key_t key;
 } moves[] = {
-  {  3, DB_KEY_INIT("thirty-one", -1) },
-  { 14, DB_KEY_INIT("thirty-two", -1) },
-  {  6, DB_KEY_INIT("thirty-three", -1) },
-  { 11, DB_KEY_INIT("thirty-four", -1) },
-  {  1, DB_KEY_INIT("thirty-five", -1) },
-  {  4, DB_KEY_INIT("thirty-six", -1) },
-  { 27, DB_KEY_INIT("thirty-seven", -1) },
-  { 24, DB_KEY_INIT("thirty-eight", -1) },
-  { 18, DB_KEY_INIT("thirty-nine", -1) },
-  { 15, DB_KEY_INIT("forty", -1) }
+  {  3, DB_KEY_INIT("thirty-one", 10) },
+  { 14, DB_KEY_INIT("thirty-two", 10) },
+  {  6, DB_KEY_INIT("thirty-three", 12) },
+  { 11, DB_KEY_INIT("thirty-four", 11) },
+  {  1, DB_KEY_INIT("thirty-five", 11) },
+  {  4, DB_KEY_INIT("thirty-six", 10) },
+  { 27, DB_KEY_INIT("thirty-seven", 12) },
+  { 24, DB_KEY_INIT("thirty-eight", 12) },
+  { 18, DB_KEY_INIT("thirty-nine", 11) },
+  { 15, DB_KEY_INIT("forty", 5) }
 };
 
 #define HASH_MOVE_CNT	(sizeof(moves) / sizeof(struct moves_s))

@@ -128,7 +128,7 @@ comp_order(int *o1, int *o2)
 }
 
 /* handy macro to generate the arguments for identifying nodes in printf's */
-#define n_debargs(node) (void *)(node), (node) ? dk_len(rn_key(node)) : -1, \
+#define n_debargs(node) (void *)(node), (node) ? dk_len(rn_key(node)) : 0, \
 			rn_isblack(node) ? "BLACK" : \
 			(rn_isred(node) ? "RED" : "NO COLOR")
 
@@ -143,30 +143,30 @@ treecheck(rb_node_t *node, rb_node_t *parent, int bh, int *tbhp)
 
   /* First, check parental referential integrity... */
   if (node->rn_parent != parent) {
-    fprintf(stderr, "Node %p/%d (%s) thinks its a child of %p/%d (%s) "
-	    "rather than of %p/%d (%s)\n", n_debargs(node),
+    fprintf(stderr, "Node %p/%zu (%s) thinks its a child of %p/%zu (%s) "
+	    "rather than of %p/%zu (%s)\n", n_debargs(node),
 	    n_debargs(node->rn_parent), n_debargs(parent));
     return 0;
   }
 
   /* Next, make sure it has a reasonable color... */
   if (!rn_isred(node) && !rn_isblack(node)) {
-    fprintf(stderr, "Node %p/%d (%s) is neither red nor black\n",
+    fprintf(stderr, "Node %p/%zu (%s) is neither red nor black\n",
 	    n_debargs(node));
     return 0;
   }
 
   /* Now, if it's at the root of the tree, it'd better be black */
   if (!parent && !rn_isblack(node)) {
-    fprintf(stderr, "Node %p/%d (%s) is a non-black root node\n",
+    fprintf(stderr, "Node %p/%zu (%s) is a non-black root node\n",
 	    n_debargs(node->rn_parent));
     return 0;
   }
 
   /* No red node may have a red parent */
   if (rn_isred(parent) && rn_isred(node)) {
-    fprintf(stderr, "Node %p/%d (%s) is a red node with a red parent "
-	    "%p/%d (%s)\n", n_debargs(node), n_debargs(parent));
+    fprintf(stderr, "Node %p/%zu (%s) is a red node with a red parent "
+	    "%p/%zu (%s)\n", n_debargs(node), n_debargs(parent));
     return 0;
   }
 
@@ -180,15 +180,15 @@ treecheck(rb_node_t *node, rb_node_t *parent, int bh, int *tbhp)
   if (node->rn_left) {
     /* First, double-check node ordering... */
     if (dk_len(rn_key(node->rn_left)) >= dk_len(rn_key(node))) {
-      fprintf(stderr, "Node %p/%d (%s) is less than its left child, "
-	      "%p/%d (%s)", n_debargs(node), n_debargs(node->rn_left));
+      fprintf(stderr, "Node %p/%zu (%s) is less than its left child, "
+	      "%p/%zu (%s)", n_debargs(node), n_debargs(node->rn_left));
       return 0;
     } else if (!treecheck(node->rn_left, node, bh, tbhp))
      return 0;
   } else if (*tbhp < 0) /* hit an external node for the first time... */
     *tbhp = bh + 1; /* store the black height */
   else if ((bh + 1) != *tbhp) { /* verify that black heights are consistent */
-    fprintf(stderr, "Node %p/%d (%s) left child is leaf with bh %d "
+    fprintf(stderr, "Node %p/%zu (%s) left child is leaf with bh %d "
 	    "(expected %d)\n", n_debargs(node), bh + 1, *tbhp);
     return 0;
   }
@@ -197,15 +197,15 @@ treecheck(rb_node_t *node, rb_node_t *parent, int bh, int *tbhp)
   if (node->rn_right) {
     /* First, double-check node ordering... */
     if (dk_len(rn_key(node)) >= dk_len(rn_key(node->rn_right))) {
-      fprintf(stderr, "Node %p/%d (%s) is greater than its right child, "
-	      "%p/%d (%s)", n_debargs(node), n_debargs(node->rn_left));
+      fprintf(stderr, "Node %p/%zu (%s) is greater than its right child, "
+	      "%p/%zu (%s)", n_debargs(node), n_debargs(node->rn_left));
       return 0;
     } else if (!treecheck(node->rn_right, node, bh, tbhp))
       return 0;
   } else if (*tbhp < 0) /* hit an external node for the first time... */
     *tbhp = bh + 1; /* store the black height */
   else if ((bh + 1) != *tbhp) { /* verify that black heights are consistent */
-    fprintf(stderr, "Node %p/%d (%s) right child is leaf with bh %d "
+    fprintf(stderr, "Node %p/%zu (%s) right child is leaf with bh %d "
 	    "(expected %d)\n", n_debargs(node), bh + 1, *tbhp);
     return 0;
   }
@@ -240,7 +240,7 @@ struct flush_test {
 static unsigned long
 t_flush(rb_tree_t *tree, rb_node_t *node, struct flush_test *ft)
 {
-  fprintf(stderr, "t_flush(%d)\n", dk_len(rn_key(node)));
+  fprintf(stderr, "t_flush(%zu)\n", dk_len(rn_key(node)));
 
   /* have we visited this node before? */
   if (!(ft->visited & (0x01lu << dk_len(rn_key(node)))))
@@ -268,7 +268,7 @@ struct iter_test {
 static unsigned long
 t_iter(rb_tree_t *tree, rb_node_t *node, struct iter_test *it)
 {
-  fprintf(stderr, "t_iter(%d)\n", dk_len(rn_key(node)));
+  fprintf(stderr, "t_iter(%zu)\n", dk_len(rn_key(node)));
 
   /* have we visited this node already? */
   if (!(it->visited & (0x01lu << dk_len(rn_key(node)))))
@@ -330,13 +330,13 @@ main(int argc, char **argv)
   for (visited = RBT_ELEM_MASK; visited;
        visited &= ~(0x01lu << dk_len(&key))) {
     dk_len(&key) = rand() % RBT_ELEM_CNT; /* select an entry at random... */
-    fprintf(stderr, "Looking up entry %d . . .\n", dk_len(&key));
+    fprintf(stderr, "Looking up entry %zu . . .\n", dk_len(&key));
     if ((err = rt_find(&tree, &n, &key)))
       FAIL(TEST_NAME(rt_find), FATAL(0), "rt_find() failed with error %lu",
 	   err);
     else if (n != &nodes[dk_len(&key)])
       FAIL(TEST_NAME(rt_find), FATAL(0), "rt_find() found wrong entry; "
-	   "expected %d returned %ld", dk_len(&key), n ? -1 : n - nodes);
+	   "expected %zu returned %ld", dk_len(&key), n ? -1 : n - nodes);
   }
   PASS(TEST_NAME(rt_find), "rt_find() calls successful");
 
@@ -362,7 +362,7 @@ main(int argc, char **argv)
   for (visited = RBT_ELEM_MASK; visited;
        visited &= ~(0x01lu << dk_len(&key))) {
     dk_len(&key) = rand() % RBT_ELEM_CNT; /* select an entry at random... */
-    fprintf(stderr, "Looking up entry %d . . .%s\n", dk_len(&key),
+    fprintf(stderr, "Looking up entry %zu . . .%s\n", dk_len(&key),
 	    (visit_init & (0x01lu << dk_len(&key))) ? "" : "[removed]");
 
     err = rt_find(&tree, &n, &key); /* look up the node */
@@ -431,7 +431,7 @@ main(int argc, char **argv)
       /* select a unique element for each iteration */
       if (visited & (0x01lu << (dk_len(&key) = rand() % RBT_ELEM_CNT)))
 	continue;
-      fprintf(stderr, "Adding node %d...\n", dk_len(&key));
+      fprintf(stderr, "Adding node %zu...\n", dk_len(&key));
       if ((err = rt_add(&tree, &nodes[dk_len(&key)], &key)))
 	FAIL(TEST_NAME(rt_iter), FATAL(0), "rt_add() failed with error %lu "
 	     "while testing rt_iter()", err);
@@ -477,7 +477,7 @@ main(int argc, char **argv)
 
     /* Now finish up the iteration... */
     if (it.last_node) { /* if there was a next node, that is... */
-      fprintf(stderr, "Starting second rt_iter() at node %d\n",
+      fprintf(stderr, "Starting second rt_iter() at node %zu\n",
 	      dk_len(rn_key(it.last_node)));
       if ((err = rt_iter(&tree, it.last_node, (rb_iter_t)t_iter, &it,
 			 ordering)))
