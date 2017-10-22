@@ -2,7 +2,12 @@ sudo: false
 addons:
   apt:
     packages:
+    - autoconf
     - autoconf-archive
+    - automake
+    - doxygen
+    - libtool
+    - graphviz
     - pkg-config
 language: c
 script: ./tools/travis-test.sh
