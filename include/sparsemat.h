@@ -19,7 +19,7 @@
 #ifndef included_dbprim_sparsemat_h__
 #define included_dbprim_sparsemat_h__
 
-/** \file dbprim/sparsemat.h
+/** \file
  * \brief Sparse matrices.
  *
  * This header file contains the definitions for the sparse matrices

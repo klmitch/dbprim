@@ -30,7 +30,7 @@
  * list.
  */
 
-/** \file dbprim/dbprim.h
+/** \file
  * \brief Core Database Primitives header file.
  *
  * This header file is a convenience header that includes all the

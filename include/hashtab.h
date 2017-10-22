@@ -19,7 +19,7 @@
 #ifndef included_dbprim_hashtab_h__
 #define included_dbprim_hashtab_h__
 
-/** \file dbprim/hashtab.h
+/** \file
  * \brief Hash tables.
  *
  * This header file contains the definitions for the hash tables

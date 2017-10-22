@@ -19,7 +19,7 @@
 #ifndef included_dbprim_linklist_h__
 #define included_dbprim_linklist_h__
 
-/** \file dbprim/linklist.h
+/** \file
  * \brief Linked lists.
  *
  * This header file contains the definitions for the linked lists

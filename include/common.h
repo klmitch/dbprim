@@ -19,7 +19,7 @@
 #ifndef included_dbprim_common_h__
 #define included_dbprim_common_h__
 
-/** \file dbprim/common.h
+/** \file
  * \brief Common header file.
  *
  * This header file contains the common definitions for the Database

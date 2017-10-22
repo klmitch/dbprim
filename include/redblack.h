@@ -19,7 +19,7 @@
 #ifndef included_dbprim_redblack_h__
 #define included_dbprim_redblack_h__
 
-/** \file dbprim/redblack.h
+/** \file
  * \brief Red-black trees.
  *
  * This header file contains the definitions for the red-black tree
