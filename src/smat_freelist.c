@@ -96,7 +96,7 @@ smat_cleanup(void)
   return 0;
 }
 
-unsigned long
+size_t
 smat_freemem(void)
 {
   /* tell caller how much memory we're using */

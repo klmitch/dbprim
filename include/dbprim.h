@@ -1753,7 +1753,7 @@ db_err_t smat_cleanup(void);
  * \return	A number indicating the size, in bytes, of the memory
  *		allocated for smat_entry_t objects on the free list.
  */
-unsigned long smat_freemem(void);
+size_t smat_freemem(void);
 
 /** \internal
  * \ingroup dbprim_smat
