@@ -71,7 +71,7 @@ _sh_iter_iter(link_head_t *head, link_elem_t *elem, void *extra)
 
 db_err_t
 sh_iter(smat_head_t *head, smat_entry_t *start,
-	smat_iter_t iter_func, void *extra, unsigned long flags)
+	smat_iter_t iter_func, void *extra, db_flag_t flags)
 {
   struct _sh_iter_s si;
 

@@ -141,7 +141,7 @@ unsigned long _hash_prime(unsigned long start);
  *		unlikely to occur.
  */
 db_err_t _st_remove(smat_table_t *table, smat_entry_t *entry,
-		    unsigned int remflag);
+		    db_flag_t remflag);
 
 /** \internal
  * \ingroup dbprim_smat

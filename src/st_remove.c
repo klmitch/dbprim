@@ -28,7 +28,7 @@
 #include "dbprim_int.h"
 
 db_err_t
-_st_remove(smat_table_t *table, smat_entry_t *entry, unsigned int remflag)
+_st_remove(smat_table_t *table, smat_entry_t *entry, db_flag_t remflag)
 {
   db_err_t retval;
 

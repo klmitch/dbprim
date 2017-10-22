@@ -27,8 +27,8 @@
 #include "dbprim_int.h"
 
 db_err_t
-rt_iter(rb_tree_t *tree, rb_node_t *start,
-	rb_iter_t iter_func, void *extra, unsigned long flags)
+rt_iter(rb_tree_t *tree, rb_node_t *start, rb_iter_t iter_func, void *extra,
+	db_flag_t flags)
 {
   db_err_t retval = 0;
 

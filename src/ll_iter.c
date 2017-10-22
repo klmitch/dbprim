@@ -27,8 +27,8 @@
 #include "dbprim_int.h"
 
 db_err_t
-ll_iter(link_head_t *list, link_elem_t *start,
-	link_iter_t iter_func, void *extra, unsigned long flags)
+ll_iter(link_head_t *list, link_elem_t *start, link_iter_t iter_func,
+	void *extra, db_flag_t flags)
 {
   db_err_t retval;
   link_elem_t *elem, *next = 0;

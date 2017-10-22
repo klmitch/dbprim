@@ -261,6 +261,17 @@ typedef uint32_t db_err_t;
 typedef uint32_t _db_magic_t;
 
 /** \ingroup dbprim
+ * \brief Flags.
+ *
+ * The behavior of several functions in the library may be controlled
+ * through flags, either passed to the function or part of the
+ * structures being manipulated.  Several structures also contain flag
+ * fields that are for the use of the application.  This type provides
+ * an alias for these flag fields.
+ */
+typedef uint32_t db_flag_t;
+
+/** \ingroup dbprim
  * \brief Database key.
  *
  * This structure is a generic key containing a void * pointer and a
@@ -978,7 +989,7 @@ db_err_t ll_find(link_head_t *list, link_elem_t **elem_p,
  * \retval DB_ERR_WRONGTABLE	\p start is not in this linked list.
  */
 db_err_t ll_iter(link_head_t *list, link_elem_t *start, link_iter_t iter_func,
-		 void *extra, unsigned long flags);
+		 void *extra, db_flag_t flags);
 
 /** \ingroup dbprim_link
  * \brief Flush a linked list.
@@ -1015,7 +1026,7 @@ struct _link_elem_s {
   link_elem_t  *le_prev;	/**< Previous element in list. */
   void	       *le_object;	/**< The object pointed to by this link. */
   link_head_t  *le_head;	/**< The head of the list. */
-  unsigned long	le_flags;	/**< Flags associated with this element. */
+  db_flag_t	le_flags;	/**< Flags associated with this element. */
 };
 
 /** \internal
@@ -1114,8 +1125,8 @@ struct _link_elem_s {
  *
  * \param[in]		elem	A pointer to a #link_elem_t.
  *
- * \return	An <CODE>unsigned long</CODE> containing the flags
- *		associated with the element.
+ * \return	A #db_flag_t containing the flags associated with the
+ *		element.
  */
 #define le_flags(elem)	((elem)->le_flags)
 
@@ -1187,7 +1198,7 @@ unsigned long hash_comp(hash_table_t *table, db_key_t *key1, db_key_t *key2);
  */
 struct _hash_table_s {
   _db_magic_t	ht_magic;	/**< Magic number. */
-  unsigned long	ht_flags;	/**< Flags associated with the table. */
+  db_flag_t	ht_flags;	/**< Flags associated with the table. */
   unsigned long	ht_modulus;	/**< Size (modulus) of the hash
 				     table--must be prime. */
   unsigned long	ht_count;	/**< Number of elements in the table. */
@@ -1290,8 +1301,8 @@ struct _hash_table_s {
  *
  * \param[in]		table	A pointer to a #hash_table_t.
  *
- * \return	An <CODE>unsigned long</CODE> containing the flags for
- *		the hash table.
+ * \return	An #db_flag_t containing the flags for the hash
+ *		table.
  */
 #define ht_flags(table)	  ((table)->ht_flags)
 
@@ -1424,7 +1435,7 @@ struct _hash_table_s {
  * \retval DB_ERR_BADARGS	An invalid argument was given.
  * \retval ENOMEM		Unable to allocate memory.
  */
-db_err_t ht_init(hash_table_t *table, unsigned long flags, hash_func_t func,
+db_err_t ht_init(hash_table_t *table, db_flag_t flags, hash_func_t func,
 		 hash_comp_t comp, hash_resize_t resize, void *extra,
 		 unsigned long init_mod);
 
@@ -1664,8 +1675,8 @@ struct _hash_entry_s {
  *
  * \param[in]		entry	A pointer to a #hash_entry_t.
  *
- * \return	An <CODE>unsigned long</CODE> containing the flags
- *		associated with the entry.
+ * \return	A #db_flag_t containing the flags associated with the
+ *		entry.
  */
 #define he_flags(entry)	((entry)->he_elem.le_flags)
 
@@ -1818,8 +1829,8 @@ struct _smat_table_s {
  *
  * \param[in]		table	A pointer to a #smat_table_t.
  *
- * \return	An <CODE>unsigned long</CODE> containing the flags for
- *		the sparse matrix table.
+ * \return	A #db_flag_t containing the flags for the sparse
+ *		matrix table.
  */
 #define st_flags(table)	  ((table)->st_table.ht_flags)
 
@@ -1932,8 +1943,8 @@ struct _smat_table_s {
  * \retval DB_ERR_BADARGS	An invalid argument was given.
  * \retval ENOMEM		Unable to allocate memory.
  */
-db_err_t st_init(smat_table_t *table, unsigned long flags,
-		 smat_resize_t resize, void *extra, unsigned long init_mod);
+db_err_t st_init(smat_table_t *table, db_flag_t flags, smat_resize_t resize,
+		 void *extra, unsigned long init_mod);
 
 /** \ingroup dbprim_smat
  * \brief Add an entry to a sparse matrix.
@@ -2403,7 +2414,7 @@ db_err_t sh_find(smat_head_t *head, smat_entry_t **elem_p,
  * \retval DB_ERR_WRONGTABLE	\p start is not in this row or column.
  */
 db_err_t sh_iter(smat_head_t *head, smat_entry_t *start, smat_iter_t iter_func,
-		 void *extra, unsigned long flags);
+		 void *extra, db_flag_t flags);
 
 /** \ingroup dbprim_smat
  * \brief Flush a row or column of a sparse matrix.
@@ -2501,8 +2512,8 @@ struct _smat_entry_s {
  *
  * \param[in]		entry	A pointer to a #smat_entry_t.
  *
- * \return	An <CODE>unsigned long</CODE> containing the flags
- *		associated with the entry.
+ * \return	A #db_flag_t containing the flags associated with the
+ *		entry.
  */
 #define se_flags(entry)     ((entry)->se_hash.he_elem.le_flags)
 
@@ -2604,8 +2615,8 @@ struct _smat_entry_s {
  *				#SMAT_LOC_SECOND to specify which list
  *				thread is desired.
  *
- * \return	An <CODE>unsigned long</CODE> containing the flags
- *		associated with the entry.
+ * \return	A #db_flag_t containing the flags associated with the
+ *		entry.
  */
 #define se_lflags(entry, n) ((entry)->se_link[(n)].le_flags)
 
@@ -2649,7 +2660,7 @@ long rbtree_comp(rb_tree_t *tree, db_key_t *key1, db_key_t *key2);
  */
 struct _rb_tree_s {
   _db_magic_t	rt_magic;	/**< Magic number. */
-  unsigned long	rt_flags;	/**< Flags associated with the table. */
+  db_flag_t	rt_flags;	/**< Flags associated with the table. */
   unsigned long	rt_count;	/**< Number of nodes in the tree. */
   rb_node_t    *rt_root;	/**< Pointer to the root node of the tree. */
   rb_comp_t	rt_comp;	/**< Function for comparing tree keys. */
@@ -2933,7 +2944,7 @@ db_err_t rt_find(rb_tree_t *tree, rb_node_t **node_p, db_key_t *key);
  * \retval DB_ERR_WRONGTABLE	\p start is not in this red-black
  *				tree.
  */
-db_err_t rt_next(rb_tree_t *tree, rb_node_t **node_io, unsigned long flags);
+db_err_t rt_next(rb_tree_t *tree, rb_node_t **node_io, db_flag_t flags);
 
 /** \ingroup dbprim_rbtree
  * \brief Iterate over each entry in a red-black tree.
@@ -2967,7 +2978,7 @@ db_err_t rt_next(rb_tree_t *tree, rb_node_t **node_io, unsigned long flags);
  *				tree.
  */
 db_err_t rt_iter(rb_tree_t *tree, rb_node_t *start, rb_iter_t iter_func,
-		 void *extra, unsigned long flags);
+		 void *extra, db_flag_t flags);
 
 /** \ingroup dbprim_rbtree
  * \brief Flush a red-black tree.
