@@ -30,9 +30,9 @@
 /tests/test-harness
 /tests/test-harness.log
 /tests/t_hashtab
-/tests/t_linklists
+/tests/t_linklist
 /tests/t_redblack
-/tests/t_smat
+/tests/t_sparsemat
 /travis-build
 .deps
 .dirstamp
