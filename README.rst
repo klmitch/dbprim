@@ -32,9 +32,9 @@ Data Structure Overview
 
 The following subsections provide an overview of the available data
 structures and how to use them.  For more details, see the
-documentation or the ``dbprim.h`` header file (``include/dbprim.h`` in
-the source distribution, or installed in ``dbprim/dbprim.h`` in the
-selected include path).
+documentation or the library header files (in the ``include``
+directory in the source distribution, or installed in the ``dbprim``
+directory in the selected include path).
 
 Linked Lists
 ------------

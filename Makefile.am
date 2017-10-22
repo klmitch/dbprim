@@ -29,8 +29,13 @@ AM_CPPFLAGS = -D__DBPRIM_LIBRARY__ -I$(top_builddir) -I$(top_srcdir)/include
 
 lib_LTLIBRARIES = libdbprim.la
 libdbprim_la_SOURCES = \
+	include/common.h \
 	include/dbprim.h \
 	include/dbprim_int.h \
+	include/hashtab.h \
+	include/linklist.h \
+	include/redblack.h \
+	include/sparsemat.h \
 	\
 	src/dbprim_err.c \
 	dbprim_version.c \
@@ -89,7 +94,14 @@ libdbprim_la_SOURCES = \
 	src/st_resize.c
 libdbprim_la_LDFLAGS = -version-info 4:0:0
 
-pkginclude_HEADERS = include/dbprim.h dbprim_version.h
+pkginclude_HEADERS = \
+	include/common.h \
+	include/dbprim.h \
+	dbprim_version.h \
+	include/hashtab.h \
+	include/linklist.h \
+	include/redblack.h \
+	include/sparsemat.h
 
 EXTRA_CSTATUS = dbprim_version.c dbprim_version.h
 

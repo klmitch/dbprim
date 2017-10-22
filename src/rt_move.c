@@ -24,7 +24,6 @@
  * used to move a node within a red-black tree to correspond to a new
  * key.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 db_err_t

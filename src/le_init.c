@@ -23,7 +23,6 @@
  * This file contains the implementation of the le_init() function,
  * used to dynamically initialize a linked list element.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 db_err_t

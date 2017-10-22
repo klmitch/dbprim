@@ -23,7 +23,6 @@
  * This file contains the implementation of the st_free() function,
  * used to release memory allocated by the sparse matrix hash table.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 db_err_t

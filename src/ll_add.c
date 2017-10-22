@@ -23,7 +23,6 @@
  * This file contains the implementation of the ll_add() function,
  * used to add an element to a linked list.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 db_err_t

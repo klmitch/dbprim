@@ -23,7 +23,6 @@
  * This file contains the implementation of the _rb_locate() function,
  * used to locate a given node in a red-black tree.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 /* Locate a given node, placing the given node if necessary */

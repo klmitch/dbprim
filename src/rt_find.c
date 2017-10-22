@@ -23,7 +23,6 @@
  * This file contains the implementation of the rt_find() function,
  * used to locate a specific node in a red-black tree.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 db_err_t

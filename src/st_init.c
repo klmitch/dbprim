@@ -23,7 +23,6 @@
  * This file contains the implementation of the st_init() function,
  * used to dynamically initialize a sparse matrix table.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 db_err_t

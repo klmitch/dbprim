@@ -24,7 +24,6 @@
  * used to move a linked list element to another location within the
  * linked list.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 db_err_t

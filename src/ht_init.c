@@ -26,7 +26,6 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 db_err_t

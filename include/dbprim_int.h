@@ -26,7 +26,11 @@
 #ifndef included_dbprim_int_h__
 #define included_dbprim_int_h__
 
-#include "dbprim_version.h"
+#include "common.h"
+#include "hashtab.h"
+#include "linklist.h"
+#include "redblack.h"
+#include "sparsemat.h"
 
 #ifndef DBPRIM_DOXYGEN
 # ifdef __GNUC__

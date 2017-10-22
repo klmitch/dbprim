@@ -28,7 +28,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 /** \internal

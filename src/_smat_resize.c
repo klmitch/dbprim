@@ -23,7 +23,6 @@
  * This file contains the implementation of the _smat_resize()
  * function, the resize callback used by sparse matrices.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 db_err_t

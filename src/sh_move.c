@@ -24,7 +24,6 @@
  * used to move sparse matrix entries from one place to another in a
  * sparse matrix head list.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 db_err_t

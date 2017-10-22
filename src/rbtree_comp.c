@@ -26,10 +26,9 @@
  */
 #include <string.h>
 
-#include "dbprim.h"
 #include "dbprim_int.h"
 
-long
+int
 rbtree_comp(rb_tree_t *tree, db_key_t *key1, db_key_t *key2)
 {
   int tmp;

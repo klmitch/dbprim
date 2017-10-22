@@ -23,7 +23,6 @@
  * This file contains the implementation of the sh_iter() function,
  * used to iterate over all entries in a sparse matrix list.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 /** \internal

@@ -23,7 +23,6 @@
  * This file contains the implementation of the st_iter() function,
  * used to iterate over all entries in a sparse matrix table.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 /** \internal

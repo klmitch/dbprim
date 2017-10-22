@@ -23,7 +23,6 @@
  * This file contains the implementation of the ht_move() function,
  * used to move a hash table entry to correspond to a new key.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 db_err_t

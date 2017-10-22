@@ -25,7 +25,6 @@
 
 #include "test-harness.h"
 
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 TEST_PROG(t_hashtab, "Test hash table functionality")

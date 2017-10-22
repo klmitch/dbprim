@@ -23,7 +23,6 @@
  * This file contains the implementation of the he_init() function,
  * used to dynamically initialize a hash table entry.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 db_err_t

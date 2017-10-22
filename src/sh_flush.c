@@ -23,7 +23,6 @@
  * This file contains the implementation of the sh_flush() function,
  * used to release all entries in a sparse matrix linked list.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 /** \internal

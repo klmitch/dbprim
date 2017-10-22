@@ -23,7 +23,6 @@
  * This file contains the implementation of the sh_find() function,
  * used to look up a specific #smat_entry_t in a sparse matrix head.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 /** \internal

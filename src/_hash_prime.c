@@ -24,7 +24,6 @@
  * function, used to determine a prime number to use as a hash table
  * modulus.
  */
-#include "dbprim.h"
 #include "dbprim_int.h"
 
 /** \internal
