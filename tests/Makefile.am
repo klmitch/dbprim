@@ -25,10 +25,10 @@ AM_LDFLAGS = -static
 
 check_PROGRAMS = test-harness \
 		 \
-		 t_linklists \
 		 t_hashtab \
-		 t_smat \
-		 t_redblack
+		 t_linklist \
+		 t_redblack \
+		 t_sparsemat
 
 test_harness_SOURCES = test-harness.c test-harness.h
 test_harness_LDADD =

@@ -15,29 +15,29 @@
 # Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 # MA 02111-1307, USA
 
-program t_linklists t_linklists \
+program t_linklist t_linklist \
 	"Test linked list functionality"
 
-test ll_init			t_linklists	PASS	\
+test ll_init			t_linklist	PASS	\
 	"Test that ll_init() may be called"
-test le_init			t_linklists	PASS	\
+test le_init			t_linklist	PASS	\
 	"Test that le_init() may be called"
-test ll_add			t_linklists	PASS	\
+test ll_add			t_linklist	PASS	\
 	"Test that ll_add() works properly"
-test ll_move			t_linklists	PASS	\
+test ll_move			t_linklist	PASS	\
 	"Test that ll_move() works properly"
-test ll_remove			t_linklists	PASS	\
+test ll_remove			t_linklist	PASS	\
 	"Test that ll_remove() works properly"
-test ll_find			t_linklists	PASS	\
+test ll_find			t_linklist	PASS	\
 	"Test that ll_find() works properly"
-test ll_iter			t_linklists	PASS	\
+test ll_iter			t_linklist	PASS	\
 	"Test that ll_iter() works properly"
-test ll_flush			t_linklists	PASS	\
+test ll_flush			t_linklist	PASS	\
 	"Test that ll_flush() works properly"
 
 program t_hashtab t_hashtab \
 	"Test hash table functionality"
-t_hashtab: t_linklists
+t_hashtab: t_linklist
 
 test ht_init			t_hashtab	PASS	\
 	"Test that ht_init() may be called"
@@ -72,19 +72,19 @@ test hash_fnv1			t_hashtab	PASS	\
 test hash_fnv1a			t_hashtab	PASS	\
 	"Test that hash_fnv1a() computes the correct hash"
 
-program t_smat t_smat \
+program t_sparsemat t_sparsemat \
 	"Test sparse matrix functionality"
-t_smat: t_linklists t_hashtab
+t_sparsemat: t_linklist t_hashtab
 
-test st_init			t_smat		PASS	\
+test st_init			t_sparsemat		PASS	\
 	"Test that st_init() may be called"
-test sh_init			t_smat		PASS	\
+test sh_init			t_sparsemat		PASS	\
 	"Test that sh_init() may be called"
-test st_add			t_smat		PASS	\
+test st_add			t_sparsemat		PASS	\
 	"Test that st_add() adds elements to a sparse matrix"
-test st_find			t_smat		PASS	\
+test st_find			t_sparsemat		PASS	\
 	"Test that st_find() can locate elements in a sparse matrix"
-test st_remove			t_smat		PASS	\
+test st_remove			t_sparsemat		PASS	\
 	"Test that st_remove() can remove elements in a sparse matrix"
 
 # Pretty much everything else is so simple and straightforward that it
