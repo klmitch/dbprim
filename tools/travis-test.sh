@@ -42,7 +42,8 @@ cd travis-build
 # Configure the source
 banner 0 "  Configuring the source"
 ${build_root}/configure
-
+banner 1 "Contents of Makefile"
+cat Makefile
 # Run a simple make distcheck
 banner 1 "  Running \"make distcheck\""
 make distcheck
