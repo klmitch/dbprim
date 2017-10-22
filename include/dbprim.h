@@ -251,6 +251,15 @@ DBPRIM_BEGIN_C_DECLS
  */
 typedef uint32_t db_err_t;
 
+/** \internal
+ * \ingroup dbprim
+ * \brief Magic number type.
+ *
+ * This type is used for magic numbers on library structures.  Magic
+ * numbers provide some protection against passing incorrect pointers.
+ */
+typedef uint32_t _db_magic_t;
+
 /** \ingroup dbprim
  * \brief Database key.
  *
@@ -744,7 +753,7 @@ const char *dbprim_err(db_err_t err);
  * This is the implementation of the #link_head_t type.
  */
 struct _link_head_s {
-  unsigned long	lh_magic;	/**< Magic number. */
+  _db_magic_t	lh_magic;	/**< Magic number. */
   unsigned long	lh_count;	/**< Number of entries in the linked list. */
   link_elem_t  *lh_first;	/**< First element in the list. */
   link_elem_t  *lh_last;	/**< Last element in the list. */
@@ -1001,7 +1010,7 @@ db_err_t ll_flush(link_head_t *list, link_iter_t flush_func, void *extra);
  * This is the implementation of the #link_elem_t type.
  */
 struct _link_elem_s {
-  unsigned long	le_magic;	/**< Magic number. */
+  _db_magic_t	le_magic;	/**< Magic number. */
   link_elem_t  *le_next;	/**< Next element in list. */
   link_elem_t  *le_prev;	/**< Previous element in list. */
   void	       *le_object;	/**< The object pointed to by this link. */
@@ -1177,7 +1186,7 @@ unsigned long hash_comp(hash_table_t *table, db_key_t *key1, db_key_t *key2);
  * This is the implementation of the #hash_table_t type.
  */
 struct _hash_table_s {
-  unsigned long	ht_magic;	/**< Magic number. */
+  _db_magic_t	ht_magic;	/**< Magic number. */
   unsigned long	ht_flags;	/**< Flags associated with the table. */
   unsigned long	ht_modulus;	/**< Size (modulus) of the hash
 				     table--must be prime. */
@@ -1590,7 +1599,7 @@ db_err_t ht_free(hash_table_t *table);
  * This is the implementation of the #hash_entry_t type.
  */
 struct _hash_entry_s {
-  unsigned long he_magic;	/**< Magic number. */
+  _db_magic_t	he_magic;	/**< Magic number. */
   link_elem_t	he_elem;	/**< Link element. */
   hash_table_t *he_table;	/**< Hash table we're in. */
   unsigned long	he_hash;	/**< Hash value. */
@@ -1767,7 +1776,7 @@ unsigned long smat_freemem(void);
  * This is the implementation of the #smat_table_t type.
  */
 struct _smat_table_s {
-  unsigned long	st_magic;	/**< Magic number. */
+  _db_magic_t	st_magic;	/**< Magic number. */
   smat_resize_t	st_resize;	/**< Function pointer for resize callback. */
   void	       *st_extra;	/**< Extra data pointer. */
   hash_table_t	st_table;	/**< Hash table. */
@@ -2106,7 +2115,7 @@ db_err_t st_free(smat_table_t *table);
  * This is the implementation of the #smat_head_t type.
  */
 struct _smat_head_s {
-  unsigned long sh_magic;	/**< Magic number. */
+  _db_magic_t	sh_magic;	/**< Magic number. */
   smat_loc_t	sh_elem;	/**< 0 or 1 to indicate first or second. */
   smat_table_t *sh_table;	/**< Table this object's in. */
   link_head_t	sh_head;	/**< Linked list head. */
@@ -2427,7 +2436,7 @@ db_err_t sh_flush(smat_head_t *head, smat_iter_t flush_func, void *extra);
  * This is the implementation of the #smat_entry_t type.
  */
 struct _smat_entry_s {
-  unsigned long	se_magic;	/**< Magic number. */
+  _db_magic_t	se_magic;	/**< Magic number. */
   smat_table_t *se_table;	/**< Sparse matrix table. */
   hash_entry_t	se_hash;	/**< Hash table entry. */
   link_elem_t	se_link[2];	/**< Linked list elements. */
@@ -2639,7 +2648,7 @@ long rbtree_comp(rb_tree_t *tree, db_key_t *key1, db_key_t *key2);
  * This is the implementation of the #rb_tree_t type.
  */
 struct _rb_tree_s {
-  unsigned long	rt_magic;	/**< Magic number. */
+  _db_magic_t	rt_magic;	/**< Magic number. */
   unsigned long	rt_flags;	/**< Flags associated with the table. */
   unsigned long	rt_count;	/**< Number of nodes in the tree. */
   rb_node_t    *rt_root;	/**< Pointer to the root node of the tree. */
@@ -2990,7 +2999,7 @@ db_err_t rt_flush(rb_tree_t *tree, rb_iter_t flush_func, void *extra);
  * This is the implementation of the #rb_node_t type.
  */
 struct _rb_node_s {
-  unsigned long	rn_magic;	/**< Magic number. */
+  _db_magic_t	rn_magic;	/**< Magic number. */
   rb_color_t	rn_color;	/**< Node's color. */
   rb_tree_t    *rn_tree;	/**< Tree node is in. */
   rb_node_t    *rn_parent;	/**< Parent of this node. */
