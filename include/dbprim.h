@@ -271,6 +271,13 @@ typedef uint32_t _db_magic_t;
  */
 typedef uint32_t db_flag_t;
 
+/** \ingroup dbprim
+ * \brief Counts.
+ *
+ * This type is used exclusively to hold item counts.
+ */
+typedef uint32_t db_count_t;
+
 /** \ingroup dbprim_hash
  * \brief Hash value.
  *
@@ -773,7 +780,7 @@ const char *dbprim_err(db_err_t err);
  */
 struct _link_head_s {
   _db_magic_t	lh_magic;	/**< Magic number. */
-  unsigned long	lh_count;	/**< Number of entries in the linked list. */
+  db_count_t	lh_count;	/**< Number of entries in the linked list. */
   link_elem_t  *lh_first;	/**< First element in the list. */
   link_elem_t  *lh_last;	/**< Last element in the list. */
   void	       *lh_extra;	/**< Extra data associated with list. */
@@ -820,8 +827,8 @@ struct _link_head_s {
  *
  * \param[in]		list	A pointer to a #link_head_t.
  *
- * \return	An <CODE>unsigned long</CODE> containing a count of
- *		the number of elements in the linked list.
+ * \return	A #db_count_t containing a count of the number of
+ *		elements in the linked list.
  */
 #define ll_count(list)	((list)->lh_count)
 
@@ -1209,7 +1216,7 @@ struct _hash_table_s {
   db_flag_t	ht_flags;	/**< Flags associated with the table. */
   hash_t	ht_modulus;	/**< Size (modulus) of the hash
 				     table--must be prime. */
-  unsigned long	ht_count;	/**< Number of elements in the table. */
+  db_count_t	ht_count;	/**< Number of elements in the table. */
   hash_t	ht_rollover;	/**< Size at which the table grows. */
   hash_t	ht_rollunder;	/**< Size at which the table shrinks. */
   link_head_t  *ht_table;	/**< Actual table entries. */
@@ -1351,8 +1358,8 @@ struct _hash_table_s {
  *
  * \param[in]		table	A pointer to a #hash_table_t.
  *
- * \return	An <CODE>unsigned long</CODE> containing a count of
- *		the number of items in the hash table.
+ * \return	A #db_count_t containing a count of the number of
+ *		items in the hash table.
  */
 #define ht_count(table)	  ((table)->ht_count)
 
@@ -1878,8 +1885,8 @@ struct _smat_table_s {
  *
  * \param[in]		table	A pointer to a #smat_table_t.
  *
- * \return	An <CODE>unsigned long</CODE> containing a count of
- *		the number of items in the sparse matrix table.
+ * \return	A #db_count_t containing a count of the number of
+ *		items in the sparse matrix table.
  */
 #define st_count(table)	  ((table)->st_table.ht_count)
 
@@ -2225,8 +2232,8 @@ struct _smat_head_s {
  *
  * \param[in]		head	A pointer to #smat_head_t.
  *
- * \return	An <CODE>unsigned long</CODE> containing a count of
- *		the number of elements in the sparse matrix list.
+ * \return	A #db_count_t containing a count of the number of
+ *		elements in the sparse matrix list.
  */
 #define sh_count(head)	((head)->sh_head.lh_count)
 
@@ -2667,7 +2674,7 @@ long rbtree_comp(rb_tree_t *tree, db_key_t *key1, db_key_t *key2);
 struct _rb_tree_s {
   _db_magic_t	rt_magic;	/**< Magic number. */
   db_flag_t	rt_flags;	/**< Flags associated with the table. */
-  unsigned long	rt_count;	/**< Number of nodes in the tree. */
+  db_count_t	rt_count;	/**< Number of nodes in the tree. */
   rb_node_t    *rt_root;	/**< Pointer to the root node of the tree. */
   rb_comp_t	rt_comp;	/**< Function for comparing tree keys. */
   void	       *rt_extra;	/**< Extra data associated with the tree. */
@@ -2739,8 +2746,8 @@ struct _rb_tree_s {
  *
  * \param[in]		tree	A pointer to a #rb_tree_t.
  *
- * \return	An <CODE>unsigned long</CODE> containing a count of
- *		the number of items in the red-black tree.
+ * \return	A #db_count_t containing a count of the number of
+ *		items in the red-black tree.
  */
 #define rt_count(tree)		((tree)->rt_count)
 
