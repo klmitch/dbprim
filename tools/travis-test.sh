@@ -47,5 +47,9 @@ ${build_root}/configure
 banner 1 "  Running \"make distcheck\""
 make distcheck
 
+# Run a documentation build
+banner 1 "  Running \"make doxygen-doc\""
+make doxygen-doc
+
 # Done; go back to the build root
 banner 1 "Done testing dbprim library"
