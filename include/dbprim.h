@@ -637,7 +637,7 @@ struct _db_key_s {
  * This potential error return indicates that the provided arguments
  * are incorrect.
  */
-#define DB_ERR_BADARGS		2043325440L
+#define DB_ERR_BADARGS		UINT32_C(2043325440)
 
 /** \ingroup dbprim
  * \brief Element already in use.
@@ -645,7 +645,7 @@ struct _db_key_s {
  * This potential error return indicates that the element to be added
  * already exists in a container.
  */
-#define DB_ERR_BUSY		2043325441L
+#define DB_ERR_BUSY		UINT32_C(2043325441)
 
 /** \ingroup dbprim
  * \brief Element is not in use.
@@ -653,7 +653,7 @@ struct _db_key_s {
  * This potential error return indicates that the element referenced
  * is not in a container.
  */
-#define DB_ERR_UNUSED		2043325442L
+#define DB_ERR_UNUSED		UINT32_C(2043325442)
 
 /** \ingroup dbprim
  * \brief Element is not in this table.
@@ -661,7 +661,7 @@ struct _db_key_s {
  * This potential error return indicates that the element referenced
  * is not in the designated container.
  */
-#define DB_ERR_WRONGTABLE	2043325443L
+#define DB_ERR_WRONGTABLE	UINT32_C(2043325443)
 
 /** \ingroup dbprim
  * \brief No matching element.
@@ -669,7 +669,7 @@ struct _db_key_s {
  * This potential error return indicates that no element matching the
  * specified criteria was found.
  */
-#define DB_ERR_NOENTRY		2043325444L
+#define DB_ERR_NOENTRY		UINT32_C(2043325444)
 
 /** \ingroup dbprim
  * \brief Duplicate keys found.
@@ -677,7 +677,7 @@ struct _db_key_s {
  * This potential error return indicates that the key of the element
  * to be added already exists in the designated container.
  */
-#define DB_ERR_DUPLICATE	2043325445L
+#define DB_ERR_DUPLICATE	UINT32_C(2043325445)
 
 /** \ingroup dbprim
  * \brief Table not empty.
@@ -685,7 +685,7 @@ struct _db_key_s {
  * This potential error return indicates that a container is not empty
  * and cannot have its allocated memory released.
  */
-#define DB_ERR_NOTEMPTY		2043325446L
+#define DB_ERR_NOTEMPTY		UINT32_C(2043325446)
 
 /** \ingroup dbprim
  * \brief Table is frozen; try again later.
@@ -695,7 +695,7 @@ struct _db_key_s {
  * container will be frozen to ensure that the iteration order cannot
  * be altered.
  */
-#define DB_ERR_FROZEN		2043325447L
+#define DB_ERR_FROZEN		UINT32_C(2043325447)
 
 /** \ingroup dbprim
  * \brief No table allocated.
@@ -703,7 +703,7 @@ struct _db_key_s {
  * This potential error return indicates that a container has no table
  * allocated and that automatic allocation has been disabled.
  */
-#define DB_ERR_NOTABLE		2043325448L
+#define DB_ERR_NOTABLE		UINT32_C(2043325448)
 
 /** \ingroup dbprim
  * \brief Failed to re-add entry to table.
@@ -712,7 +712,7 @@ struct _db_key_s {
  * moved (re-keyed) could not be re-added to the container with the
  * new key.
  */
-#define DB_ERR_READDFAILED	2043325449L
+#define DB_ERR_READDFAILED	UINT32_C(2043325449)
 
 /** \ingroup dbprim
  * \brief Unrecoverable error; table unusable.
@@ -720,7 +720,7 @@ struct _db_key_s {
  * This potential error return indicates that the container has been
  * corrupted beyond repair; the table must be discarded and rebuilt.
  */
-#define DB_ERR_UNRECOVERABLE	2043325450L
+#define DB_ERR_UNRECOVERABLE	UINT32_C(2043325450)
 
 /** \ingroup dbprim
  * \brief Retrieve a string describing an error return code.
