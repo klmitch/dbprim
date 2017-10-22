@@ -28,7 +28,7 @@
 
 db_err_t
 st_init(smat_table_t *table, db_flag_t flags, smat_resize_t resize,
-	void *extra, unsigned long init_mod)
+	void *extra, hash_t init_mod)
 {
   db_err_t retval;
 

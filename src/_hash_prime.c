@@ -773,8 +773,8 @@ static unsigned long primes[] = {
   65437, 65447, 65449, 65479, 65497, 65519, 65521, 65537, 65539
 };
 
-unsigned long
-_hash_prime(unsigned long start)
+hash_t
+_hash_prime(hash_t start)
 {
   int i;
 

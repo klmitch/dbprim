@@ -16,6 +16,7 @@
 ** Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ** MA 02111-1307, USA
 */
+#include <inttypes.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,10 +47,10 @@ hamming(unsigned long bits)
 }
 
 /* simple hash function for testing... */
-static unsigned long
+static hash_t
 t_hash(hash_table_t *tab, db_key_t *key)
 {
-  unsigned long hash = 0;
+  hash_t hash = 0;
   unsigned char *kv = dk_key(key);
   int i;
 
@@ -80,12 +81,12 @@ static unsigned int rsize_flags = 0;
 #define RSF_INHIBIT	0x0001
 #define RSF_RESIZE	0x0002
 
-static unsigned long rsize_new = 0;
-static unsigned long rsize_err = 44;
+static hash_t rsize_new = 0;
+static hash_t rsize_err = 44;
 
 /* simple resize callback function for testing */
 static db_err_t
-t_resize(hash_table_t *tab, unsigned long new)
+t_resize(hash_table_t *tab, hash_t new)
 {
   rsize_new = new; /* save new table size... */
   rsize_flags |= RSF_RESIZE; /* mark that it's been resized */
@@ -137,8 +138,8 @@ static int removes[] = { 5, 7, 24, 21, 13, 8, 22 };
 #define HASH_REMOVE_CNT	(sizeof(removes) / sizeof(int))
 
 static struct fnv1_s {
-  unsigned long fnv1;
-  unsigned long fnv1a;
+  hash_t fnv1;
+  hash_t fnv1a;
   db_key_t key;
 } hashes[] = {
   { 1444023680UL,  572056750UL, DB_KEY_INIT("forty-one", 9) },
@@ -189,8 +190,8 @@ main(int argc, char **argv)
   hash_entry_t *he = 0;
   int i, tmp;
   unsigned long visited = VISIT_INIT, visit_init = VISIT_INIT;
-  unsigned long oldsize = 0, newsize = 0;
-  unsigned long hash;
+  hash_t oldsize = 0, newsize = 0;
+  hash_t hash;
   struct iter_s iter_tmp = { 0, 88, 0 };
   int resize_successful = 0;
 
@@ -201,7 +202,7 @@ main(int argc, char **argv)
        (!(err = ht_init(&tab, 0, t_hash, t_comp, t_resize, 0, 6)) &&
 	ht_modulus(&tab) == 7), FATAL(0),
        ("ht_init() call successful"),
-       ("ht_init() call failed with error %lu modulus %lu", err,
+       ("ht_init() call failed with error %lu modulus %" PRIu32, err,
 	ht_modulus(&tab)));
 
   /* Now let's try some he_init()s... */
@@ -293,7 +294,7 @@ main(int argc, char **argv)
   TEST(t_hashtab, ht_resize, "Test that ht_resize() may be called",
        (!(err = ht_resize(&tab, 20)) && ht_modulus(&tab) == 23), 0,
        ("ht_resize() call successful"),
-       ("ht_resize() call failed with error %lu modulus %lu", err,
+       ("ht_resize() call failed with error %lu modulus %" PRIu32, err,
 	ht_modulus(&tab)));
 
   /* remember if ht_resize worked... */
@@ -372,11 +373,12 @@ main(int argc, char **argv)
 	   "code %lu", err);
 
     if (rsize_flags & RSF_RESIZE) { /* ok, resize callback called... */
-      fprintf(stderr, "Element %d: ht_add() autogrow to %lu\n", i, rsize_new);
+      fprintf(stderr, "Element %d: ht_add() autogrow to %" PRIu32 "\n",
+	      i, rsize_new);
       if (rsize_new <= oldsize) /* size make sense? */
 	FAIL(TEST_NAME(ht_add_autogrow), FATAL(0), "ht_add() wants to "
-	     "shrink the table? (New size %lu, old size %lu)", rsize_new,
-	     oldsize);
+	     "shrink the table? (New size %" PRIu32 ", old size %" PRIu32 ")",
+	     rsize_new, oldsize);
 
       rsize_flags = 0; /* turn off inhibition */
       newsize = rsize_new; /* save new size */
@@ -388,8 +390,8 @@ main(int argc, char **argv)
       /* OK, check the size... */
       if (ht_modulus(&tab) != newsize)
 	FAIL(TEST_NAME(ht_add_autogrow), FATAL(0), "ht_add() tried to resize "
-	     "to a random value; expecting %lu, got %lu (original %lu, "
-	     "callback %lu)",
+	     "to a random value; expecting %" PRIu32 ", got %" PRIu32
+	     " (original %" PRIu32 ", callback %" PRIu32 ")",
 	     newsize, ht_modulus(&tab), oldsize, rsize_new);
     }
   }
@@ -437,12 +439,12 @@ main(int argc, char **argv)
 	   "with error code %lu", err);
 
     if (rsize_flags & RSF_RESIZE) { /* ok, resize callback called... */
-      fprintf(stderr, "Element %d: ht_remove() autoshrink to %lu\n", tmp,
-	      rsize_new);
+      fprintf(stderr, "Element %d: ht_remove() autoshrink to %" PRIu32 "\n",
+	      tmp, rsize_new);
       if (rsize_new >= oldsize) /* size make sense? */
 	FAIL(TEST_NAME(ht_remove_autoshrink), FATAL(0), "ht_remove() wants to "
-	     "grow the table? (New size %lu, old size %lu)", rsize_new,
-	     oldsize);
+	     "grow the table? (New size %" PRIu32 ", old size %" PRIu32 ")",
+	     rsize_new, oldsize);
 
       rsize_flags = 0; /* turn off inhibition */
       newsize = rsize_new; /* save new size */
@@ -454,9 +456,9 @@ main(int argc, char **argv)
       /* OK, check the size... */
       if (ht_modulus(&tab) != newsize)
 	FAIL(TEST_NAME(ht_remove_autoshrink), FATAL(0), "ht_remove() tried "
-	     "to resize to a random value; expecting %lu, got %lu "
-	     "(original %lu, callback %lu)", newsize, ht_modulus(&tab),
-	     oldsize, rsize_new);
+	     "to resize to a random value; expecting %" PRIu32 ", got %"
+	     PRIu32 " (original %" PRIu32 ", callback %" PRIu32 ")",
+	     newsize, ht_modulus(&tab), oldsize, rsize_new);
     }
   }
   PASS(TEST_NAME(ht_remove_autoshrink), "ht_remove() autoshrinks the table "
@@ -488,11 +490,11 @@ main(int argc, char **argv)
   for (i = 0; i < HASH_CNT; i++) {
     if ((hash = hash_fnv1(0, &hashes[i].key)) != hashes[i].fnv1)
       FAIL(TEST_NAME(hash_fnv1), FATAL(0), "hash_fnv1() computed incorrect "
-	   "hash for key \"%s\"; expected %lu, got %lu",
+	   "hash for key \"%s\"; expected %" PRIu32 ", got %" PRIu32,
 	   (char *)dk_key(&hashes[i].key), hashes[i].fnv1, hash);
     if ((hash = hash_fnv1a(0, &hashes[i].key)) != hashes[i].fnv1a)
       FAIL(TEST_NAME(hash_fnv1a), FATAL(0), "hash_fnv1a() computed incorrect "
-	   "hash for key \"%s\"; expected %lu, got %lu",
+	   "hash for key \"%s\"; expected %" PRIu32 ", got %" PRIu32,
 	   (char *)dk_key(&hashes[i].key), hashes[i].fnv1a, hash);
   }
   PASS(TEST_NAME(hash_fnv1), "hash_fnv1() computes correct hash");

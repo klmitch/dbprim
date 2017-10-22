@@ -16,6 +16,7 @@
 ** Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ** MA 02111-1307, USA
 */
+#include <inttypes.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -101,7 +102,7 @@ main(int argc, char **argv)
        (!(err = st_init(&tab, 0, 0, 0, 6)) &&
 	st_modulus(&tab) == 7), FATAL(0),
        ("st_init() call successful"),
-       ("st_init() call failed with error %lu modulus %lu", err,
+       ("st_init() call failed with error %lu modulus %" PRIu32, err,
 	st_modulus(&tab)));
 
   /* Now try some sh_inits... */

@@ -31,7 +31,7 @@
 #include "dbprim_int.h"
 
 db_err_t
-ht_resize(hash_table_t *table, unsigned long new_size)
+ht_resize(hash_table_t *table, hash_t new_size)
 {
   db_err_t retval;
   link_head_t *htab;

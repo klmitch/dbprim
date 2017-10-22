@@ -271,6 +271,14 @@ typedef uint32_t _db_magic_t;
  */
 typedef uint32_t db_flag_t;
 
+/** \ingroup dbprim_hash
+ * \brief Hash value.
+ *
+ * This type is used for hash values, and for values related to hash
+ * values, such as the table modulus.  It is exactly 32 bits.
+ */
+typedef uint32_t hash_t;
+
 /** \ingroup dbprim
  * \brief Database key.
  *
@@ -407,16 +415,16 @@ typedef db_err_t (*hash_iter_t)(hash_table_t *table, hash_entry_t *ent,
  * \brief Hash function callback.
  *
  * This function is associated with a hash table, and is responsible
- * for generating a hash value.  The full 32-bit range of an
- * <CODE>unsigned long</CODE> should be used--do *not* reduce the hash
- * value by the modulus of the hash table.
+ * for generating a hash value.  The full 32-bit range of a #hash_t
+ * should be used--do *not* reduce the hash value by the modulus of
+ * the hash table.
  *
  * \param[in]		table	A pointer to a #hash_table_t.
  * \param[in]		key	The database key to hash.
  *
  * \return	A 32-bit hash value for \p key.
  */
-typedef unsigned long (*hash_func_t)(hash_table_t *table, db_key_t *key);
+typedef hash_t (*hash_func_t)(hash_table_t *table, db_key_t *key);
 
 /** \ingroup dbprim_hash
  * \brief Hash table comparison callback.
@@ -448,7 +456,7 @@ typedef unsigned long (*hash_comp_t)(hash_table_t *table, db_key_t *key1,
  *
  * \return	Zero to permit the table resize, non-zero otherwise.
  */
-typedef db_err_t (*hash_resize_t)(hash_table_t *table, unsigned long new_mod);
+typedef db_err_t (*hash_resize_t)(hash_table_t *table, hash_t new_mod);
 
 /** \ingroup dbprim_smat
  * \brief Sparse matrix table resize callback.
@@ -463,7 +471,7 @@ typedef db_err_t (*hash_resize_t)(hash_table_t *table, unsigned long new_mod);
  *
  * \return	Zero to permit the table resize, non-zero otherwise.
  */
-typedef db_err_t (*smat_resize_t)(smat_table_t *table, unsigned long new_mod);
+typedef db_err_t (*smat_resize_t)(smat_table_t *table, hash_t new_mod);
 
 /** \ingroup dbprim_smat
  * \brief Sparse matrix iteration callback.
@@ -1159,7 +1167,7 @@ db_err_t le_init(link_elem_t *elem, void *object);
  *
  * \return	A 32-bit hash value for \p key.
  */
-unsigned long hash_fnv1(hash_table_t *table, db_key_t *key);
+hash_t hash_fnv1(hash_table_t *table, db_key_t *key);
 
 /** \ingroup dbprim_hash
  * \brief FNV-1a hash function.
@@ -1174,7 +1182,7 @@ unsigned long hash_fnv1(hash_table_t *table, db_key_t *key);
  *
  * \return	A 32-bit hash value for \p key.
  */
-unsigned long hash_fnv1a(hash_table_t *table, db_key_t *key);
+hash_t hash_fnv1a(hash_table_t *table, db_key_t *key);
 
 /** \ingroup dbprim_hash
  * \brief Hash comparison function.
@@ -1199,11 +1207,11 @@ unsigned long hash_comp(hash_table_t *table, db_key_t *key1, db_key_t *key2);
 struct _hash_table_s {
   _db_magic_t	ht_magic;	/**< Magic number. */
   db_flag_t	ht_flags;	/**< Flags associated with the table. */
-  unsigned long	ht_modulus;	/**< Size (modulus) of the hash
+  hash_t	ht_modulus;	/**< Size (modulus) of the hash
 				     table--must be prime. */
   unsigned long	ht_count;	/**< Number of elements in the table. */
-  unsigned long	ht_rollover;	/**< Size at which the table grows. */
-  unsigned long	ht_rollunder;	/**< Size at which the table shrinks. */
+  hash_t	ht_rollover;	/**< Size at which the table grows. */
+  hash_t	ht_rollunder;	/**< Size at which the table shrinks. */
   link_head_t  *ht_table;	/**< Actual table entries. */
   hash_func_t	ht_func;	/**< Function for computing the hash. */
   hash_comp_t	ht_comp;	/**< Function for comparing hash keys. */
@@ -1330,8 +1338,8 @@ struct _hash_table_s {
  *
  * \param[in]		table	A pointer to a #hash_table_t.
  *
- * \return	An <CODE>unsigned long</CODE> containing the number of
- *		buckets allocated for the hash table.
+ * \return	A #hash_t containing the number of buckets allocated
+ *		for the hash table.
  */
 #define ht_modulus(table) ((table)->ht_modulus)
 
@@ -1437,7 +1445,7 @@ struct _hash_table_s {
  */
 db_err_t ht_init(hash_table_t *table, db_flag_t flags, hash_func_t func,
 		 hash_comp_t comp, hash_resize_t resize, void *extra,
-		 unsigned long init_mod);
+		 hash_t init_mod);
 
 /** \ingroup dbprim_hash
  * \brief Add an entry to a hash table.
@@ -1587,7 +1595,7 @@ db_err_t ht_flush(hash_table_t *table, hash_iter_t flush_func, void *extra);
  * \retval ENOMEM		No memory could be allocated for the
  *				new bucket table.
  */
-db_err_t ht_resize(hash_table_t *table, unsigned long new_size);
+db_err_t ht_resize(hash_table_t *table, hash_t new_size);
 
 /** \ingroup dbprim_hash
  * \brief Free memory used by an empty hash table.
@@ -1613,7 +1621,7 @@ struct _hash_entry_s {
   _db_magic_t	he_magic;	/**< Magic number. */
   link_elem_t	he_elem;	/**< Link element. */
   hash_table_t *he_table;	/**< Hash table we're in. */
-  unsigned long	he_hash;	/**< Hash value. */
+  hash_t	he_hash;	/**< Hash value. */
   db_key_t	he_key;		/**< Entry's key. */
   void	       *he_value;	/**< Actual entry. */
 };
@@ -1700,8 +1708,7 @@ struct _hash_entry_s {
  *
  * \param[in]		entry	A pointer to a #hash_entry_t.
  *
- * \return	An <CODE>unsigned long</CODE> containing the hash code
- *		for the entry.
+ * \return	A #hash_t containing the hash code for the entry.
  */
 #define he_hash(entry)	((entry)->he_hash)
 
@@ -1858,8 +1865,8 @@ struct _smat_table_s {
  *
  * \param[in]		table	A pointer to a #smat_table_t.
  *
- * \return	An <CODE>unsigned long</CODE> containing the number of
- *		buckets allocated for the sparse matrix table.
+ * \return	A #hash_t containing the number of buckets allocated
+ *		for the sparse matrix table.
  */
 #define st_modulus(table) ((table)->st_table.ht_modulus)
 
@@ -1944,7 +1951,7 @@ struct _smat_table_s {
  * \retval ENOMEM		Unable to allocate memory.
  */
 db_err_t st_init(smat_table_t *table, db_flag_t flags, smat_resize_t resize,
-		 void *extra, unsigned long init_mod);
+		 void *extra, hash_t init_mod);
 
 /** \ingroup dbprim_smat
  * \brief Add an entry to a sparse matrix.
@@ -2103,7 +2110,7 @@ db_err_t st_flush(smat_table_t *table, smat_iter_t flush_func, void *extra);
  * \retval ENOMEM		No memory could be allocated for the
  *				new bucket table.
  */
-db_err_t st_resize(smat_table_t *table, unsigned long new_size);
+db_err_t st_resize(smat_table_t *table, hash_t new_size);
 
 /** \ingroup dbprim_smat
  * \brief Free memory used by an empty sparse matrix table.
@@ -2526,8 +2533,7 @@ struct _smat_entry_s {
  *
  * \param[in]		entry	A pointer to a #smat_entry_t.
  *
- * \return	An <CODE>unsigned long</CODE> containing the hash code
- *		for the entry.
+ * \return	A #hash_t containing the hash code for the entry.
  */
 #define se_hash(entry)	    ((entry)->se_hash.he_hash)
 

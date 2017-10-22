@@ -51,7 +51,7 @@
  *
  * \return	The first prime number larger than \p start.
  */
-unsigned long _hash_prime(unsigned long start);
+hash_t _hash_prime(hash_t start);
 
 /** \internal
  * \ingroup dbprim_hash
@@ -221,7 +221,7 @@ void _smat_free(smat_entry_t *entry);
  * \return	Zero if the resize operation should be performed,
  *		non-zero otherwise.
  */
-db_err_t _smat_resize(hash_table_t *table, unsigned long new_mod);
+db_err_t _smat_resize(hash_table_t *table, hash_t new_mod);
 
 /** \internal
  * \ingroup dbprim_rbtree

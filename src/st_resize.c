@@ -27,7 +27,7 @@
 #include "dbprim_int.h"
 
 db_err_t
-st_resize(smat_table_t *table, unsigned long new_size)
+st_resize(smat_table_t *table, hash_t new_size)
 {
   if (!st_verify(table)) /* verify that it's really a table */
     return DB_ERR_BADARGS;

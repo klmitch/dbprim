@@ -27,7 +27,7 @@
 #include "dbprim_int.h"
 
 db_err_t
-_smat_resize(hash_table_t *table, unsigned long new_mod)
+_smat_resize(hash_table_t *table, hash_t new_mod)
 {
   smat_table_t *stab;
 

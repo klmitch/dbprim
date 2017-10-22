@@ -31,8 +31,7 @@
 
 db_err_t
 ht_init(hash_table_t *table, db_flag_t flags, hash_func_t func,
-	hash_comp_t comp, hash_resize_t resize, void *extra,
-	unsigned long init_mod)
+	hash_comp_t comp, hash_resize_t resize, void *extra, hash_t init_mod)
 {
   int i;
   db_err_t retval;

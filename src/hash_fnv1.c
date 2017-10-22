@@ -27,11 +27,11 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+hash_t
 hash_fnv1(hash_table_t *table, db_key_t *key)
 {
   int i;
-  unsigned long hash = HASH_FNV_OFFSET;
+  hash_t hash = HASH_FNV_OFFSET;
   unsigned char *c;
 
   if (!key || !dk_len(key) || !dk_key(key)) /* invalid key?  return 0 */
