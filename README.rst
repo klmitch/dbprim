@@ -2,7 +2,7 @@
 Database Primitives Library
 ===========================
 
-.. image:: https://travis-ci.org/klmitch/dbprim.svg?branch=modernize
+.. image:: https://travis-ci.org/klmitch/dbprim.svg?branch=master
     :target: https://travis-ci.org/klmitch/dbprim
 
 Many programs require some basic in-memory data structures.  In many
