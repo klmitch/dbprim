@@ -24,7 +24,7 @@
  * st_remove() functions, which cooperate in removing a sparse matrix
  * entry from the table.
  */
-#include "dbprim_int.h"
+#include "sparsemat_int.h"
 
 db_err_t
 _st_remove(smat_table_t *table, smat_entry_t *entry, db_flag_t remflag)

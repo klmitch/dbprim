@@ -25,7 +25,7 @@
  */
 #include <string.h>
 
-#include "dbprim_int.h"
+#include "sparsemat_int.h"
 
 db_err_t
 st_find(smat_table_t *table, smat_entry_t **entry_p, smat_head_t *head1,

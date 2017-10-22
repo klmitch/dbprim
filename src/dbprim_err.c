@@ -24,7 +24,7 @@
  * which is used to convert error return codes into error strings.
  */
 
-#include "dbprim_int.h"
+#include "common_int.h"
 
 static const char * const text[] = {
   "Bad arguments",

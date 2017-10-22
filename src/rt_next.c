@@ -23,7 +23,7 @@
  * This file contains the implementation of the rt_next() function,
  * used to locate the next node in a given iteration scheme.
  */
-#include "dbprim_int.h"
+#include "redblack_int.h"
 
 db_err_t
 rt_next(rb_tree_t *tree, rb_node_t **node_io, db_flag_t flags)

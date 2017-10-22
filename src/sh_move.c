@@ -24,7 +24,7 @@
  * used to move sparse matrix entries from one place to another in a
  * sparse matrix head list.
  */
-#include "dbprim_int.h"
+#include "sparsemat_int.h"
 
 db_err_t
 sh_move(smat_head_t *head, smat_entry_t *elem, link_loc_t loc,

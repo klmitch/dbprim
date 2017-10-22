@@ -23,7 +23,7 @@
  * This file contains the implementation of the rt_add() function,
  * used to add a red-black tree node to a given tree.
  */
-#include "dbprim_int.h"
+#include "redblack_int.h"
 
 /** \internal
  * \ingroup dbprim_rbtree

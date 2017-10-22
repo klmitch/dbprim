@@ -24,7 +24,7 @@
  * used to move a linked list element to another location within the
  * linked list.
  */
-#include "dbprim_int.h"
+#include "linklist_int.h"
 
 db_err_t
 ll_move(link_head_t *list, link_elem_t *new, link_loc_t loc,

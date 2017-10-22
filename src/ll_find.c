@@ -23,7 +23,7 @@
  * This file contains the implementation of the ll_find() function,
  * used to locate a specific element within a linked list.
  */
-#include "dbprim_int.h"
+#include "linklist_int.h"
 
 db_err_t
 ll_find(link_head_t *list, link_elem_t **elem_p, link_comp_t comp_func,

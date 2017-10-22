@@ -23,7 +23,7 @@
  * This file contains the implementation of the rt_iter() function,
  * used to iterate over all nodes in a red-black tree.
  */
-#include "dbprim_int.h"
+#include "redblack_int.h"
 
 db_err_t
 rt_iter(rb_tree_t *tree, rb_node_t *start, rb_iter_t iter_func, void *extra,

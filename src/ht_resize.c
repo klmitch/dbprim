@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "dbprim_int.h"
+#include "hashtab_int.h"
 
 db_err_t
 ht_resize(hash_table_t *table, hash_t new_size)

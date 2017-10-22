@@ -23,7 +23,7 @@
  * This file contains the implementation of the rt_init() function,
  * used to dynamically initialize a red-black tree.
  */
-#include "dbprim_int.h"
+#include "redblack_int.h"
 
 db_err_t
 rt_init(rb_tree_t *tree, rb_comp_t comp, void *extra)

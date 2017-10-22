@@ -21,7 +21,7 @@
 
 #include "test-harness.h"
 
-#include "dbprim_int.h"
+#include "linklist_int.h"
 
 TEST_PROG(t_linklists, "Test linked list functionality")
 

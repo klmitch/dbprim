@@ -23,7 +23,7 @@
  * This file contains the implementation of the _rb_rotate() function,
  * used to perform a tree node rotation for tree balancing.
  */
-#include "dbprim_int.h"
+#include "redblack_int.h"
 
 /* Swap a child with its parent, effecting a rotation */
 void

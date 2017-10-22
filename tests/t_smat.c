@@ -24,7 +24,7 @@
 
 #include "test-harness.h"
 
-#include "dbprim_int.h"
+#include "sparsemat_int.h"
 
 TEST_PROG(t_smat, "Test sparse matrix functionality")
 

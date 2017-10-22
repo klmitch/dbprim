@@ -25,7 +25,7 @@
 
 #include "test-harness.h"
 
-#include "dbprim_int.h"
+#include "redblack_int.h"
 
 TEST_PROG(t_redblack, "Test red-black tree functionality")
 

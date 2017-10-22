@@ -24,7 +24,7 @@
  * function, used to determine a prime number to use as a hash table
  * modulus.
  */
-#include "dbprim_int.h"
+#include "hashtab_int.h"
 
 /** \internal
  * \ingroup dbprim_hash
@@ -42,7 +42,7 @@
  * This variable contains a table of 16-bit prime numbers, used by
  * _hash_prime() to test the primality of potential primes.
  */
-static unsigned long primes[] = {
+static hash_t primes[] = {
       3,     5,     7,    11,    13,    17,    19,    23,    29,
      31,    37,    41,    43,    47,    53,    59,    61,    67,
      71,    73,    79,    83,    89,    97,   101,   103,   107,

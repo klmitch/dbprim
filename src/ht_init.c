@@ -26,7 +26,7 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#include "dbprim_int.h"
+#include "hashtab_int.h"
 
 db_err_t
 ht_init(hash_table_t *table, db_flag_t flags, hash_func_t func,

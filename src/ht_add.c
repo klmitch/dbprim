@@ -23,7 +23,7 @@
  * This file contains the implementation of the ht_add() function,
  * used to add an entry to a hash table.
  */
-#include "dbprim_int.h"
+#include "hashtab_int.h"
 
 db_err_t
 ht_add(hash_table_t *table, hash_entry_t *entry, db_key_t *key)

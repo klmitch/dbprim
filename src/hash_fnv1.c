@@ -24,7 +24,7 @@
  * a generic hash function callback implementing the FNV-1 hash
  * algorithm.
  */
-#include "dbprim_int.h"
+#include "hashtab_int.h"
 
 hash_t
 hash_fnv1(hash_table_t *table, db_key_t *key)

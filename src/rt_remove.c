@@ -23,7 +23,7 @@
  * This file contains the implementation of the rt_remove() function,
  * used to remove a node from a red-black tree.
  */
-#include "dbprim_int.h"
+#include "redblack_int.h"
 
 /** \internal
  * \ingroup dbprim_rbtree

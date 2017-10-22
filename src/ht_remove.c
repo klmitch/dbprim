@@ -23,7 +23,7 @@
  * This file contains the implementation of the ht_remove() function,
  * used to remove an entry from a hash table.
  */
-#include "dbprim_int.h"
+#include "hashtab_int.h"
 
 db_err_t
 ht_remove(hash_table_t *table, hash_entry_t *entry)

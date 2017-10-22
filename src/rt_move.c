@@ -24,7 +24,7 @@
  * used to move a node within a red-black tree to correspond to a new
  * key.
  */
-#include "dbprim_int.h"
+#include "redblack_int.h"
 
 db_err_t
 rt_move(rb_tree_t *tree, rb_node_t *node, db_key_t *key)

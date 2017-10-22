@@ -1,5 +1,5 @@
 /*
-** Copyright (C) 2003, 2017 by Kevin L. Mitchell <klmitch@mit.edu>
+** Copyright (C) 2017 by Kevin L. Mitchell <klmitch@mit.edu>
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -16,31 +16,18 @@
 ** Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ** MA 02111-1307, USA
 */
+#ifndef included_dbprim_linklist_int_h__
+#define included_dbprim_linklist_int_h__
+
 /** \internal
  * \file
- * \brief Implementation of rt_find().
+ * \brief Linked lists internal header file.
  *
- * This file contains the implementation of the rt_find() function,
- * used to locate a specific node in a red-black tree.
+ * This file contains the internal definitions for the linked lists
+ * component of the Database Primitives library.
  */
-#include "redblack_int.h"
 
-db_err_t
-rt_find(rb_tree_t *tree, rb_node_t **node_p, db_key_t *key)
-{
-  rb_node_t *node;
+#include "common_int.h"
+#include "linklist.h"
 
-  if (!rt_verify(tree) || !key) /* verify arguments */
-    return DB_ERR_BADARGS;
-
-  if (!tree->rt_count) /* no entries in table... */
-    return DB_ERR_NOENTRY;
-
-  if (!(node = _rb_locate(tree, 0, key))) /* look up the node... */
-    return DB_ERR_NOENTRY; /* err, it's not in the tree... */
-
-  if (node_p) /* found one, return it */
-    *node_p = node;
-
-  return 0;
-}
+#endif /* included_dbprim_linklist_int_h__ */

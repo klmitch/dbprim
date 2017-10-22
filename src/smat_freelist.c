@@ -28,7 +28,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "dbprim_int.h"
+#include "sparsemat_int.h"
 
 /** \internal
  * \ingroup dbprim_smat

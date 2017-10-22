@@ -23,7 +23,7 @@
  * This file contains the implementation of the ll_remove() function,
  * used to remove an element from a linked list.
  */
-#include "dbprim_int.h"
+#include "linklist_int.h"
 
 db_err_t
 ll_remove(link_head_t *list, link_elem_t *elem)

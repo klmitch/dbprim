@@ -23,7 +23,7 @@
  * This file contains the implementation of the rn_init() function,
  * used to dynamically initialize a red-black tree node.
  */
-#include "dbprim_int.h"
+#include "redblack_int.h"
 
 db_err_t
 rn_init(rb_node_t *node, void *value)

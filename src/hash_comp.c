@@ -25,7 +25,7 @@
  */
 #include <string.h>
 
-#include "dbprim_int.h"
+#include "hashtab_int.h"
 
 int
 hash_comp(hash_table_t *table, db_key_t *key1, db_key_t *key2)

@@ -26,7 +26,7 @@
  */
 #include <string.h>
 
-#include "dbprim_int.h"
+#include "redblack_int.h"
 
 int
 rbtree_comp(rb_tree_t *tree, db_key_t *key1, db_key_t *key2)

@@ -23,7 +23,7 @@
  * This file contains the implementation of the sh_init() function,
  * used to dynamically initialize a sparse matrix head structure.
  */
-#include "dbprim_int.h"
+#include "sparsemat_int.h"
 
 db_err_t
 sh_init(smat_head_t *head, smat_loc_t elem, void *object)

@@ -23,7 +23,7 @@
  * This file contains the implementation of the ll_flush() function,
  * used to remove every element from a linked list.
  */
-#include "dbprim_int.h"
+#include "linklist_int.h"
 
 db_err_t
 ll_flush(link_head_t *list, link_iter_t flush_func, void *extra)

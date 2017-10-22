@@ -23,7 +23,7 @@
  * This file contains the implementation of the st_init() function,
  * used to dynamically initialize a sparse matrix table.
  */
-#include "dbprim_int.h"
+#include "sparsemat_int.h"
 
 db_err_t
 st_init(smat_table_t *table, db_flag_t flags, smat_resize_t resize,

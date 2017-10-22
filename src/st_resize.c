@@ -23,7 +23,7 @@
  * This file contains the implementation of the st_resize() function,
  * used to force a resize of the sparse matrix hash table.
  */
-#include "dbprim_int.h"
+#include "sparsemat_int.h"
 
 db_err_t
 st_resize(smat_table_t *table, hash_t new_size)

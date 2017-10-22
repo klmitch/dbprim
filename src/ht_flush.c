@@ -25,7 +25,7 @@
  */
 #include <stdlib.h>
 
-#include "dbprim_int.h"
+#include "hashtab_int.h"
 
 db_err_t
 ht_flush(hash_table_t *table, hash_iter_t flush_func, void *extra)

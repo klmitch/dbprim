@@ -23,7 +23,7 @@
  * This file contains the implementation of the ll_iter() function,
  * used to iterate over every element in a linked list.
  */
-#include "dbprim_int.h"
+#include "linklist_int.h"
 
 db_err_t
 ll_iter(link_head_t *list, link_elem_t *start, link_iter_t iter_func,

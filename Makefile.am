@@ -30,12 +30,16 @@ AM_CPPFLAGS = -D__DBPRIM_LIBRARY__ -I$(top_builddir) -I$(top_srcdir)/include
 lib_LTLIBRARIES = libdbprim.la
 libdbprim_la_SOURCES = \
 	include/common.h \
+	include/common_int.h \
 	include/dbprim.h \
-	include/dbprim_int.h \
 	include/hashtab.h \
+	include/hashtab_int.h \
 	include/linklist.h \
+	include/linklist_int.h \
 	include/redblack.h \
+	include/redblack_int.h \
 	include/sparsemat.h \
+	include/sparsemat_int.h \
 	\
 	src/dbprim_err.c \
 	dbprim_version.c \

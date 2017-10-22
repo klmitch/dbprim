@@ -23,7 +23,7 @@
  * This file contains the implementation of the ll_init() function,
  * used to dynamically initialize a linked list head.
  */
-#include "dbprim_int.h"
+#include "linklist_int.h"
 
 db_err_t
 ll_init(link_head_t *list, void *extra)

@@ -25,7 +25,7 @@
  */
 #include <stdlib.h>
 
-#include "dbprim_int.h"
+#include "hashtab_int.h"
 
 db_err_t
 ht_free(hash_table_t *table)

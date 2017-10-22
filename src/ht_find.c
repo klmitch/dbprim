@@ -23,7 +23,7 @@
  * This file contains the implementation of the ht_find() function,
  * used to locate a specific entry in a hash table.
  */
-#include "dbprim_int.h"
+#include "hashtab_int.h"
 
 db_err_t
 ht_find(hash_table_t *table, hash_entry_t **entry_p, db_key_t *key)
