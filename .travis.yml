@@ -10,4 +10,14 @@ addons:
     - graphviz
     - pkg-config
 language: c
-script: ./tools/travis-test.sh
+script: "./tools/travis-test.sh"
+deploy:
+  provider: releases
+  api_key:
+    secure: PdS5XdqX7sA2t0Tspnwu35XLU2WYeBFqfgnH6BSxoMTabtHTuemi7/b8vzCAcKFrfxzmpfnaQ6fJq1Ur38QOjMWA227btJtoilmIxA0LigEUL6cm90PxSNaqv+kIZkNV+wBOYIJQLsjJdUYS8ek63Fj+rKKDsIzI15rbuQn4SHxz73V3yIP5/SHW1bcvycVIIO+vglE7cKQhG5gZtCT9+05q/Pt3Oj/Se7eXLpM/K3H8LHOVKFVnS00QurSLHFDQnI9zW1fjJ0YrJsPcsKu+wQvJiXjIb88vDULVru18lm3CslTlD3GlV89abuPcEV6EZSh0Mkwtyan136yZxID8BYVZmbGZS7jLuJiYBF6maKwYwBqg2x4YrZGT/WhmYpkpC3GP+aObLd+W8gouLjjFbmY855Ijs0XogQAKY2iDz8ACPTxkcBnz39ataoDAsqonsR6E00GUGsfnMHVTbepFK/uvQkL82PFnClj+LF5T/ymI/9xhWrrZ5rUH5af5b8el/qzBhzR1vgFcvT/BV+3BlhFKmXfG85X8zw8C4GNSkns1OQ/n+eMSnl6viiBkNxEMymhQ794AXPh3MqYHofGx0X5M+S/Gn/KIvBGs/v9bk4ICvcfwB6DspQxEprlRWcAEj0HKa2i/RLawTbdjwEp8WEYxqBLfx9IDTTgcxWbedC8=
+  file: dbprim-$TRAVIS_TAG.tar.gz
+  skip_cleanup: true
+  on:
+    repo: klmitch/dbprim
+    tags: true
+    condition: "`./configure --version | awk '{print $NF; exit}'` = $TRAVIS_TAG"
