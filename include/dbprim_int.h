@@ -23,8 +23,8 @@
  * This file contains the \#define's and function declarations used
  * internally by the Database Primitives Library.
  */
-#ifndef __include_dbprim_int_h__
-#define __include_dbprim_int_h__
+#ifndef included_dbprim_int_h__
+#define included_dbprim_int_h__
 
 #include "dbprim_version.h"
 
@@ -257,4 +257,4 @@ rb_node_t *_rb_locate(rb_tree_t *tree, rb_node_t *node, db_key_t *key);
  */
 void _rb_rotate(rb_tree_t *tree, rb_node_t *child);
 
-#endif /* __include_dbprim_int_h__ */
+#endif /* included_dbprim_int_h__ */

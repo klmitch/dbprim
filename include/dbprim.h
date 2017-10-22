@@ -16,8 +16,8 @@
 ** Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ** MA 02111-1307, USA
 */
-#ifndef __include_dbprim_h__
-#define __include_dbprim_h__
+#ifndef included_dbprim_h__
+#define included_dbprim_h__
 /** \mainpage Database Primitives Library
  *
  * This library contains a set of database primitives.  The primitives
@@ -3235,4 +3235,4 @@ db_err_t rn_init(rb_node_t *node, void *value);
 
 DBPRIM_END_C_DECLS
 
-#endif /* __include_dbprim_h__ */
+#endif /* included_dbprim_h__ */
