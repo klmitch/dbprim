@@ -26,7 +26,7 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 st_free(smat_table_t *table)
 {
   if (!st_verify(table)) /* verify argument */

@@ -26,11 +26,11 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 ll_flush(link_head_t *list, link_iter_t flush_func, void *extra)
 {
   link_elem_t *elem;
-  unsigned long retval;
+  db_err_t retval;
 
   if (!ll_verify(list)) /* Verify arguments */
     return DB_ERR_BADARGS;

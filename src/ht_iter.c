@@ -26,10 +26,10 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 ht_iter(hash_table_t *table, hash_iter_t iter_func, void *extra)
 {
-  unsigned long retval;
+  db_err_t retval;
   int i;
   link_elem_t *elem;
 

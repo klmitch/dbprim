@@ -28,13 +28,13 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 st_add(smat_table_t *table, smat_entry_t **entry_p,
        smat_head_t *head1, link_loc_t loc1, smat_entry_t *ent1,
        smat_head_t *head2, link_loc_t loc2, smat_entry_t *ent2)
 {
   smat_entry_t *se;
-  unsigned long retval = 0;
+  db_err_t retval = 0;
   unsigned int freeflags = 0;
   db_key_t key;
 

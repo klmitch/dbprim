@@ -26,7 +26,7 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 rt_init(rb_tree_t *tree, rb_comp_t comp, void *extra)
 {
   if (!tree || !comp) /* verify arguments */

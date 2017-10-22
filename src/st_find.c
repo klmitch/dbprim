@@ -28,12 +28,12 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 st_find(smat_table_t *table, smat_entry_t **entry_p, smat_head_t *head1,
 	smat_head_t *head2)
 {
   hash_entry_t *ent;
-  unsigned long retval;
+  db_err_t retval;
   void *object[2];
   db_key_t key;
 

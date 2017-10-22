@@ -28,7 +28,7 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 ht_free(hash_table_t *table)
 {
   if (!ht_verify(table)) /* verify argument */

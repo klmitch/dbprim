@@ -64,11 +64,11 @@ _sh_find_comp(db_key_t *key, void *data)
   return (*sf->sf_comp)(sf->sf_key, data);
 }
 
-unsigned long
+db_err_t
 sh_find(smat_head_t *head, smat_entry_t **elem_p, smat_comp_t comp_func,
 	smat_entry_t *start, db_key_t *key)
 {
-  unsigned long retval;
+  db_err_t retval;
   link_elem_t *elem;
   struct _sh_find_s sf;
   db_key_t fkey;

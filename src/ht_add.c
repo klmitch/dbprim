@@ -26,10 +26,10 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 ht_add(hash_table_t *table, hash_entry_t *entry, db_key_t *key)
 {
-  unsigned long retval;
+  db_err_t retval;
 
   if (!ht_verify(table) || !he_verify(entry) || !key) /* verify arguments */
     return DB_ERR_BADARGS;

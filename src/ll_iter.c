@@ -26,11 +26,11 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 ll_iter(link_head_t *list, link_elem_t *start,
 	link_iter_t iter_func, void *extra, unsigned long flags)
 {
-  unsigned long retval;
+  db_err_t retval;
   link_elem_t *elem, *next = 0;
 
   /* verify arguments */

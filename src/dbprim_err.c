@@ -41,7 +41,7 @@ static const char * const text[] = {
 };
 
 const char *
-dbprim_err(unsigned long err)
+dbprim_err(db_err_t err)
 {
   if (err < DB_ERR_BADARGS || err > DB_ERR_UNRECOVERABLE)
     return 0;

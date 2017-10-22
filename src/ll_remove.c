@@ -26,7 +26,7 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 ll_remove(link_head_t *list, link_elem_t *elem)
 {
   if (!ll_verify(list) || !le_verify(elem)) /* First, verify the arguments */

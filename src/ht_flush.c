@@ -28,10 +28,10 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 ht_flush(hash_table_t *table, hash_iter_t flush_func, void *extra)
 {
-  unsigned long retval = 0;
+  db_err_t retval = 0;
   int i;
   link_elem_t *elem;
 

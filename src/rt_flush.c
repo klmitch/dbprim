@@ -26,10 +26,10 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 rt_flush(rb_tree_t *tree, rb_iter_t flush_func, void *extra)
 {
-  unsigned long retval = 0;
+  db_err_t retval = 0;
   rb_node_t *node;
 
   if (!rt_verify(tree)) /* verify arguments */

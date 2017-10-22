@@ -237,9 +237,18 @@
 
 DBPRIM_BEGIN_C_DECLS
 
+#include <stdint.h>
+
 #ifndef __DBPRIM_LIBRARY__
 #include <dbprim/dbprim_version.h>
 #endif /* __DBPRIM_LIBRARY__ */
+
+/** \ingroup dbprim
+ * \brief Error codes.
+ *
+ * This type is an alias for the error code types.
+ */
+typedef uint32_t db_err_t;
 
 /** \ingroup dbprim
  * \brief Database key.
@@ -336,8 +345,8 @@ typedef struct _rb_node_s rb_node_t;
  * \return	Zero for success, or non-zero to terminate the
  *		iteration.
  */
-typedef unsigned long (*link_iter_t)(link_head_t *list, link_elem_t *elem,
-				     void *extra);
+typedef db_err_t (*link_iter_t)(link_head_t *list, link_elem_t *elem,
+				void *extra);
 
 /** \ingroup dbprim_link
  * \brief Linked list comparison callback.
@@ -370,8 +379,8 @@ typedef unsigned long (*link_comp_t)(db_key_t *key, void *obj);
  * \return	Zero for success, or non-zero to terminate the
  *		iteration.
  */
-typedef unsigned long (*hash_iter_t)(hash_table_t *table, hash_entry_t *ent,
-				     void *extra);
+typedef db_err_t (*hash_iter_t)(hash_table_t *table, hash_entry_t *ent,
+				void *extra);
 
 /** \ingroup dbprim_hash
  * \brief Hash function callback.
@@ -418,8 +427,7 @@ typedef unsigned long (*hash_comp_t)(hash_table_t *table, db_key_t *key1,
  *
  * \return	Zero to permit the table resize, non-zero otherwise.
  */
-typedef unsigned long (*hash_resize_t)(hash_table_t *table,
-				       unsigned long new_mod);
+typedef db_err_t (*hash_resize_t)(hash_table_t *table, unsigned long new_mod);
 
 /** \ingroup dbprim_smat
  * \brief Sparse matrix table resize callback.
@@ -434,8 +442,7 @@ typedef unsigned long (*hash_resize_t)(hash_table_t *table,
  *
  * \return	Zero to permit the table resize, non-zero otherwise.
  */
-typedef unsigned long (*smat_resize_t)(smat_table_t *table,
-				       unsigned long new_mod);
+typedef db_err_t (*smat_resize_t)(smat_table_t *table, unsigned long new_mod);
 
 /** \ingroup dbprim_smat
  * \brief Sparse matrix iteration callback.
@@ -454,8 +461,8 @@ typedef unsigned long (*smat_resize_t)(smat_table_t *table,
  * \return	Zero for success, or non-zero to terminate the
  *		iteration.
  */
-typedef unsigned long (*smat_iter_t)(smat_table_t *table, smat_entry_t *ent,
-				     void *extra);
+typedef db_err_t (*smat_iter_t)(smat_table_t *table, smat_entry_t *ent,
+				void *extra);
 
 /** \ingroup dbprim_smat
  * \brief Sparse matrix comparison callback.
@@ -489,8 +496,7 @@ typedef unsigned long (*smat_comp_t)(db_key_t *key, smat_entry_t *ent);
  * \return	Zero for success, or non-zero to terminate the
  *		iteration.
  */
-typedef unsigned long (*rb_iter_t)(rb_tree_t *tree, rb_node_t *node,
-				   void *extra);
+typedef db_err_t (*rb_iter_t)(rb_tree_t *tree, rb_node_t *node, void *extra);
 
 /** \ingroup dbprim_rbtree
  * \brief Red-black tree comparison callback.
@@ -728,7 +734,7 @@ struct _db_key_s {
  *		error, or \c NULL if there is no corresponding textual
  *		description of the error.
  */
-const char *dbprim_err(unsigned long err);
+const char *dbprim_err(db_err_t err);
 
 /** \internal
  * \ingroup dbprim_link
@@ -838,7 +844,7 @@ struct _link_head_s {
  * \retval DB_ERR_BADARGS	A \c NULL pointer was passed for \p
  *				list.
  */
-unsigned long ll_init(link_head_t *list, void *extra);
+db_err_t ll_init(link_head_t *list, void *extra);
 
 /** \ingroup dbprim_link
  * \brief Add an element to a linked list.
@@ -861,8 +867,8 @@ unsigned long ll_init(link_head_t *list, void *extra);
  * \retval DB_ERR_WRONGTABLE	\p elem is in a different list.
  * \retval DB_ERR_UNUSED	\p elem is not in any list.
  */
-unsigned long ll_add(link_head_t *list, link_elem_t *new, link_loc_t loc,
-		     link_elem_t *elem);
+db_err_t ll_add(link_head_t *list, link_elem_t *new, link_loc_t loc,
+		link_elem_t *elem);
 
 /** \ingroup dbprim_link
  * \brief Move an element within a linked list.
@@ -887,8 +893,8 @@ unsigned long ll_add(link_head_t *list, link_elem_t *new, link_loc_t loc,
  * \retval DB_ERR_UNUSED	\p new or \p elem are not in any
  *				list.
  */
-unsigned long ll_move(link_head_t *list, link_elem_t *elem, link_loc_t loc,
-		      link_elem_t *elem2);
+db_err_t ll_move(link_head_t *list, link_elem_t *elem, link_loc_t loc,
+		 link_elem_t *elem2);
 
 /** \ingroup dbprim_link
  * \brief Remove an element from a linked list.
@@ -903,7 +909,7 @@ unsigned long ll_move(link_head_t *list, link_elem_t *elem, link_loc_t loc,
  * \retval DB_ERR_UNUSED	\p elem is not in a linked list.
  * \retval DB_ERR_WRONGTABLE	\p elem is not in this linked list.
  */
-unsigned long ll_remove(link_head_t *list, link_elem_t *elem);
+db_err_t ll_remove(link_head_t *list, link_elem_t *elem);
 
 /** \ingroup dbprim_link
  * \brief Find an element in a linked list.
@@ -931,9 +937,8 @@ unsigned long ll_remove(link_head_t *list, link_elem_t *elem);
  * \retval DB_ERR_WRONGTABLE	\p start is not in this linked list.
  * \retval DB_ERR_NOENTRY	No matching entry was found.
  */
-unsigned long ll_find(link_head_t *list, link_elem_t **elem_p,
-		      link_comp_t comp_func, link_elem_t *start,
-		      db_key_t *key);
+db_err_t ll_find(link_head_t *list, link_elem_t **elem_p,
+		 link_comp_t comp_func, link_elem_t *start, db_key_t *key);
 
 /** \ingroup dbprim_link
  * \brief Iterate over each entry in a linked list.
@@ -962,8 +967,8 @@ unsigned long ll_find(link_head_t *list, link_elem_t **elem_p,
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_WRONGTABLE	\p start is not in this linked list.
  */
-unsigned long ll_iter(link_head_t *list, link_elem_t *start,
-		      link_iter_t iter_func, void *extra, unsigned long flags);
+db_err_t ll_iter(link_head_t *list, link_elem_t *start, link_iter_t iter_func,
+		 void *extra, unsigned long flags);
 
 /** \ingroup dbprim_link
  * \brief Flush a linked list.
@@ -986,7 +991,7 @@ unsigned long ll_iter(link_head_t *list, link_elem_t *start,
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
  */
-unsigned long ll_flush(link_head_t *list, link_iter_t flush_func, void *extra);
+db_err_t ll_flush(link_head_t *list, link_iter_t flush_func, void *extra);
 
 /** \internal
  * \ingroup dbprim_link
@@ -1118,7 +1123,7 @@ struct _link_elem_s {
  * \retval DB_ERR_BADARGS	A \c NULL pointer was passed for \p
  *				elem or \p object.
  */
-unsigned long le_init(link_elem_t *elem, void *object);
+db_err_t le_init(link_elem_t *elem, void *object);
 
 /** \ingroup dbprim_hash
  * \brief FNV-1 hash function.
@@ -1409,10 +1414,9 @@ struct _hash_table_s {
  * \retval DB_ERR_BADARGS	An invalid argument was given.
  * \retval ENOMEM		Unable to allocate memory.
  */
-unsigned long ht_init(hash_table_t *table, unsigned long flags,
-		      hash_func_t func, hash_comp_t comp,
-		      hash_resize_t resize, void *extra,
-		      unsigned long init_mod);
+db_err_t ht_init(hash_table_t *table, unsigned long flags, hash_func_t func,
+		 hash_comp_t comp, hash_resize_t resize, void *extra,
+		 unsigned long init_mod);
 
 /** \ingroup dbprim_hash
  * \brief Add an entry to a hash table.
@@ -1436,7 +1440,7 @@ unsigned long ht_init(hash_table_t *table, unsigned long flags,
  * \retval DB_ERR_UNRECOVERABLE	An unrecoverable error occurred while
  *				resizing the table.
  */
-unsigned long ht_add(hash_table_t *table, hash_entry_t *entry, db_key_t *key);
+db_err_t ht_add(hash_table_t *table, hash_entry_t *entry, db_key_t *key);
 
 /** \ingroup dbprim_hash
  * \brief Move an entry in the hash table.
@@ -1459,7 +1463,7 @@ unsigned long ht_add(hash_table_t *table, hash_entry_t *entry, db_key_t *key);
  *				key.
  * \retval DB_ERR_READDFAILED	Unable to re-add entry to table.
  */
-unsigned long ht_move(hash_table_t *table, hash_entry_t *entry, db_key_t *key);
+db_err_t ht_move(hash_table_t *table, hash_entry_t *entry, db_key_t *key);
 
 /** \ingroup dbprim_hash
  * \brief Remove an element from a hash table.
@@ -1478,7 +1482,7 @@ unsigned long ht_move(hash_table_t *table, hash_entry_t *entry, db_key_t *key);
  * \retval DB_ERR_UNRECOVERABLE	An unrecoverable error occurred while
  *				resizing the table.
  */
-unsigned long ht_remove(hash_table_t *table, hash_entry_t *entry);
+db_err_t ht_remove(hash_table_t *table, hash_entry_t *entry);
 
 /** \ingroup dbprim_hash
  * \brief Find an entry in a hash table.
@@ -1489,15 +1493,14 @@ unsigned long ht_remove(hash_table_t *table, hash_entry_t *entry);
  * \param[out]		entry_p	A pointer to a pointer to a
  *				#hash_entry_t.  If \c NULL is passed,
  *				the lookup will be performed and an
- *				appropriate error code returned. 
+ *				appropriate error code returned.
  * \param[in]		key	A pointer to a #db_key_t describing
  *				the item to find.
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_NOENTRY	No matching entry was found.
  */
-unsigned long ht_find(hash_table_t *table, hash_entry_t **entry_p,
-		      db_key_t *key);
+db_err_t ht_find(hash_table_t *table, hash_entry_t **entry_p, db_key_t *key);
 
 /** \ingroup dbprim_hash
  * \brief Iterate over each entry in a hash table.
@@ -1519,7 +1522,7 @@ unsigned long ht_find(hash_table_t *table, hash_entry_t **entry_p,
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_FROZEN	The hash table is frozen.
  */
-unsigned long ht_iter(hash_table_t *table, hash_iter_t iter_func, void *extra);
+db_err_t ht_iter(hash_table_t *table, hash_iter_t iter_func, void *extra);
 
 /** \ingroup dbprim_hash
  * \brief Flush a hash table.
@@ -1543,8 +1546,7 @@ unsigned long ht_iter(hash_table_t *table, hash_iter_t iter_func, void *extra);
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_FROZEN	The hash table is frozen.
  */
-unsigned long ht_flush(hash_table_t *table, hash_iter_t flush_func,
-		       void *extra);
+db_err_t ht_flush(hash_table_t *table, hash_iter_t flush_func, void *extra);
 
 /** \ingroup dbprim_hash
  * \brief Resize a hash table.
@@ -1564,7 +1566,7 @@ unsigned long ht_flush(hash_table_t *table, hash_iter_t flush_func,
  * \retval ENOMEM		No memory could be allocated for the
  *				new bucket table.
  */
-unsigned long ht_resize(hash_table_t *table, unsigned long new_size);
+db_err_t ht_resize(hash_table_t *table, unsigned long new_size);
 
 /** \ingroup dbprim_hash
  * \brief Free memory used by an empty hash table.
@@ -1578,7 +1580,7 @@ unsigned long ht_resize(hash_table_t *table, unsigned long new_size);
  * \retval DB_ERR_FROZEN	The table is frozen.
  * \retval DB_ERR_NOTEMPTY	The table is not empty.
  */
-unsigned long ht_free(hash_table_t *table);
+db_err_t ht_free(hash_table_t *table);
 
 /** \internal
  * \ingroup dbprim_hash
@@ -1720,7 +1722,7 @@ struct _hash_entry_s {
  * \retval DB_ERR_BADARGS	A \c NULL pointer was passed for \p
  *				entry.
  */
-unsigned long he_init(hash_entry_t *entry, void *value);
+db_err_t he_init(hash_entry_t *entry, void *value);
 
 /** \ingroup dbprim_smat
  * \brief Clean up the smat free list.
@@ -1730,7 +1732,7 @@ unsigned long he_init(hash_entry_t *entry, void *value);
  *
  * \return	This function always returns 0.
  */
-unsigned long smat_cleanup(void);
+db_err_t smat_cleanup(void);
 
 /** \ingroup dbprim_smat
  * \brief Report how much memory is used by the free list.
@@ -1920,9 +1922,8 @@ struct _smat_table_s {
  * \retval DB_ERR_BADARGS	An invalid argument was given.
  * \retval ENOMEM		Unable to allocate memory.
  */
-unsigned long st_init(smat_table_t *table, unsigned long flags,
-		      smat_resize_t resize, void *extra,
-		      unsigned long init_mod);
+db_err_t st_init(smat_table_t *table, unsigned long flags,
+		 smat_resize_t resize, void *extra, unsigned long init_mod);
 
 /** \ingroup dbprim_smat
  * \brief Add an entry to a sparse matrix.
@@ -1972,9 +1973,9 @@ unsigned long st_init(smat_table_t *table, unsigned long flags,
  * \retval ENOMEM		No memory could be allocated for the
  *				#smat_entry_t structure.
  */
-unsigned long st_add(smat_table_t *table, smat_entry_t **entry_p,
-		     smat_head_t *head1, link_loc_t loc1, smat_entry_t *ent1,
-		     smat_head_t *head2, link_loc_t loc2, smat_entry_t *ent2);
+db_err_t st_add(smat_table_t *table, smat_entry_t **entry_p,
+		smat_head_t *head1, link_loc_t loc1, smat_entry_t *ent1,
+		smat_head_t *head2, link_loc_t loc2, smat_entry_t *ent2);
 
 /** \ingroup dbprim_smat
  * \brief Remove an entry from a sparse matrix.
@@ -1991,7 +1992,7 @@ unsigned long st_add(smat_table_t *table, smat_entry_t **entry_p,
  * \retval DB_ERR_UNRECOVERABLE	An unrecoverable error occurred while
  *				removing the entry from the table.
  */
-unsigned long st_remove(smat_table_t *table, smat_entry_t *entry);
+db_err_t st_remove(smat_table_t *table, smat_entry_t *entry);
 
 /** \ingroup dbprim_smat
  * \brief Find an entry in a sparse matrix.
@@ -2014,8 +2015,8 @@ unsigned long st_remove(smat_table_t *table, smat_entry_t *entry);
  *				are not referenced in this table.
  * \retval DB_ERR_NOENTRY	No matching entry was found.
  */
-unsigned long st_find(smat_table_t *table, smat_entry_t **entry_p,
-		      smat_head_t *head1, smat_head_t *head2);
+db_err_t st_find(smat_table_t *table, smat_entry_t **entry_p,
+		 smat_head_t *head1, smat_head_t *head2);
 
 /** \ingroup dbprim_smat
  * \brief Iterate over each entry in a sparse matrix.
@@ -2037,7 +2038,7 @@ unsigned long st_find(smat_table_t *table, smat_entry_t **entry_p,
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_FROZEN	The sparse matrix is frozen.
  */
-unsigned long st_iter(smat_table_t *table, smat_iter_t iter_func, void *extra);
+db_err_t st_iter(smat_table_t *table, smat_iter_t iter_func, void *extra);
 
 /** \ingroup dbprim_smat
  * \brief Flush a sparse matrix.
@@ -2061,8 +2062,7 @@ unsigned long st_iter(smat_table_t *table, smat_iter_t iter_func, void *extra);
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_FROZEN	The sparse matrix is frozen.
  */
-unsigned long st_flush(smat_table_t *table, smat_iter_t flush_func,
-		       void *extra);
+db_err_t st_flush(smat_table_t *table, smat_iter_t flush_func, void *extra);
 
 /** \ingroup dbprim_smat
  * \brief Resize a sparse matrix table.
@@ -2082,7 +2082,7 @@ unsigned long st_flush(smat_table_t *table, smat_iter_t flush_func,
  * \retval ENOMEM		No memory could be allocated for the
  *				new bucket table.
  */
-unsigned long st_resize(smat_table_t *table, unsigned long new_size);
+db_err_t st_resize(smat_table_t *table, unsigned long new_size);
 
 /** \ingroup dbprim_smat
  * \brief Free memory used by an empty sparse matrix table.
@@ -2096,7 +2096,7 @@ unsigned long st_resize(smat_table_t *table, unsigned long new_size);
  * \retval DB_ERR_FROZEN	The table is frozen.
  * \retval DB_ERR_NOTEMPTY	The table is not empty.
  */
-unsigned long st_free(smat_table_t *table);
+db_err_t st_free(smat_table_t *table);
 
 /** \internal
  * \ingroup dbprim_smat
@@ -2303,7 +2303,7 @@ struct _smat_head_s {
  *
  * \retval DB_ERR_BADARGS	An invalid argument was given.
  */
-unsigned long sh_init(smat_head_t *head, smat_loc_t elem, void *object);
+db_err_t sh_init(smat_head_t *head, smat_loc_t elem, void *object);
 
 /** \ingroup dbprim_smat
  * \brief Move an entry within a row or column list.
@@ -2330,8 +2330,8 @@ unsigned long sh_init(smat_head_t *head, smat_loc_t elem, void *object);
  * \retval DB_ERR_UNUSED	\p elem or \p elem2 are not in any row
  *				or column.
  */
-unsigned long sh_move(smat_head_t *head, smat_entry_t *elem, link_loc_t loc,
-		      smat_entry_t *elem2);
+db_err_t sh_move(smat_head_t *head, smat_entry_t *elem, link_loc_t loc,
+		 smat_entry_t *elem2);
 
 /** \ingroup dbprim_smat
  * \brief Find an entry in a row or column of a sparse matrix.
@@ -2360,9 +2360,8 @@ unsigned long sh_move(smat_head_t *head, smat_entry_t *elem, link_loc_t loc,
  * \retval DB_ERR_WRONGTABLE	\p start is not in this row or column.
  * \retval DB_ERR_NOENTRY	No matching entry was found.
  */
-unsigned long sh_find(smat_head_t *head, smat_entry_t **elem_p,
-		      smat_comp_t comp_func, smat_entry_t *start,
-		      db_key_t *key);
+db_err_t sh_find(smat_head_t *head, smat_entry_t **elem_p,
+		 smat_comp_t comp_func, smat_entry_t *start, db_key_t *key);
 
 /** \ingroup dbprim_smat
  * \brief Iterate over each entry in a row or column of a sparse
@@ -2393,8 +2392,8 @@ unsigned long sh_find(smat_head_t *head, smat_entry_t **elem_p,
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_WRONGTABLE	\p start is not in this row or column.
  */
-unsigned long sh_iter(smat_head_t *head, smat_entry_t *start,
-		      smat_iter_t iter_func, void *extra, unsigned long flags);
+db_err_t sh_iter(smat_head_t *head, smat_entry_t *start, smat_iter_t iter_func,
+		 void *extra, unsigned long flags);
 
 /** \ingroup dbprim_smat
  * \brief Flush a row or column of a sparse matrix.
@@ -2418,7 +2417,7 @@ unsigned long sh_iter(smat_head_t *head, smat_entry_t *start,
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
  */
-unsigned long sh_flush(smat_head_t *head, smat_iter_t flush_func, void *extra);
+db_err_t sh_flush(smat_head_t *head, smat_iter_t flush_func, void *extra);
 
 /** \internal
  * \ingroup dbprim_smat
@@ -2821,7 +2820,7 @@ struct _rb_tree_s {
  *
  * \retval DB_ERR_BADARGS	An invalid argument was given.
  */
-unsigned long rt_init(rb_tree_t *tree, rb_comp_t comp, void *extra);
+db_err_t rt_init(rb_tree_t *tree, rb_comp_t comp, void *extra);
 
 /** \ingroup dbprim_rbtree
  * \brief Add a node to a red-black tree.
@@ -2840,7 +2839,7 @@ unsigned long rt_init(rb_tree_t *tree, rb_comp_t comp, void *extra);
  * \retval DB_ERR_DUPLICATE	The entry is a duplicate of an
  *				existing node.
  */
-unsigned long rt_add(rb_tree_t *tree, rb_node_t *node, db_key_t *key);
+db_err_t rt_add(rb_tree_t *tree, rb_node_t *node, db_key_t *key);
 
 /** \ingroup dbprim_rbtree
  * \brief Move a node in a red-black tree.
@@ -2863,7 +2862,7 @@ unsigned long rt_add(rb_tree_t *tree, rb_node_t *node, db_key_t *key);
  *				key.
  * \retval DB_ERR_READDFAILED	Unable to re-add node to tree.
  */
-unsigned long rt_move(rb_tree_t *tree, rb_node_t *node, db_key_t *key);
+db_err_t rt_move(rb_tree_t *tree, rb_node_t *node, db_key_t *key);
 
 /** \ingroup dbprim_rbtree
  * \brief Remove a node from a red-black tree.
@@ -2880,7 +2879,7 @@ unsigned long rt_move(rb_tree_t *tree, rb_node_t *node, db_key_t *key);
  * \retval DB_ERR_WRONGTABLE	Node is not in this tree.
  * \retval DB_ERR_FROZEN	Red-black tree is frozen.
  */
-unsigned long rt_remove(rb_tree_t *tree, rb_node_t *node);
+db_err_t rt_remove(rb_tree_t *tree, rb_node_t *node);
 
 /** \ingroup dbprim_rbtree
  * \brief Find an entry in a red-black table.
@@ -2898,7 +2897,7 @@ unsigned long rt_remove(rb_tree_t *tree, rb_node_t *node);
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_NOENTRY	No matching entry was found.
  */
-unsigned long rt_find(rb_tree_t *tree, rb_node_t **node_p, db_key_t *key);
+db_err_t rt_find(rb_tree_t *tree, rb_node_t **node_p, db_key_t *key);
 
 /** \ingroup dbprim_rbtree
  * \brief Get the next node.
@@ -2924,8 +2923,7 @@ unsigned long rt_find(rb_tree_t *tree, rb_node_t **node_p, db_key_t *key);
  * \retval DB_ERR_WRONGTABLE	\p start is not in this red-black
  *				tree.
  */
-unsigned long rt_next(rb_tree_t *tree, rb_node_t **node_io,
-		      unsigned long flags);
+db_err_t rt_next(rb_tree_t *tree, rb_node_t **node_io, unsigned long flags);
 
 /** \ingroup dbprim_rbtree
  * \brief Iterate over each entry in a red-black tree.
@@ -2958,8 +2956,8 @@ unsigned long rt_next(rb_tree_t *tree, rb_node_t **node_io,
  * \retval DB_ERR_WRONGTABLE	\p start is not in this red-black
  *				tree.
  */
-unsigned long rt_iter(rb_tree_t *tree, rb_node_t *start,
-		      rb_iter_t iter_func, void *extra, unsigned long flags);
+db_err_t rt_iter(rb_tree_t *tree, rb_node_t *start, rb_iter_t iter_func,
+		 void *extra, unsigned long flags);
 
 /** \ingroup dbprim_rbtree
  * \brief Flush a red-black tree.
@@ -2982,7 +2980,7 @@ unsigned long rt_iter(rb_tree_t *tree, rb_node_t *start,
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_FROZEN	The red-black tree is frozen.
  */
-unsigned long rt_flush(rb_tree_t *tree, rb_iter_t flush_func, void *extra);
+db_err_t rt_flush(rb_tree_t *tree, rb_iter_t flush_func, void *extra);
 
 /** \internal
  * \ingroup dbprim_rbtree
@@ -3199,7 +3197,7 @@ struct _rb_node_s {
  * \retval DB_ERR_BADARGS	A \c NULL pointer was passed for \p
  *				node.
  */
-unsigned long rn_init(rb_node_t *node, void *value);
+db_err_t rn_init(rb_node_t *node, void *value);
 
 DBPRIM_END_C_DECLS
 

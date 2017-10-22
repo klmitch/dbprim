@@ -26,10 +26,10 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 ht_remove(hash_table_t *table, hash_entry_t *entry)
 {
-  unsigned long retval = 0;
+  db_err_t retval = 0;
 
   if (!ht_verify(table) || !he_verify(entry)) /* verify arguments */
     return DB_ERR_BADARGS;

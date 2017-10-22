@@ -140,8 +140,8 @@ unsigned long _hash_prime(unsigned long start);
  *		indicates a catastrophic failure condition, but is
  *		unlikely to occur.
  */
-unsigned long _st_remove(smat_table_t *table, smat_entry_t *entry,
-			 unsigned int remflag);
+db_err_t _st_remove(smat_table_t *table, smat_entry_t *entry,
+		    unsigned int remflag);
 
 /** \internal
  * \ingroup dbprim_smat
@@ -221,7 +221,7 @@ void _smat_free(smat_entry_t *entry);
  * \return	Zero if the resize operation should be performed,
  *		non-zero otherwise.
  */
-unsigned long _smat_resize(hash_table_t *table, unsigned long new_mod);
+db_err_t _smat_resize(hash_table_t *table, unsigned long new_mod);
 
 /** \internal
  * \ingroup dbprim_rbtree

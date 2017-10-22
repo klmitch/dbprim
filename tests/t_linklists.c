@@ -78,7 +78,7 @@ struct iter_desc {
   unsigned long	expected;
 };
 
-static unsigned long
+static db_err_t
 t_iter(link_head_t *head, link_elem_t *elem, void *extra)
 {
   struct iter_desc *desc = (struct iter_desc *)extra;

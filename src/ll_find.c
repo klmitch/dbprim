@@ -26,7 +26,7 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 ll_find(link_head_t *list, link_elem_t **elem_p, link_comp_t comp_func,
 	link_elem_t *start, db_key_t *key)
 {

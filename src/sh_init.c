@@ -26,10 +26,10 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 sh_init(smat_head_t *head, smat_loc_t elem, void *object)
 {
-  unsigned long retval;
+  db_err_t retval;
 
   /* verify arguments... */
   if (!head || (elem != SMAT_LOC_FIRST && elem != SMAT_LOC_SECOND))

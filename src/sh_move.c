@@ -27,7 +27,7 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 sh_move(smat_head_t *head, smat_entry_t *elem, link_loc_t loc,
 	smat_entry_t *elem2)
 {

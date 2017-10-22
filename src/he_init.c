@@ -26,10 +26,10 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 he_init(hash_entry_t *entry, void *value)
 {
-  unsigned long retval;
+  db_err_t retval;
 
   if (!entry) /* verify arguments */
     return DB_ERR_BADARGS;

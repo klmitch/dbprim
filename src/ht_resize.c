@@ -30,10 +30,10 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 ht_resize(hash_table_t *table, unsigned long new_size)
 {
-  unsigned long retval;
+  db_err_t retval;
   link_head_t *htab;
   link_elem_t *elem;
   hash_entry_t *ent;

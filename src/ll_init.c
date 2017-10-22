@@ -26,7 +26,7 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 ll_init(link_head_t *list, void *extra)
 {
   if (!list) /* must have a list head */

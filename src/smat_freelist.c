@@ -82,7 +82,7 @@ _smat_free(smat_entry_t *entry)
     free(entry); /* addition failed, so free the entry */
 }
 
-unsigned long
+db_err_t
 smat_cleanup(void)
 {
   link_elem_t *entry;

@@ -26,7 +26,7 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 rt_next(rb_tree_t *tree, rb_node_t **node_io, unsigned long flags)
 {
   rb_node_t *node = 0;

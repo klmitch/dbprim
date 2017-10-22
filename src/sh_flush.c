@@ -59,10 +59,10 @@ struct _sh_flush_s {
  *
  * \return	Zero to continue flushing, non-zero otherwise.
  */
-static unsigned long
+static db_err_t
 _sh_flush_iter(link_head_t *head, link_elem_t *elem, void *extra)
 {
-  unsigned long retval = 0;
+  db_err_t retval = 0;
   struct _sh_flush_s *sf;
 
   sf = extra;
@@ -82,7 +82,7 @@ _sh_flush_iter(link_head_t *head, link_elem_t *elem, void *extra)
   return retval;
 }
 
-unsigned long
+db_err_t
 sh_flush(smat_head_t *head, smat_iter_t flush_func, void *extra)
 {
   struct _sh_flush_s sf;

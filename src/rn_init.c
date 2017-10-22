@@ -26,7 +26,7 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 rn_init(rb_node_t *node, void *value)
 {
   if (!node) /* verify arguments */

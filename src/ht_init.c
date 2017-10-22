@@ -29,13 +29,13 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 ht_init(hash_table_t *table, unsigned long flags, hash_func_t func,
 	hash_comp_t comp, hash_resize_t resize, void *extra,
 	unsigned long init_mod)
 {
   int i;
-  unsigned long retval;
+  db_err_t retval;
 
   if (!table || !func || !comp) /* verify arguments */
     return DB_ERR_BADARGS;

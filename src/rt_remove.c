@@ -146,7 +146,7 @@ do {									      \
  */
 #define r_neph(par, n)	(sel_lr(isleft((par), (n)), sibling((par), (n))))
 
-unsigned long
+db_err_t
 rt_remove(rb_tree_t *tree, rb_node_t *node)
 {
   rb_color_t col;

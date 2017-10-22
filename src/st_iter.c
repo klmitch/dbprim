@@ -58,7 +58,7 @@ struct _st_iter_s {
  *
  * \return	Zero to continue iteration, non-zero otherwise.
  */
-static unsigned long
+static db_err_t
 _st_iter_iter(hash_table_t *table, hash_entry_t *ent, void *extra)
 {
   struct _st_iter_s *si;
@@ -69,7 +69,7 @@ _st_iter_iter(hash_table_t *table, hash_entry_t *ent, void *extra)
   return (*si->si_iter)(si->si_table, he_value(ent), si->si_extra);
 }
 
-unsigned long
+db_err_t
 st_iter(smat_table_t *table, smat_iter_t iter_func, void *extra)
 {
   struct _st_iter_s si;

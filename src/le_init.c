@@ -26,7 +26,7 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 le_init(link_elem_t *elem, void *object)
 {
   if (!elem) /* verify arguments */

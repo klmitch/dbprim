@@ -58,7 +58,7 @@ struct _sh_iter_s {
  *
  * \return	Zero to continue iteration, non-zero otherwise.
  */
-static unsigned long
+static db_err_t
 _sh_iter_iter(link_head_t *head, link_elem_t *elem, void *extra)
 {
   struct _sh_iter_s *si;
@@ -69,7 +69,7 @@ _sh_iter_iter(link_head_t *head, link_elem_t *elem, void *extra)
   return (*si->si_iter)(si->si_table, le_object(elem), si->si_extra);
 }
 
-unsigned long
+db_err_t
 sh_iter(smat_head_t *head, smat_entry_t *start,
 	smat_iter_t iter_func, void *extra, unsigned long flags)
 {

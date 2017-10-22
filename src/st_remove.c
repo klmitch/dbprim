@@ -27,10 +27,10 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 _st_remove(smat_table_t *table, smat_entry_t *entry, unsigned int remflag)
 {
-  unsigned long retval;
+  db_err_t retval;
 
   if (remflag & ST_REM_HASH) { /* remove from hash table */
     if ((retval = ht_remove(&table->st_table, &entry->se_hash)))
@@ -55,7 +55,7 @@ _st_remove(smat_table_t *table, smat_entry_t *entry, unsigned int remflag)
   return 0;
 }
 
-unsigned long
+db_err_t
 st_remove(smat_table_t *table, smat_entry_t *entry)
 {
   /* verify arguments */

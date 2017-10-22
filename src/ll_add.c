@@ -26,7 +26,7 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 ll_add(link_head_t *list, link_elem_t *new, link_loc_t loc,
        link_elem_t *elem)
 {

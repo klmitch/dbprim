@@ -26,11 +26,11 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 st_init(smat_table_t *table, unsigned long flags, smat_resize_t resize,
 	void *extra, unsigned long init_mod)
 {
-  unsigned long retval;
+  db_err_t retval;
 
   if (!table) /* verify arguments */
     return DB_ERR_BADARGS;

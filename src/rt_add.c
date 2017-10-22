@@ -54,7 +54,7 @@
 			 ((node)->rn_color == RB_COLOR_BLACK) ? \
 			 RB_COLOR_RED : RB_COLOR_BLACK)
 
-unsigned long
+db_err_t
 rt_add(rb_tree_t *tree, rb_node_t *node, db_key_t *key)
 {
   if (!rt_verify(tree) || !rn_verify(node) || !key) /* verify arguments */

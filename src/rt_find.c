@@ -26,7 +26,7 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 rt_find(rb_tree_t *tree, rb_node_t **node_p, db_key_t *key)
 {
   rb_node_t *node;

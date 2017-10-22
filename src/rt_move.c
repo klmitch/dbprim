@@ -27,10 +27,10 @@
 #include "dbprim.h"
 #include "dbprim_int.h"
 
-unsigned long
+db_err_t
 rt_move(rb_tree_t *tree, rb_node_t *node, db_key_t *key)
 {
-  unsigned long retval;
+  db_err_t retval;
 
   if (!rt_verify(tree) || !rn_verify(node) || !key) /* verify arguments */
     return DB_ERR_BADARGS;

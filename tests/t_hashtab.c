@@ -87,7 +87,7 @@ static unsigned long rsize_new = 0;
 static unsigned long rsize_err = 44;
 
 /* simple resize callback function for testing */
-static unsigned long
+static db_err_t
 t_resize(hash_table_t *tab, unsigned long new)
 {
   rsize_new = new; /* save new table size... */
