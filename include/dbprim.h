@@ -242,111 +242,6 @@ DBPRIM_BEGIN_C_DECLS
 #endif /* __DBPRIM_LIBRARY__ */
 
 /** \ingroup dbprim
- * \brief Bad arguments.
- *
- * This potential error return indicates that the provided arguments
- * are incorrect.
- */
-#define DB_ERR_BADARGS		2043325440L
-
-/** \ingroup dbprim
- * \brief Element already in use.
- *
- * This potential error return indicates that the element to be added
- * already exists in a container.
- */
-#define DB_ERR_BUSY		2043325441L
-
-/** \ingroup dbprim
- * \brief Element is not in use.
- *
- * This potential error return indicates that the element referenced
- * is not in a container.
- */
-#define DB_ERR_UNUSED		2043325442L
-
-/** \ingroup dbprim
- * \brief Element is not in this table.
- *
- * This potential error return indicates that the element referenced
- * is not in the designated container.
- */
-#define DB_ERR_WRONGTABLE	2043325443L
-
-/** \ingroup dbprim
- * \brief No matching element.
- *
- * This potential error return indicates that no element matching the
- * specified criteria was found.
- */
-#define DB_ERR_NOENTRY		2043325444L
-
-/** \ingroup dbprim
- * \brief Duplicate keys found.
- *
- * This potential error return indicates that the key of the element
- * to be added already exists in the designated container.
- */
-#define DB_ERR_DUPLICATE	2043325445L
-
-/** \ingroup dbprim
- * \brief Table not empty.
- *
- * This potential error return indicates that a container is not empty
- * and cannot have its allocated memory released.
- */
-#define DB_ERR_NOTEMPTY		2043325446L
-
-/** \ingroup dbprim
- * \brief Table is frozen; try again later.
- *
- * This potential error return indicates that a container is frozen.
- * This typically occurs if the container is being iterated over; the
- * container will be frozen to ensure that the iteration order cannot
- * be altered.
- */
-#define DB_ERR_FROZEN		2043325447L
-
-/** \ingroup dbprim
- * \brief No table allocated.
- *
- * This potential error return indicates that a container has no table
- * allocated and that automatic allocation has been disabled.
- */
-#define DB_ERR_NOTABLE		2043325448L
-
-/** \ingroup dbprim
- * \brief Failed to re-add entry to table.
- *
- * This potential error return indicates that an entry which has been
- * moved (re-keyed) could not be re-added to the container with the
- * new key.
- */
-#define DB_ERR_READDFAILED	2043325449L
-
-/** \ingroup dbprim
- * \brief Unrecoverable error; table unusable.
- *
- * This potential error return indicates that the container has been
- * corrupted beyond repair; the table must be discarded and rebuilt.
- */
-#define DB_ERR_UNRECOVERABLE	2043325450L
-
-/** \ingroup dbprim
- * \brief Retrieve a string describing an error return code.
- *
- * This function retrieves a string that describes an error return
- * code returned by the library.
- *
- * \param[in]		err	The error code.
- *
- * \return	A constant string containing a description of the
- *		error, or \c NULL if there is no corresponding textual
- *		description of the error.
- */
-const char *dbprim_err(unsigned long err);
-
-/** \ingroup dbprim
  * \brief Database key.
  *
  * This structure is a generic key containing a void * pointer and a
@@ -729,6 +624,111 @@ struct _db_key_s {
  * order of the iterations.
  */
 #define DB_FLAG_REVERSE		0x80000000
+
+/** \ingroup dbprim
+ * \brief Bad arguments.
+ *
+ * This potential error return indicates that the provided arguments
+ * are incorrect.
+ */
+#define DB_ERR_BADARGS		2043325440L
+
+/** \ingroup dbprim
+ * \brief Element already in use.
+ *
+ * This potential error return indicates that the element to be added
+ * already exists in a container.
+ */
+#define DB_ERR_BUSY		2043325441L
+
+/** \ingroup dbprim
+ * \brief Element is not in use.
+ *
+ * This potential error return indicates that the element referenced
+ * is not in a container.
+ */
+#define DB_ERR_UNUSED		2043325442L
+
+/** \ingroup dbprim
+ * \brief Element is not in this table.
+ *
+ * This potential error return indicates that the element referenced
+ * is not in the designated container.
+ */
+#define DB_ERR_WRONGTABLE	2043325443L
+
+/** \ingroup dbprim
+ * \brief No matching element.
+ *
+ * This potential error return indicates that no element matching the
+ * specified criteria was found.
+ */
+#define DB_ERR_NOENTRY		2043325444L
+
+/** \ingroup dbprim
+ * \brief Duplicate keys found.
+ *
+ * This potential error return indicates that the key of the element
+ * to be added already exists in the designated container.
+ */
+#define DB_ERR_DUPLICATE	2043325445L
+
+/** \ingroup dbprim
+ * \brief Table not empty.
+ *
+ * This potential error return indicates that a container is not empty
+ * and cannot have its allocated memory released.
+ */
+#define DB_ERR_NOTEMPTY		2043325446L
+
+/** \ingroup dbprim
+ * \brief Table is frozen; try again later.
+ *
+ * This potential error return indicates that a container is frozen.
+ * This typically occurs if the container is being iterated over; the
+ * container will be frozen to ensure that the iteration order cannot
+ * be altered.
+ */
+#define DB_ERR_FROZEN		2043325447L
+
+/** \ingroup dbprim
+ * \brief No table allocated.
+ *
+ * This potential error return indicates that a container has no table
+ * allocated and that automatic allocation has been disabled.
+ */
+#define DB_ERR_NOTABLE		2043325448L
+
+/** \ingroup dbprim
+ * \brief Failed to re-add entry to table.
+ *
+ * This potential error return indicates that an entry which has been
+ * moved (re-keyed) could not be re-added to the container with the
+ * new key.
+ */
+#define DB_ERR_READDFAILED	2043325449L
+
+/** \ingroup dbprim
+ * \brief Unrecoverable error; table unusable.
+ *
+ * This potential error return indicates that the container has been
+ * corrupted beyond repair; the table must be discarded and rebuilt.
+ */
+#define DB_ERR_UNRECOVERABLE	2043325450L
+
+/** \ingroup dbprim
+ * \brief Retrieve a string describing an error return code.
+ *
+ * This function retrieves a string that describes an error return
+ * code returned by the library.
+ *
+ * \param[in]		err	The error code.
+ *
+ * \return	A constant string containing a description of the
+ *		error, or \c NULL if there is no corresponding textual
+ *		description of the error.
+ */
+const char *dbprim_err(unsigned long err);
 
 /** \internal
  * \ingroup dbprim_link
