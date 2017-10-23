@@ -123,13 +123,12 @@ the manager-employee relationship.
 
 The ``smat_head_t`` contains the linked list.  There are actually two
 kinds of these structures--one is ``SMAT_LOC_FIRST``, which could be
-regarded as a ``row,'' and the other is ``SMAT_LOC_SECOND``, which
-could be regarded as a ``column.''  Which one is used for which type
-of data is irrelevant, as long as consistency is maintained.  For the
-above example, a ``smat_head_t`` for a manager may be
-``SMAT_LOC_FIRST``, and one for an employee must then be
-``SMAT_LOC_SECOND``.  (These values are set when initializing the
-``smat_head_t`` structure.)
+regarded as a "row," and the other is ``SMAT_LOC_SECOND``, which could
+be regarded as a "column."  Which one is used for which type of data
+is irrelevant, as long as consistency is maintained.  For the above
+example, a ``smat_head_t`` for a manager may be ``SMAT_LOC_FIRST``,
+and one for an employee must then be ``SMAT_LOC_SECOND``.  (These
+values are set when initializing the ``smat_head_t`` structure.)
 
 An association may be created with the ``st_add()`` function, which
 allows an arbitrary ordering in the associated linked lists by the
