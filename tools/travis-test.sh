@@ -49,7 +49,7 @@ make check
 
 # Submit the code coverage report
 banner 1 "  Submitting code coverage report"
-coveralls --verbose --dump coverage.json --exclude tests --root ${build_root} --build-root ${build_root}
+coveralls --exclude tests --root ${build_root} --build-root ${build_root}
 
 # Run a make distcheck
 banner 1 "  Running \"make distcheck\""
