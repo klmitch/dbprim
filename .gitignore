@@ -37,6 +37,12 @@
 .deps
 .dirstamp
 .libs
+*-coverage
+*-coverage.info
+*-coverage.info.tmp
+*.gcda
+*.gcno
+*.gcov
 *.lo
 *.o
 *.tar.gz

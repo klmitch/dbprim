@@ -54,6 +54,8 @@ DX_PDF_FEATURE(OFF)
 DX_PS_FEATURE(OFF)
 DX_INIT_DOXYGEN(dbprim, Doxyfile, docs)
 
+AX_CODE_COVERAGE()
+
 dnl Checks for libraries.
 
 dnl Checks for header files.
