@@ -21,10 +21,6 @@
 
 AUTOMAKE_OPTIONS = subdir-objects foreign
 
-# The . here forces prefix ordering, so make check rebuilds the
-# library first if necessary
-SUBDIRS = . tests
-
 # The code coverage rules use $(PACKAGE_NAME), which contains spaces;
 # they should use $(PACKAGE_TARNAME).
 CODE_COVERAGE_OUTPUT_FILE = $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)-coverage.info
@@ -34,7 +30,14 @@ CODE_COVERAGE_OUTPUT_DIRECTORY = $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)-coverage
 CODE_COVERAGE_BRANCH_COVERAGE = 1
 
 # Ignore coverage in the test suite or any system header files
-CODE_COVERAGE_IGNORE_PATTERN = tests/* /usr/include/*
+CODE_COVERAGE_IGNORE_PATTERN = tests/* new-tests/* /usr/include/*
+
+# Set up common flags
+AM_LIBS = $(CODE_COVERAGE_LIBS)
+AM_CPPFLAGS = \
+	-D__DBPRIM_LIBRARY__ -I$(top_builddir) -I$(top_srcdir)/include \
+	$(CODE_COVERAGE_CPPFLAGS)
+AM_CFLAGS = $(CODE_COVERAGE_CFLAGS)
 
 @CODE_COVERAGE_RULES@
 
@@ -111,11 +114,6 @@ libdbprim_la_SOURCES = \
 	src/st_iter.c \
 	src/st_remove.c \
 	src/st_resize.c
-libdbprim_la_LIBS = $(CODE_COVERAGE_LIBS)
-libdbprim_la_CPPFLAGS = \
-	-D__DBPRIM_LIBRARY__ -I$(top_builddir) -I$(top_srcdir)/include \
-	$(CODE_COVERAGE_CPPFLAGS)
-libdbprim_la_CFLAGS = $(CODE_COVERAGE_CFLAGS)
 libdbprim_la_LDFLAGS = -version-info 4:0:0
 
 pkginclude_HEADERS = \
@@ -150,3 +148,9 @@ dist-hook:
 	    rm -f $(distdir)/$$file ; \
 	done ; \
 	find $(distdir) -name .git -print -prune | xargs rm -rf
+
+# Testing-related definitions
+LDADD = $(top_builddir)/libdbprim.la -lcmocka
+check_PROGRAMS = \
+	new-tests/test_le_init
+TESTS = $(check_PROGRAMS)

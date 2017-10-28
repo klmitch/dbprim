@@ -5,12 +5,15 @@ addons:
     - autoconf
     - autoconf-archive
     - automake
+    - cmake
     - doxygen
     - lcov
     - libtool
     - python
     - graphviz
     - pkg-config
+    - wget
+    - xz-utils
 language: c
 before_install:
   - pip install --user cpp-coveralls

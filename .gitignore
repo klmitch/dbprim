@@ -16,6 +16,7 @@
 /install-sh
 /libdbprim.la
 /libtool
+/local
 /ltmain.sh
 /m4/libtool.m4
 /m4/lt~obsolete.m4
@@ -25,6 +26,7 @@
 /Makefile
 /Makefile.in
 /missing
+/test-driver
 /tests/Makefile
 /tests/Makefile.in
 /tests/test-harness
@@ -33,6 +35,8 @@
 /tests/t_linklist
 /tests/t_redblack
 /tests/t_sparsemat
+/new-tests/test_le_init
+/new-tests/*.trs
 /travis-build
 .deps
 .dirstamp
@@ -44,5 +48,6 @@
 *.gcno
 *.gcov
 *.lo
+*.log
 *.o
 *.tar.gz
