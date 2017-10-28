@@ -25,7 +25,18 @@ AUTOMAKE_OPTIONS = subdir-objects foreign
 # library first if necessary
 SUBDIRS = . tests
 
-AM_CPPFLAGS = -D__DBPRIM_LIBRARY__ -I$(top_builddir) -I$(top_srcdir)/include
+# The code coverage rules use $(PACKAGE_NAME), which contains spaces;
+# they should use $(PACKAGE_TARNAME).
+CODE_COVERAGE_OUTPUT_FILE = $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)-coverage.info
+CODE_COVERAGE_OUTPUT_DIRECTORY = $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)-coverage
+
+# Turn on branch coverage
+CODE_COVERAGE_BRANCH_COVERAGE = 1
+
+# Ignore coverage in the test suite or any system header files
+CODE_COVERAGE_IGNORE_PATTERN = tests/* /usr/include/*
+
+@CODE_COVERAGE_RULES@
 
 lib_LTLIBRARIES = libdbprim.la
 libdbprim_la_SOURCES = \
@@ -100,6 +111,11 @@ libdbprim_la_SOURCES = \
 	src/st_iter.c \
 	src/st_remove.c \
 	src/st_resize.c
+libdbprim_la_LIBS = $(CODE_COVERAGE_LIBS)
+libdbprim_la_CPPFLAGS = \
+	-D__DBPRIM_LIBRARY__ -I$(top_builddir) -I$(top_srcdir)/include \
+	$(CODE_COVERAGE_CPPFLAGS)
+libdbprim_la_CFLAGS = $(CODE_COVERAGE_CFLAGS)
 libdbprim_la_LDFLAGS = -version-info 4:0:0
 
 pkginclude_HEADERS = \

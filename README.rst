@@ -4,6 +4,8 @@ Database Primitives Library
 
 .. image:: https://travis-ci.org/klmitch/dbprim.svg?branch=master
     :target: https://travis-ci.org/klmitch/dbprim
+.. image:: https://coveralls.io/repos/github/klmitch/dbprim/badge.svg?branch=master
+    :target: https://coveralls.io/github/klmitch/dbprim?branch=master
 
 Many programs require some basic in-memory data structures.  In many
 languages, the language or standard library provide these basic data

@@ -19,7 +19,14 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-AM_CPPFLAGS = -D__DBPRIM_LIBRARY__ -I$(top_builddir) -I$(top_srcdir)/include
+# Turn on branch coverage
+CODE_COVERAGE_BRANCH_COVERAGE = 1
+
+AM_LIBS = $(CODE_COVERAGE_LIBS)
+AM_CPPFLAGS = \
+	-D__DBPRIM_LIBRARY__ -I$(top_builddir) -I$(top_srcdir)/include \
+	$(CODE_COVERAGE_CPPFLAGS)
+AM_CFLAGS = $(CODE_COVERAGE_CFLAGS)
 LDADD = $(top_builddir)/libdbprim.la
 AM_LDFLAGS = -static
 

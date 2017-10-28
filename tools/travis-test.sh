@@ -41,9 +41,17 @@ cd travis-build
 
 # Configure the source
 banner 0 "  Configuring the source"
-${build_root}/configure
+${build_root}/configure --enable-code-coverage
 
-# Run a simple make distcheck
+# Run a check
+banner 1 "  Running \"make check\""
+make check
+
+# Submit the code coverage report
+banner 1 "  Submitting code coverage report"
+coveralls --exclude tests --root ${build_root} --build-root ${build_root}
+
+# Run a make distcheck
 banner 1 "  Running \"make distcheck\""
 make distcheck
 
