@@ -30,7 +30,7 @@ CODE_COVERAGE_OUTPUT_DIRECTORY = $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)-coverage
 CODE_COVERAGE_BRANCH_COVERAGE = 1
 
 # Ignore coverage in the test suite or any system header files
-CODE_COVERAGE_IGNORE_PATTERN = tests/* new-tests/* /usr/include/*
+CODE_COVERAGE_IGNORE_PATTERN = tests/* /usr/include/*
 
 # Set up common flags
 AM_LIBS = $(CODE_COVERAGE_LIBS)
@@ -150,7 +150,30 @@ dist-hook:
 	find $(distdir) -name .git -print -prune | xargs rm -rf
 
 # Testing-related definitions
-LDADD = $(top_builddir)/libdbprim.la -lcmocka
+LDADD = -lcmocka
 check_PROGRAMS = \
-	new-tests/test_le_init
+	tests/test_hash_fnv_init \
+	tests/test_he_init \
+	tests/test_ht_init \
+	tests/test_le_init \
+	tests/test_ll_init
 TESTS = $(check_PROGRAMS)
+
+tests_test_hash_fnv_init_LDFLAGS = src/hash_fnv_init.lo
+
+tests_test_he_init_LDFLAGS = src/he_init.lo \
+	-Wl,--wrap=le_init
+
+tests_test_ht_init_SOURCES = \
+	tests/test_ht_init.c \
+	tests/mock_malloc.c \
+	tests/mock_malloc.h
+tests_test_ht_init_LDFLAGS = src/ht_init.lo \
+	-Wl,--wrap=malloc \
+	-Wl,--wrap=free \
+	-Wl,--wrap=_hash_prime \
+	-Wl,--wrap=ll_init
+
+tests_test_le_init_LDFLAGS = src/le_init.lo
+
+tests_test_ll_init_LDFLAGS = src/ll_init.lo

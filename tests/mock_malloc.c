@@ -16,48 +16,61 @@
 ** Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ** MA 02111-1307, USA
 */
+#include <errno.h>
 #include <setjmp.h>
 #include <stdarg.h>
 #include <stddef.h>
+#include <stdlib.h>
 #include <cmocka.h>
 
-#include "linklist_int.h"
+#include "mock_malloc.h"
 
-void
-test_badargs(void **state)
+/* Sentinel used to indicate that the fakes should be used */
+static int _malloc_wrapper = 0;
+
+/* Set up and tear down functions for utilizing the wrapper */
+int
+malloc_setup(void **state)
 {
-  db_err_t err;
+  _malloc_wrapper = 1;
 
-  err = le_init(0, 0);
-
-  assert_int_equal(err, DB_ERR_BADARGS);
-}
-
-void
-test_goodargs(void **state)
-{
-  db_err_t err;
-  link_elem_t elem;
-  int spam;
-
-  err = le_init(&elem, &spam);
-
-  assert_int_equal(err, 0);
-  assert_int_equal(elem.le_magic, LINK_ELEM_MAGIC);
-  assert_ptr_equal(elem.le_next, 0);
-  assert_ptr_equal(elem.le_prev, 0);
-  assert_ptr_equal(elem.le_object, &spam);
-  assert_ptr_equal(elem.le_head, 0);
-  assert_int_equal(elem.le_flags, 0);
+  return 0;
 }
 
 int
-main(void)
+malloc_teardown(void **state)
 {
-  const struct CMUnitTest tests[] = {
-    cmocka_unit_test(test_badargs),
-    cmocka_unit_test(test_goodargs)
-  };
+  _malloc_wrapper = 0;
 
-  return cmocka_run_group_tests_name("Test le_init()", tests, 0, 0);
+  return 0;
+}
+
+/* The actual wrappers */
+void *
+__wrap_malloc(size_t size)
+{
+  void *ptr;
+
+  /* Use the real malloc unless we're wanted */
+  if (!_malloc_wrapper)
+    return (void *)__real_malloc(size);
+
+  check_expected(size);
+  ptr = (void *)mock();
+  if (!ptr)
+    errno = (int)mock();
+
+  return ptr;
+}
+
+void
+__wrap_free(void *ptr)
+{
+  /* Use the real free unless we're wanted */
+  if (!_malloc_wrapper) {
+    __real_free(ptr);
+    return;
+  }
+
+  check_expected(ptr);
 }
