@@ -23,10 +23,54 @@
 
 #include "hashtab_int.h"
 
+void
+test_zero(void **state)
+{
+  hash_t hash;
+
+  hash = _hash_prime(0);
+
+  assert_int_equal(hash, 0);
+}
+
+void
+test_small(void **state)
+{
+  hash_t hash;
+
+  hash = _hash_prime(3);
+
+  assert_int_equal(hash, 3);
+}
+
+void
+test_large(void **state)
+{
+  hash_t hash;
+
+  hash = _hash_prime(4294967292UL);
+
+  assert_int_equal(hash, 4294967291UL);
+}
+
+void
+test_find(void **state)
+{
+  hash_t hash;
+
+  hash = _hash_prime(4294967280UL);
+
+  assert_int_equal(hash, 4294967291UL);
+}
+
 int
 main(void)
 {
   const struct CMUnitTest tests[] = {
+    cmocka_unit_test(test_zero),
+    cmocka_unit_test(test_small),
+    cmocka_unit_test(test_large),
+    cmocka_unit_test(test_find)
   };
 
   return cmocka_run_group_tests_name("Test _hash_prime.c", tests, 0, 0);

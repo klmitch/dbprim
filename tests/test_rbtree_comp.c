@@ -23,10 +23,151 @@
 
 #include "redblack_int.h"
 
+void
+test_badkey1(void **state)
+{
+  int result;
+  db_key_t key2 = DB_KEY_INIT("spam", 4);
+
+  result = rbtree_comp(0, 0, &key2);
+
+  assert_int_equal(result, 1);
+}
+
+void
+test_badlen1(void **state)
+{
+  int result;
+  db_key_t key1 = DB_KEY_INIT("spam", 0);
+  db_key_t key2 = DB_KEY_INIT("spam", 4);
+
+  result = rbtree_comp(0, &key1, &key2);
+
+  assert_int_equal(result, 1);
+}
+
+void
+test_badvalue1(void **state)
+{
+  int result;
+  db_key_t key1 = DB_KEY_INIT(0, 4);
+  db_key_t key2 = DB_KEY_INIT("spam", 4);
+
+  result = rbtree_comp(0, &key1, &key2);
+
+  assert_int_equal(result, 1);
+}
+
+void
+test_badkey2(void **state)
+{
+  int result;
+  db_key_t key1 = DB_KEY_INIT("spam", 4);
+
+  result = rbtree_comp(0, &key1, 0);
+
+  assert_int_equal(result, 1);
+}
+
+void
+test_badlen2(void **state)
+{
+  int result;
+  db_key_t key1 = DB_KEY_INIT("spam", 4);
+  db_key_t key2 = DB_KEY_INIT("spam", 0);
+
+  result = rbtree_comp(0, &key1, &key2);
+
+  assert_int_equal(result, 1);
+}
+
+void
+test_badvalue2(void **state)
+{
+  int result;
+  db_key_t key1 = DB_KEY_INIT("spam", 4);
+  db_key_t key2 = DB_KEY_INIT(0, 4);
+
+  result = rbtree_comp(0, &key1, &key2);
+
+  assert_int_equal(result, 1);
+}
+
+void
+test_match(void **state)
+{
+  int result;
+  db_key_t key1 = DB_KEY_INIT("spam", 4);
+  db_key_t key2 = DB_KEY_INIT("spam", 4);
+
+  result = rbtree_comp(0, &key1, &key2);
+
+  assert_int_equal(result, 0);
+}
+
+void
+test_lessthan_len(void **state)
+{
+  int result;
+  db_key_t key1 = DB_KEY_INIT("spam", 4);
+  db_key_t key2 = DB_KEY_INIT("spammer", 7);
+
+  result = rbtree_comp(0, &key1, &key2);
+
+  assert_true(result < 0);
+}
+
+void
+test_greaterthan_len(void **state)
+{
+  int result;
+  db_key_t key1 = DB_KEY_INIT("spammer", 7);
+  db_key_t key2 = DB_KEY_INIT("spam", 4);
+
+  result = rbtree_comp(0, &key1, &key2);
+
+  assert_true(result > 0);
+}
+
+void
+test_lessthan_value(void **state)
+{
+  int result;
+  db_key_t key1 = DB_KEY_INIT("spam", 4);
+  db_key_t key2 = DB_KEY_INIT("test", 4);
+
+  result = rbtree_comp(0, &key1, &key2);
+
+  assert_true(result < 0);
+}
+
+void
+test_greaterthan_value(void **state)
+{
+  int result;
+  db_key_t key1 = DB_KEY_INIT("test", 4);
+  db_key_t key2 = DB_KEY_INIT("spam", 4);
+
+  result = rbtree_comp(0, &key1, &key2);
+
+  assert_true(result > 0);
+}
+
 int
 main(void)
 {
   const struct CMUnitTest tests[] = {
+    cmocka_unit_test(test_badkey1),
+    cmocka_unit_test(test_badlen1),
+    cmocka_unit_test(test_badvalue1),
+    cmocka_unit_test(test_badkey2),
+    cmocka_unit_test(test_badlen2),
+    cmocka_unit_test(test_badvalue2),
+    cmocka_unit_test(test_match),
+    cmocka_unit_test(test_lessthan_len),
+    cmocka_unit_test(test_greaterthan_len),
+    cmocka_unit_test(test_lessthan_value),
+    cmocka_unit_test(test_greaterthan_value)
   };
 
   return cmocka_run_group_tests_name("Test rbtree_comp.c", tests, 0, 0);
