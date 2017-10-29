@@ -92,7 +92,7 @@ make check || (banner 1 "  Displaying test log"; cat test-suite.log; exit 1)
 
 # Submit the code coverage report
 banner 1 "  Submitting code coverage report"
-coveralls ${coveralls_dryrun} --exclude tests \
+coveralls ${coveralls_dryrun} --exclude local --exclude tests \
 	  --root ${build_root} --build-root ${build_root}
 
 # Run a make distcheck
