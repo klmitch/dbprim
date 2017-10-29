@@ -23,10 +23,63 @@
 
 #include "hashtab_int.h"
 
+void
+test_badstate(void **state)
+{
+  db_err_t err;
+
+  err = hash_fnv1_accum(0, "data", 4);
+
+  assert_int_equal(err, DB_ERR_BADARGS);
+}
+
+void
+test_baddata(void **state)
+{
+  db_err_t err;
+  hash_fnv_state_t test_state = HASH_FNV_OFFSET;
+
+  err = hash_fnv1_accum(&test_state, 0, 4);
+
+  assert_int_equal(err, DB_ERR_BADARGS);
+}
+
+void
+test_badlen(void **state)
+{
+  db_err_t err;
+  hash_fnv_state_t test_state = HASH_FNV_OFFSET;
+
+  err = hash_fnv1_accum(&test_state, "data", 0);
+
+  assert_int_equal(err, DB_ERR_BADARGS);
+}
+
+void
+test_success(void **state)
+{
+  db_err_t err;
+  hash_fnv_state_t test_state = HASH_FNV_OFFSET;
+
+  err = hash_fnv1_accum(&test_state, "data", 4);
+
+  assert_int_equal(err, 0);
+  assert_int_equal(test_state, 1959470013UL);
+
+  err = hash_fnv1_accum(&test_state, "data", 4);
+
+  assert_int_equal(err, 0);
+  assert_int_equal(test_state, 3697007541UL);
+}
+
 int
 main(void)
 {
   const struct CMUnitTest tests[] = {
+    cmocka_unit_test(test_badstate),
+    cmocka_unit_test(test_baddata),
+    cmocka_unit_test(test_badlen),
+    cmocka_unit_test(test_success)
   };
 
   return cmocka_run_group_tests_name("Test hash_fnv1_accum.c", tests, 0, 0);

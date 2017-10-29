@@ -23,10 +23,33 @@
 
 #include "hashtab_int.h"
 
+void
+test_badargs(void **state)
+{
+  hash_t hash;
+
+  hash = hash_fnv_final(0);
+
+  assert_int_equal(hash, 0);
+}
+
+void
+test_goodargs(void **state)
+{
+  hash_t hash;
+  hash_fnv_state_t test_state = 42;
+
+  hash = hash_fnv_final(&test_state);
+
+  assert_int_equal(hash, 42);
+}
+
 int
 main(void)
 {
   const struct CMUnitTest tests[] = {
+    cmocka_unit_test(test_badargs),
+    cmocka_unit_test(test_goodargs)
   };
 
   return cmocka_run_group_tests_name("Test hash_fnv_final.c", tests, 0, 0);
