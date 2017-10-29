@@ -152,28 +152,254 @@ dist-hook:
 # Testing-related definitions
 LDADD = -lcmocka
 check_PROGRAMS = \
+	tests/test__hash_prime \
+	tests/test__rb_locate \
+	tests/test__rb_rotate \
+	tests/test__smat_resize \
+	tests/test_dbprim_err \
+	tests/test_hash_comp \
+	tests/test_hash_fnv1 \
+	tests/test_hash_fnv1_accum \
+	tests/test_hash_fnv1a \
+	tests/test_hash_fnv1a_accum \
+	tests/test_hash_fnv_final \
 	tests/test_hash_fnv_init \
 	tests/test_he_init \
+	tests/test_ht_add \
+	tests/test_ht_find \
+	tests/test_ht_flush \
+	tests/test_ht_free \
 	tests/test_ht_init \
+	tests/test_ht_iter \
+	tests/test_ht_move \
+	tests/test_ht_remove \
+	tests/test_ht_resize \
 	tests/test_le_init \
-	tests/test_ll_init
+	tests/test_ll_add \
+	tests/test_ll_find \
+	tests/test_ll_flush \
+	tests/test_ll_init \
+	tests/test_ll_iter \
+	tests/test_ll_move \
+	tests/test_ll_remove \
+	tests/test_rbtree_comp \
+	tests/test_rn_init \
+	tests/test_rt_add \
+	tests/test_rt_find \
+	tests/test_rt_flush \
+	tests/test_rt_init \
+	tests/test_rt_iter \
+	tests/test_rt_move \
+	tests/test_rt_next \
+	tests/test_rt_remove \
+	tests/test_sh_find \
+	tests/test_sh_flush \
+	tests/test_sh_init \
+	tests/test_sh_iter \
+	tests/test_sh_move \
+	tests/test_smat_freelist \
+	tests/test_st_add \
+	tests/test_st_find \
+	tests/test_st_flush \
+	tests/test_st_free \
+	tests/test_st_init \
+	tests/test_st_iter \
+	tests/test_st_remove \
+	tests/test_st_resize
 TESTS = $(check_PROGRAMS)
+
+tests_test__hash_prime_LDFLAGS = src/_hash_prime.lo
+
+tests_test__rb_locate_LDFLAGS = src/_rb_locate.lo
+
+tests_test__rb_rotate_LDFLAGS = src/_rb_rotate.lo
+
+tests_test__smat_resize_LDFLAGS = src/_smat_resize.lo
+
+tests_test_dbprim_err_LDFLAGS = src/dbprim_err.lo
+
+tests_test_hash_comp_LDFLAGS = src/hash_comp.lo
+
+tests_test_hash_fnv1_LDFLAGS = src/hash_fnv1.lo \
+	-Wl,--wrap=hash_fnv_init \
+	-Wl,--wrap=hash_fnv1_accum \
+	-Wl,--wrap=hash_fnv_final
+
+tests_test_hash_fnv1_accum_LDFLAGS = src/hash_fnv1_accum.lo
+
+tests_test_hash_fnv1a_LDFLAGS = src/hash_fnv1a.lo \
+	-Wl,--wrap=hash_fnv_init \
+	-Wl,--wrap=hash_fnv1a_accum \
+	-Wl,--wrap=hash_fnv_final
+
+tests_test_hash_fnv1a_accum_LDFLAGS = src/hash_fnv1a_accum.lo
+
+tests_test_hash_fnv_final_LDFLAGS = src/hash_fnv_final.lo
 
 tests_test_hash_fnv_init_LDFLAGS = src/hash_fnv_init.lo
 
 tests_test_he_init_LDFLAGS = src/he_init.lo \
 	-Wl,--wrap=le_init
 
-tests_test_ht_init_SOURCES = \
-	tests/test_ht_init.c \
+tests_test_ht_add_LDFLAGS = src/ht_add.lo \
+	-Wl,--wrap=ht_find \
+	-Wl,--wrap=ll_add \
+	-Wl,--wrap=ht_resize
+
+tests_test_ht_find_LDFLAGS = src/ht_find.lo
+
+tests_test_ht_flush_LDFLAGS = src/ht_flush.lo \
+	-Wl,--wrap=ht_remove \
+	-Wl,--wrap=ht_free
+
+tests_test_ht_free_SOURCES = \
 	tests/mock_malloc.c \
-	tests/mock_malloc.h
+	tests/mock_malloc.h \
+	tests/test_ht_free.c
+tests_test_ht_free_LDFLAGS = src/ht_free.lo \
+	-Wl,--wrap=malloc \
+	-Wl,--wrap=free
+
+tests_test_ht_init_SOURCES = \
+	tests/mock_malloc.c \
+	tests/mock_malloc.h \
+	tests/test_ht_init.c
 tests_test_ht_init_LDFLAGS = src/ht_init.lo \
 	-Wl,--wrap=malloc \
 	-Wl,--wrap=free \
 	-Wl,--wrap=_hash_prime \
 	-Wl,--wrap=ll_init
 
+tests_test_ht_iter_LDFLAGS = src/ht_iter.lo
+
+tests_test_ht_move_LDFLAGS = src/ht_move.lo \
+	-Wl,--wrap=ht_find \
+	-Wl,--wrap=ll_remove \
+	-Wl,--wrap=ll_add
+
+tests_test_ht_remove_LDFLAGS = src/ht_remove.lo \
+	-Wl,--wrap=ll_remove \
+	-Wl,--wrap=ht_resize
+
+tests_test_ht_resize_SOURCES = \
+	tests/mock_malloc.c \
+	tests/mock_malloc.h \
+	tests/test_ht_resize.c
+tests_test_ht_resize_LDFLAGS = src/ht_resize.lo \
+	-Wl,--wrap=malloc \
+	-Wl,--wrap=free \
+	-Wl,--wrap=_hash_prime \
+	-Wl,--wrap=ll_init \
+	-Wl,--wrap=ll_add \
+	-Wl,--wrap=ll_remove
+
 tests_test_le_init_LDFLAGS = src/le_init.lo
 
+tests_test_ll_add_LDFLAGS = src/ll_add.lo
+
+tests_test_ll_find_LDFLAGS = src/ll_find.lo
+
+tests_test_ll_flush_LDFLAGS = src/ll_flush.lo \
+	-Wl,--wrap=ll_remove
+
 tests_test_ll_init_LDFLAGS = src/ll_init.lo
+
+tests_test_ll_iter_LDFLAGS = src/ll_iter.lo
+
+tests_test_ll_move_LDFLAGS = src/ll_move.lo
+
+tests_test_ll_remove_LDFLAGS = src/ll_remove.lo
+
+tests_test_rbtree_comp_LDFLAGS = src/rbtree_comp.lo
+
+tests_test_rn_init_LDFLAGS = src/rn_init.lo
+
+tests_test_rt_add_LDFLAGS = src/rt_add.lo \
+	-Wl,--wrap=_rb_locate \
+	-Wl,--wrap=_rb_rotate
+
+tests_test_rt_find_LDFLAGS = src/rt_find.lo \
+	-Wl,--wrap=_rb_locate
+
+tests_test_rt_flush_LDFLAGS = src/rt_flush.lo \
+	-Wl,--wrap=rt_remove
+
+tests_test_rt_init_LDFLAGS = src/rt_init.lo
+
+tests_test_rt_iter_LDFLAGS = src/rt_iter.lo \
+	-Wl,--wrap=rt_next
+
+tests_test_rt_move_LDFLAGS = src/rt_move.lo \
+	-Wl,--wrap=_rb_locate \
+	-Wl,--wrap=rt_remove \
+	-Wl,--wrap=rt_add
+
+tests_test_rt_next_LDFLAGS = src/rt_next.lo
+
+tests_test_rt_remove_LDFLAGS = src/rt_remove.lo \
+	-Wl,--wrap=_rb_rotate
+
+tests_test_sh_find_LDFLAGS = src/sh_find.lo \
+	-Wl,--wrap=ll_find
+
+tests_test_sh_flush_LDFLAGS = src/sh_flush.lo \
+	-Wl,--wrap=_st_remove \
+	-Wl,--wrap=_smat_free \
+	-Wl,--wrap=ll_flush
+
+tests_test_sh_init_LDFLAGS = src/sh_init.lo \
+	-Wl,--wrap=ll_init
+
+tests_test_sh_iter_LDFLAGS = src/sh_iter.lo \
+	-Wl,--wrap=ll_iter
+
+tests_test_sh_move_LDFLAGS = src/sh_move.lo \
+	-Wl,--wrap=ll_move
+
+tests_test_smat_freelist_SOURCES = \
+	tests/mock_malloc.c \
+	tests/mock_malloc.h \
+	tests/test_smat_freelist.c
+tests_test_smat_freelist_LDFLAGS = src/smat_freelist.lo \
+	-Wl,--wrap=malloc \
+	-Wl,--wrap=free \
+	-Wl,--wrap=ll_remove \
+	-Wl,--wrap=he_init \
+	-Wl,--wrap=le_init \
+	-Wl,--wrap=ll_add
+
+tests_test_st_add_LDFLAGS = src/st_add.lo \
+	-Wl,--wrap=_smat_alloc \
+	-Wl,--wrap=ht_add \
+	-Wl,--wrap=ll_add \
+	-Wl,--wrap=ll_remove \
+	-Wl,--wrap=ht_remove \
+	-Wl,--wrap=_smat_free
+
+tests_test_st_find_LDFLAGS = src/st_find.lo \
+	-Wl,--wrap=ht_find
+
+tests_test_st_flush_LDFLAGS = src/st_flush.lo \
+	-Wl,--wrap=_st_remove \
+	-Wl,--wrap=_smat_free \
+	-Wl,--wrap=ht_flush
+
+tests_test_st_free_LDFLAGS = src/st_free.lo \
+	-Wl,--wrap=ht_free
+
+tests_test_st_init_LDFLAGS = src/st_init.lo \
+	-Wl,--wrap=hash_comp \
+	-Wl,--wrap=hash_fnv1a \
+	-Wl,--wrap=_smat_resize \
+	-Wl,--wrap=ht_init
+
+tests_test_st_iter_LDFLAGS = src/st_iter.lo \
+	-Wl,--wrap=ht_iter
+
+tests_test_st_remove_LDFLAGS = src/st_remove.lo \
+	-Wl,--wrap=_smat_free \
+	-Wl,--wrap=ht_remove \
+	-Wl,--wrap=ll_remove
+
+tests_test_st_resize_LDFLAGS = src/st_resize.lo \
+	-Wl,--wrap=ht_resize

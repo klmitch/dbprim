@@ -23,7 +23,6 @@
 
 #include "hashtab_int.h"
 
-/* Mock for le_init() */
 db_err_t
 __wrap_le_init(link_elem_t *elem, void *object)
 {

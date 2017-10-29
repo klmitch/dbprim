@@ -20,7 +20,6 @@
 #include <setjmp.h>
 #include <stdarg.h>
 #include <stddef.h>
-#include <stdlib.h>
 #include <cmocka.h>
 
 #include "hashtab_int.h"
@@ -46,7 +45,6 @@ hash_resize(hash_table_t *table, hash_t new_mod)
   return 0;
 }
 
-/* Mock for _hash_prime() */
 hash_t
 __wrap__hash_prime(hash_t start)
 {
@@ -54,7 +52,6 @@ __wrap__hash_prime(hash_t start)
   return (hash_t)mock();
 }
 
-/* Mock for ll_init() */
 db_err_t
 __wrap_ll_init(link_head_t *list, void *extra)
 {
