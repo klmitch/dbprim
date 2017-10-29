@@ -246,14 +246,24 @@ tests_test_he_init_LDFLAGS = src/he_init.lo \
 	-Wl,--wrap=le_init
 
 tests_test_ht_add_LDFLAGS = src/ht_add.lo \
+	src/hash_comp.lo \
+	src/hash_fnv1_accum.lo \
+	src/hash_fnv1.lo \
+	src/hash_fnv_final.lo \
+	src/hash_fnv_init.lo \
 	-Wl,--wrap=ht_find \
 	-Wl,--wrap=ll_add \
 	-Wl,--wrap=ht_resize
 
-tests_test_ht_find_LDFLAGS = src/ht_find.lo
+tests_test_ht_find_LDFLAGS = src/ht_find.lo \
+	src/hash_comp.lo \
+	src/hash_fnv1_accum.lo \
+	src/hash_fnv1.lo \
+	src/hash_fnv_final.lo \
+	src/hash_fnv_init.lo
 
 tests_test_ht_flush_LDFLAGS = src/ht_flush.lo \
-	-Wl,--wrap=ht_remove \
+	-Wl,--wrap=ll_remove \
 	-Wl,--wrap=ht_free
 
 tests_test_ht_free_SOURCES = \
