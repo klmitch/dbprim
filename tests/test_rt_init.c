@@ -24,9 +24,57 @@
 #include "redblack_int.h"
 
 int
+rbtree_comp(rb_tree_t *tree, db_key_t *key1, db_key_t *key2)
+{
+  return 0;
+}
+
+void
+test_badtree(void **state)
+{
+  db_err_t err;
+
+  err = rt_init(0, rbtree_comp, 0);
+
+  assert_int_equal(err, DB_ERR_BADARGS);
+}
+
+void
+test_badcomp(void **state)
+{
+  db_err_t err;
+  rb_tree_t tree;
+
+  err = rt_init(&tree, 0, 0);
+
+  assert_int_equal(err, DB_ERR_BADARGS);
+}
+
+void
+test_goodargs(void **state)
+{
+  db_err_t err;
+  rb_tree_t tree;
+  int spam;
+
+  err = rt_init(&tree, rbtree_comp, &spam);
+
+  assert_int_equal(err, 0);
+  assert_int_equal(tree.rt_magic, RB_TREE_MAGIC);
+  assert_int_equal(tree.rt_flags, 0);
+  assert_int_equal(tree.rt_count, 0);
+  assert_ptr_equal(tree.rt_root, 0);
+  assert_ptr_equal(tree.rt_comp, rbtree_comp);
+  assert_ptr_equal(tree.rt_extra, &spam);
+}
+
+int
 main(void)
 {
   const struct CMUnitTest tests[] = {
+    cmocka_unit_test(test_badtree),
+    cmocka_unit_test(test_badcomp),
+    cmocka_unit_test(test_goodargs)
   };
 
   return cmocka_run_group_tests_name("Test rt_init.c", tests, 0, 0);

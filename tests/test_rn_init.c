@@ -23,10 +23,43 @@
 
 #include "redblack_int.h"
 
+void
+test_badargs(void **state)
+{
+  db_err_t err;
+
+  err = rn_init(0, 0);
+
+  assert_int_equal(err, DB_ERR_BADARGS);
+}
+
+void
+test_goodargs(void **state)
+{
+  db_err_t err;
+  rb_node_t node;
+  int spam;
+
+  err = rn_init(&node, &spam);
+
+  assert_int_equal(err, 0);
+  assert_int_equal(node.rn_magic, RB_NODE_MAGIC);
+  assert_int_equal(node.rn_color, RB_COLOR_NONE);
+  assert_ptr_equal(node.rn_tree, 0);
+  assert_ptr_equal(node.rn_parent, 0);
+  assert_ptr_equal(node.rn_left, 0);
+  assert_ptr_equal(node.rn_right, 0);
+  assert_ptr_equal(node.rn_key.dk_key, 0);
+  assert_int_equal(node.rn_key.dk_len, 0);
+  assert_ptr_equal(node.rn_value, &spam);
+}
+
 int
 main(void)
 {
   const struct CMUnitTest tests[] = {
+    cmocka_unit_test(test_badargs),
+    cmocka_unit_test(test_goodargs)
   };
 
   return cmocka_run_group_tests_name("Test rn_init.c", tests, 0, 0);

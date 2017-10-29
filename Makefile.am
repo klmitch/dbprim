@@ -388,9 +388,12 @@ tests_test_st_free_LDFLAGS = src/st_free.lo \
 	-Wl,--wrap=ht_free
 
 tests_test_st_init_LDFLAGS = src/st_init.lo \
-	-Wl,--wrap=hash_comp \
-	-Wl,--wrap=hash_fnv1a \
-	-Wl,--wrap=_smat_resize \
+	src/hash_comp.lo \
+	src/hash_fnv_init.lo \
+	src/hash_fnv1a_accum.lo \
+	src/hash_fnv_final.lo \
+	src/hash_fnv1a.lo \
+	src/_smat_resize.lo \
 	-Wl,--wrap=ht_init
 
 tests_test_st_iter_LDFLAGS = src/st_iter.lo \
