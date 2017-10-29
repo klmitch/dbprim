@@ -43,6 +43,7 @@ AC_CONFIG_SRCDIR([include/dbprim.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([autotools])
 AM_INIT_AUTOMAKE
+AC_REQUIRE_AUX_FILE([tap-driver.sh])
 
 dnl Checks for programs.
 AC_PROG_CC_C99

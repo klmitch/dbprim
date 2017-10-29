@@ -150,6 +150,9 @@ dist-hook:
 	find $(distdir) -name .git -print -prune | xargs rm -rf
 
 # Testing-related definitions
+LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) \
+	$(top_srcdir)/autotools/tap-driver.sh
+AM_TESTS_ENVIRONMENT = CMOCKA_MESSAGE_OUTPUT=TAP; export CMOCKA_MESSAGE_OUTPUT;
 LDADD = -lcmocka
 check_PROGRAMS = \
 	tests/test__hash_prime \
