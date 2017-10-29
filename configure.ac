@@ -41,6 +41,7 @@ MA 02111-1307, USA])
 
 AC_CONFIG_SRCDIR([include/dbprim.h])
 AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_AUX_DIR([autotools])
 AM_INIT_AUTOMAKE
 
 dnl Checks for programs.
