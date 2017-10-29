@@ -213,7 +213,8 @@ TESTS = $(check_PROGRAMS)
 
 tests_test__hash_prime_LDFLAGS = src/_hash_prime.lo
 
-tests_test__rb_locate_LDFLAGS = src/_rb_locate.lo
+tests_test__rb_locate_LDFLAGS = src/_rb_locate.lo \
+	src/rbtree_comp.lo
 
 tests_test__rb_rotate_LDFLAGS = src/_rb_rotate.lo
 
