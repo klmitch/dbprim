@@ -44,7 +44,12 @@ ht_flush(hash_table_t *table, hash_iter_t flush_func, void *extra)
   for (i = 0; i < table->ht_modulus; i++)
     for (elem = ll_first(&table->ht_table[i]); elem;
 	 elem = ll_first(&table->ht_table[i])) {
-      ht_remove(table, le_object(elem)); /* remove the entry... */
+      /* Remove the entry; ht_remove() could resize the table, which
+       * could mess up the algorithm, so we do this manually.
+       */
+      ll_remove(&table->ht_table[i], elem);
+      ((hash_entry_t *)le_object(elem))->he_table = 0;
+      table->ht_count--;
 
       table->ht_flags |= HASH_FLAG_FREEZE; /* freeze the table */
 
