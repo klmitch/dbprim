@@ -17,7 +17,7 @@ dnl MA 02111-1307, USA
 dnl
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([Database Primitives Library], 2.0.0, [klmitch@mit.edu], [dbprim],
+AC_INIT([Database Primitives Library], 2.0.1, [klmitch@mit.edu], [dbprim],
 	[https://github.com/klmitch/dbprim])
 AC_PREREQ(2.64)
 
