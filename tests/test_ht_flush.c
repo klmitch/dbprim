@@ -135,6 +135,7 @@ test_callback(void **state)
   err = ht_flush(&table, test_iter, &spam);
 
   assert_int_equal(err, 0);
+  assert_int_equal(table.ht_flags & HASH_FLAG_FREEZE, 0);
   assert_int_equal(table.ht_count, 0);
   assert_ptr_equal(linktab[0].lh_first, 0);
   assert_ptr_equal(linktab[1].lh_first, 0);
@@ -186,6 +187,7 @@ test_callback_abort(void **state)
   err = ht_flush(&table, test_iter, &spam);
 
   assert_int_equal(err, 42);
+  assert_int_equal(table.ht_flags & HASH_FLAG_FREEZE, 0);
   assert_int_equal(table.ht_count, 4);
   assert_ptr_equal(linktab[0].lh_first, 0);
   assert_ptr_equal(linktab[1].lh_first, &entries[5].he_elem);
