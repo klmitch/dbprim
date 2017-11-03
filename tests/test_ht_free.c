@@ -96,6 +96,25 @@ test_happypath(void **state)
   assert_ptr_equal(table.ht_table, 0);
 }
 
+void
+test_shortcircuit(void **state)
+{
+  db_err_t err;
+  hash_table_t table = HASH_TABLE_INIT(0, 0, 0, 0, 0);
+
+  table.ht_modulus = 0;
+  table.ht_rollover = 9;
+  table.ht_rollunder = 5;
+
+  err = ht_free(&table);
+
+  assert_int_equal(err, 0);
+  assert_int_equal(table.ht_modulus, 0);
+  assert_int_equal(table.ht_rollover, 9);
+  assert_int_equal(table.ht_rollunder, 5);
+  assert_ptr_equal(table.ht_table, 0);
+}
+
 int
 main(void)
 {
@@ -105,7 +124,8 @@ main(void)
     cmocka_unit_test(test_frozen),
     cmocka_unit_test(test_notempty),
     cmocka_unit_test_setup_teardown(test_happypath,
-				    malloc_setup, malloc_teardown)
+				    malloc_setup, malloc_teardown),
+    cmocka_unit_test(test_shortcircuit)
   };
 
   return cmocka_run_group_tests_name("Test ht_free.c", tests, 0, 0);
