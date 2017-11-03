@@ -162,57 +162,22 @@ test_outofmemory(void **state)
   assert_int_equal(err, ENOMEM);
 }
 
-int
-test_ll_init_setup(void **state)
-{
-  int retval;
-  link_head_t *link_tab;
-
-  /* Allocate the table */
-  if (!(link_tab = malloc(7 * sizeof(link_head_t))))
-    return ENOMEM;
-
-  /* Initialize the mock malloc */
-  if ((retval = malloc_setup(state))) {
-    free(link_tab);
-    return retval;
-  }
-
-  *state = link_tab;
-  return 0;
-}
-
-int
-test_ll_init_teardown(void **state)
-{
-  int retval;
-
-  /* Turn off the mock malloc */
-  if ((retval = malloc_teardown(state)))
-    return retval;
-
-  /* Free the state */
-  free(*state);
-
-  return 0;
-}
-
 void
 test_ll_init_fails(void **state)
 {
   db_err_t err;
   hash_table_t table;
   int spam;
-  link_head_t *link_tab = (link_head_t *)*state;
+  link_head_t linktab[7];
 
   will_return(__wrap__hash_prime, 7);
   expect_value(__wrap__hash_prime, start, 6);
-  will_return(__wrap_malloc, link_tab);
+  will_return(__wrap_malloc, linktab);
   expect_value(__wrap_malloc, size, 7 * sizeof(link_head_t));
   will_return(__wrap_ll_init, 42);
-  expect_value(__wrap_ll_init, list, link_tab);
+  expect_value(__wrap_ll_init, list, linktab);
   expect_value(__wrap_ll_init, extra, &table);
-  expect_value(__wrap_free, ptr, link_tab);
+  expect_value(__wrap_free, ptr, linktab);
 
   err = ht_init(&table, 0, hash_func, hash_comp, hash_resize, &spam, 6);
 
@@ -225,26 +190,26 @@ test_ll_init_succeeds(void **state)
   db_err_t err;
   hash_table_t table;
   int spam;
-  link_head_t *link_tab = (link_head_t *)*state;
+  link_head_t linktab[7];
 
   will_return(__wrap__hash_prime, 7);
   expect_value(__wrap__hash_prime, start, 6);
-  will_return(__wrap_malloc, link_tab);
+  will_return(__wrap_malloc, linktab);
   expect_value(__wrap_malloc, size, 7 * sizeof(link_head_t));
   will_return_count(__wrap_ll_init, 0, 7);
-  expect_value(__wrap_ll_init, list, &link_tab[0]); /* i = 0 */
+  expect_value(__wrap_ll_init, list, &linktab[0]); /* i = 0 */
   expect_value(__wrap_ll_init, extra, &table);
-  expect_value(__wrap_ll_init, list, &link_tab[1]); /* i = 1 */
+  expect_value(__wrap_ll_init, list, &linktab[1]); /* i = 1 */
   expect_value(__wrap_ll_init, extra, &table);
-  expect_value(__wrap_ll_init, list, &link_tab[2]); /* i = 2 */
+  expect_value(__wrap_ll_init, list, &linktab[2]); /* i = 2 */
   expect_value(__wrap_ll_init, extra, &table);
-  expect_value(__wrap_ll_init, list, &link_tab[3]); /* i = 3 */
+  expect_value(__wrap_ll_init, list, &linktab[3]); /* i = 3 */
   expect_value(__wrap_ll_init, extra, &table);
-  expect_value(__wrap_ll_init, list, &link_tab[4]); /* i = 4 */
+  expect_value(__wrap_ll_init, list, &linktab[4]); /* i = 4 */
   expect_value(__wrap_ll_init, extra, &table);
-  expect_value(__wrap_ll_init, list, &link_tab[5]); /* i = 5 */
+  expect_value(__wrap_ll_init, list, &linktab[5]); /* i = 5 */
   expect_value(__wrap_ll_init, extra, &table);
-  expect_value(__wrap_ll_init, list, &link_tab[6]); /* i = 6 */
+  expect_value(__wrap_ll_init, list, &linktab[6]); /* i = 6 */
   expect_value(__wrap_ll_init, extra, &table);
 
   err = ht_init(&table, 0, hash_func, hash_comp, hash_resize, &spam, 6);
@@ -256,7 +221,7 @@ test_ll_init_succeeds(void **state)
   assert_int_equal(table.ht_count, 0);
   assert_int_equal(table.ht_rollover, 9);
   assert_int_equal(table.ht_rollunder, 5);
-  assert_ptr_equal(table.ht_table, link_tab);
+  assert_ptr_equal(table.ht_table, linktab);
   assert_ptr_equal(table.ht_func, hash_func);
   assert_ptr_equal(table.ht_comp, hash_comp);
   assert_ptr_equal(table.ht_resize, hash_resize);
@@ -275,11 +240,9 @@ main(void)
     cmocka_unit_test_setup_teardown(test_outofmemory,
 				    malloc_setup, malloc_teardown),
     cmocka_unit_test_setup_teardown(test_ll_init_fails,
-				    test_ll_init_setup,
-				    test_ll_init_teardown),
+				    malloc_setup, malloc_teardown),
     cmocka_unit_test_setup_teardown(test_ll_init_succeeds,
-				    test_ll_init_setup,
-				    test_ll_init_teardown)
+				    malloc_setup, malloc_teardown)
   };
 
   return cmocka_run_group_tests_name("Test ht_init.c", tests, 0, 0);

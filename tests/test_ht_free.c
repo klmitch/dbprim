@@ -25,10 +25,87 @@
 
 #include "mock_malloc.h"
 
+void
+test_zerotable(void **state)
+{
+  db_err_t err;
+
+  err = ht_free(0);
+
+  assert_int_equal(err, DB_ERR_BADARGS);
+}
+
+void
+test_badtable(void **state)
+{
+  db_err_t err;
+  hash_table_t table = HASH_TABLE_INIT(0, 0, 0, 0, 0);
+
+  table.ht_magic = 0;
+
+  err = ht_free(&table);
+
+  assert_int_equal(err, DB_ERR_BADARGS);
+}
+
+void
+test_frozen(void **state)
+{
+  db_err_t err;
+  hash_table_t table = HASH_TABLE_INIT(0, 0, 0, 0, 0);
+
+  table.ht_flags |= HASH_FLAG_FREEZE;
+
+  err = ht_free(&table);
+
+  assert_int_equal(err, DB_ERR_FROZEN);
+}
+
+void
+test_notempty(void **state)
+{
+  db_err_t err;
+  hash_table_t table = HASH_TABLE_INIT(0, 0, 0, 0, 0);
+
+  table.ht_count = 1;
+
+  err = ht_free(&table);
+
+  assert_int_equal(err, DB_ERR_NOTEMPTY);
+}
+
+void
+test_happypath(void **state)
+{
+  db_err_t err;
+  link_head_t linktab[7];
+  hash_table_t table = HASH_TABLE_INIT(0, 0, 0, 0, 0);
+
+  expect_value(__wrap_free, ptr, linktab);
+  table.ht_table = linktab;
+  table.ht_modulus = 7;
+  table.ht_rollover = 9;
+  table.ht_rollunder = 5;
+
+  err = ht_free(&table);
+
+  assert_int_equal(err, 0);
+  assert_int_equal(table.ht_modulus, 0);
+  assert_int_equal(table.ht_rollover, 0);
+  assert_int_equal(table.ht_rollunder, 0);
+  assert_ptr_equal(table.ht_table, 0);
+}
+
 int
 main(void)
 {
   const struct CMUnitTest tests[] = {
+    cmocka_unit_test(test_zerotable),
+    cmocka_unit_test(test_badtable),
+    cmocka_unit_test(test_frozen),
+    cmocka_unit_test(test_notempty),
+    cmocka_unit_test_setup_teardown(test_happypath,
+				    malloc_setup, malloc_teardown)
   };
 
   return cmocka_run_group_tests_name("Test ht_free.c", tests, 0, 0);
