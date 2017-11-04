@@ -287,6 +287,10 @@ tests_test_ht_init_LDFLAGS = src/ht_init.lo \
 tests_test_ht_iter_LDFLAGS = src/ht_iter.lo
 
 tests_test_ht_move_LDFLAGS = src/ht_move.lo \
+	src/hash_fnv1_accum.lo \
+	src/hash_fnv1.lo \
+	src/hash_fnv_final.lo \
+	src/hash_fnv_init.lo \
 	-Wl,--wrap=ht_find \
 	-Wl,--wrap=ll_remove \
 	-Wl,--wrap=ll_add
@@ -300,6 +304,10 @@ tests_test_ht_resize_SOURCES = \
 	tests/mock_malloc.h \
 	tests/test_ht_resize.c
 tests_test_ht_resize_LDFLAGS = src/ht_resize.lo \
+	src/hash_fnv1_accum.lo \
+	src/hash_fnv1.lo \
+	src/hash_fnv_final.lo \
+	src/hash_fnv_init.lo \
 	-Wl,--wrap=malloc \
 	-Wl,--wrap=free \
 	-Wl,--wrap=_hash_prime \
