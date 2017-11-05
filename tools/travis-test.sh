@@ -84,7 +84,7 @@ cd ${build}
 
 # Configure the source
 banner 0 "  Configuring the source"
-${build_root}/configure --enable-code-coverage
+${build_root}/configure --enable-code-coverage CFLAGS="${CFLAGS} -Wall -Werror"
 
 # Run a check
 banner 1 "  Running \"make check\""
