@@ -361,6 +361,7 @@ db_err_t ll_find(link_head_t *list, link_elem_t **elem_p,
  *
  * \retval DB_ERR_BADARGS	An argument was invalid.
  * \retval DB_ERR_WRONGTABLE	\p start is not in this linked list.
+ * \retval DB_ERR_UNUSED	\p start is not in any list.
  */
 db_err_t ll_iter(link_head_t *list, link_elem_t *start, link_iter_t iter_func,
 		 void *extra, db_flag_t flags);

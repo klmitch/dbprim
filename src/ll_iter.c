@@ -38,7 +38,7 @@ ll_iter(link_head_t *list, link_elem_t *start, link_iter_t iter_func,
 
   /* If the start element is specified, check that it's in this list... */
   if (start && list != start->le_head)
-    return DB_ERR_WRONGTABLE;
+    return start->le_head ? DB_ERR_WRONGTABLE : DB_ERR_UNUSED;
 
   /* select the starting element */
   if (!start)
