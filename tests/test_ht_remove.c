@@ -178,6 +178,30 @@ test_autoshrink_succeeds(void **state)
 }
 
 void
+test_autoshrink_unneeded(void **state)
+{
+  db_err_t err;
+  link_head_t linktab[7];
+  hash_table_t table = HASH_TABLE_INIT(HASH_FLAG_AUTOSHRINK, 0, 0, 0, 0);
+  hash_entry_t entry = HASH_ENTRY_INIT(0);
+
+  will_return(__wrap_ll_remove, 0);
+  expect_value(__wrap_ll_remove, list, &linktab[6]);
+  expect_value(__wrap_ll_remove, elem, &entry.he_elem);
+  table.ht_table = linktab;
+  table.ht_count = 5;
+  table.ht_rollunder = 4;
+  entry.he_table = &table;
+  entry.he_hash = 6;
+
+  err = ht_remove(&table, &entry);
+
+  assert_int_equal(err, 0);
+  assert_ptr_equal(entry.he_table, 0);
+  assert_int_equal(table.ht_count, 4);
+}
+
+void
 test_no_autoshrink(void **state)
 {
   db_err_t err;
@@ -238,6 +262,7 @@ main(void)
     cmocka_unit_test(test_frozen),
     cmocka_unit_test(test_autoshrink_fails),
     cmocka_unit_test(test_autoshrink_succeeds),
+    cmocka_unit_test(test_autoshrink_unneeded),
     cmocka_unit_test(test_no_autoshrink),
     cmocka_unit_test(test_llremove_fails)
   };

@@ -139,6 +139,48 @@ test_find_left(void **state)
 }
 
 void
+test_notfound_left(void **state)
+{
+  rb_tree_t tree = RB_TREE_INIT(rbtree_comp, 0);
+  rb_node_t root = RB_NODE_INIT(0), *result;
+  rb_node_t rank1_0 = RB_NODE_INIT(0), rank2_1 = RB_NODE_INIT(0);
+  db_key_t aaaa = DB_KEY_INIT("aaaa", 4), aaab = DB_KEY_INIT("aaab", 4);
+  db_key_t aaac = DB_KEY_INIT("aaac", 4), aaae = DB_KEY_INIT("aaae", 4);
+
+  tree.rt_root = &root;
+  tree.rt_count = 4;
+  root.rn_color = RB_COLOR_BLACK;
+  root.rn_tree = &tree;
+  root.rn_key = aaae;
+  root.rn_left = &rank1_0;
+  rank1_0.rn_color = RB_COLOR_RED;
+  rank1_0.rn_tree = &tree;
+  rank1_0.rn_parent = &root;
+  rank1_0.rn_key = aaaa;
+  rank1_0.rn_right = &rank2_1;
+  rank2_1.rn_color = RB_COLOR_BLACK;
+  rank2_1.rn_tree = &tree;
+  rank2_1.rn_parent = &rank1_0;
+  rank2_1.rn_left = 0;
+  rank2_1.rn_key = aaac;
+
+  result = _rb_locate(&tree, 0, &aaab);
+
+  assert_ptr_equal(result, 0);
+  assert_ptr_equal(tree.rt_root, &root);
+  assert_int_equal(tree.rt_count, 4);
+  assert_ptr_equal(root.rn_parent, 0);
+  assert_ptr_equal(root.rn_left, &rank1_0);
+  assert_ptr_equal(root.rn_right, 0);
+  assert_ptr_equal(rank1_0.rn_parent, &root);
+  assert_ptr_equal(rank1_0.rn_left, 0);
+  assert_ptr_equal(rank1_0.rn_right, &rank2_1);
+  assert_ptr_equal(rank2_1.rn_parent, &rank1_0);
+  assert_ptr_equal(rank2_1.rn_left, 0);
+  assert_ptr_equal(rank2_1.rn_right, 0);
+}
+
+void
 test_find_right(void **state)
 {
   rb_tree_t tree = RB_TREE_INIT(rbtree_comp, 0);
@@ -189,6 +231,48 @@ test_find_right(void **state)
   assert_ptr_equal(node.rn_right, 0);
   assert_ptr_equal(node.rn_key.dk_key, aaad.dk_key);
   assert_int_equal(node.rn_key.dk_len, aaad.dk_len);
+}
+
+void
+test_notfound_right(void **state)
+{
+  rb_tree_t tree = RB_TREE_INIT(rbtree_comp, 0);
+  rb_node_t root = RB_NODE_INIT(0), *result;
+  rb_node_t rank1_0 = RB_NODE_INIT(0), rank2_1 = RB_NODE_INIT(0);
+  db_key_t aaaa = DB_KEY_INIT("aaaa", 4), aaad = DB_KEY_INIT("aaad", 4);
+  db_key_t aaac = DB_KEY_INIT("aaac", 4), aaae = DB_KEY_INIT("aaae", 4);
+
+  tree.rt_root = &root;
+  tree.rt_count = 4;
+  root.rn_color = RB_COLOR_BLACK;
+  root.rn_tree = &tree;
+  root.rn_key = aaae;
+  root.rn_left = &rank1_0;
+  rank1_0.rn_color = RB_COLOR_RED;
+  rank1_0.rn_tree = &tree;
+  rank1_0.rn_parent = &root;
+  rank1_0.rn_key = aaaa;
+  rank1_0.rn_right = &rank2_1;
+  rank2_1.rn_color = RB_COLOR_BLACK;
+  rank2_1.rn_tree = &tree;
+  rank2_1.rn_parent = &rank1_0;
+  rank2_1.rn_right = 0;
+  rank2_1.rn_key = aaac;
+
+  result = _rb_locate(&tree, 0, &aaad);
+
+  assert_ptr_equal(result, 0);
+  assert_ptr_equal(tree.rt_root, &root);
+  assert_int_equal(tree.rt_count, 4);
+  assert_ptr_equal(root.rn_parent, 0);
+  assert_ptr_equal(root.rn_left, &rank1_0);
+  assert_ptr_equal(root.rn_right, 0);
+  assert_ptr_equal(rank1_0.rn_parent, &root);
+  assert_ptr_equal(rank1_0.rn_left, 0);
+  assert_ptr_equal(rank1_0.rn_right, &rank2_1);
+  assert_ptr_equal(rank2_1.rn_parent, &rank1_0);
+  assert_ptr_equal(rank2_1.rn_left, 0);
+  assert_ptr_equal(rank2_1.rn_right, 0);
 }
 
 void
@@ -295,7 +379,9 @@ main(void)
     cmocka_unit_test(test_empty_create),
     cmocka_unit_test(test_exists_root),
     cmocka_unit_test(test_find_left),
+    cmocka_unit_test(test_notfound_left),
     cmocka_unit_test(test_find_right),
+    cmocka_unit_test(test_notfound_right),
     cmocka_unit_test(test_add_left),
     cmocka_unit_test(test_add_right)
   };
